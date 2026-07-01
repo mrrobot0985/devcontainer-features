@@ -1,0 +1,10 @@
+# Node
+node_modules/
+package-lock.json
+package.json
+
+# Dev Container CLI local artifacts
+.devcontainer/
+
+# Claude Code artifacts
+.claude/

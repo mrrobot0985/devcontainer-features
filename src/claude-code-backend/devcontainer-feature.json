@@ -1,0 +1,38 @@
+{
+  "id": "claude-code-backend",
+  "name": "Claude Code Backend",
+  "version": "0.1.0",
+  "description": "Configures Claude Code to use a custom API backend",
+  "options": {
+    "baseUrl": {
+      "type": "string",
+      "default": "http://host.docker.internal:11434",
+      "description": "Custom API base URL"
+    },
+    "authToken": {
+      "type": "string",
+      "default": "ollama",
+      "description": "Auth token for the custom backend"
+    },
+    "models": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated model overrides in key:value format"
+    },
+    "logLevel": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warn",
+        "info",
+        "debug"
+      ],
+      "default": "error",
+      "description": "Anthropic client log level"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

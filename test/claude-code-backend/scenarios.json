@@ -1,0 +1,11 @@
+{
+    "custom_models": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-backend": {
+                "baseUrl": "http://ollama:11434",
+                "models": "sonnet:custom-sonnet:latest,subagent:custom-subagent:cloud"
+            }
+        }
+    }
+}

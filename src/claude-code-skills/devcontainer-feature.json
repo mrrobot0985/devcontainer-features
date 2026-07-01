@@ -1,0 +1,12 @@
+{
+  "id": "claude-code-skills",
+  "name": "Claude Code Skills",
+  "version": "0.1.0",
+  "description": "Clones Matt Pocock's engineering and productivity skills into ~/.claude/skills/",
+  "options": {},
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/git",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

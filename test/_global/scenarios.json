@@ -1,0 +1,17 @@
+{
+    "claude_stack": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "20"
+            },
+            "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+            "claude-code-privacy": {},
+            "claude-code-backend": {
+                "baseUrl": "http://ollama:11434",
+                "models": "sonnet:qwen2.5"
+            },
+            "claude-code-hooks": {}
+        }
+    }
+}

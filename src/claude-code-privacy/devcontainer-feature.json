@@ -1,0 +1,32 @@
+{
+  "id": "claude-code-privacy",
+  "name": "Claude Code Privacy",
+  "version": "0.1.0",
+  "description": "Privacy-hardened defaults for Claude Code",
+  "options": {
+    "disableTelemetry": {
+      "type": "boolean",
+      "default": true,
+      "description": "Disable telemetry collection"
+    },
+    "disableErrorReporting": {
+      "type": "boolean",
+      "default": true,
+      "description": "Disable automatic error reporting"
+    },
+    "disableFeedback": {
+      "type": "boolean",
+      "default": true,
+      "description": "Disable the /feedback command"
+    },
+    "disableUpdates": {
+      "type": "boolean",
+      "default": true,
+      "description": "Disable automatic updates"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

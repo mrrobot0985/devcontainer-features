@@ -1,0 +1,10 @@
+{
+    "no_statusline": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installStatusLine": false
+            }
+        }
+    }
+}

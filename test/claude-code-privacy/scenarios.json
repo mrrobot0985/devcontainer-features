@@ -1,0 +1,11 @@
+{
+    "relaxed_settings": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-privacy": {
+                "disableTelemetry": false,
+                "disableErrorReporting": false
+            }
+        }
+    }
+}
