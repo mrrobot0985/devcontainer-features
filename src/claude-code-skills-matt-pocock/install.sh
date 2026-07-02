@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "Activating feature 'claude-code-skills'"
+echo "Activating feature 'claude-code-skills-matt-pocock'"
 
 USER_HOME="${_REMOTE_USER_HOME:-$HOME}"
 CLAUDE_DIR="${USER_HOME}/.claude"

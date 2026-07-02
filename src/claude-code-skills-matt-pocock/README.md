@@ -1,4 +1,4 @@
-# Claude Code Skills (claude-code-skills)
+# Claude Code Matt Pocock Skills (claude-code-skills-matt-pocock)
 
 Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) into `~/.claude/skills/` with selectable categories.
 
