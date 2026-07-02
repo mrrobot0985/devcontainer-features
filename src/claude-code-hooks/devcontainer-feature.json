@@ -1,7 +1,7 @@
 {
   "id": "claude-code-hooks",
   "name": "Claude Code Hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement (self-contained, pinned to v0)",
   "options": {
     "installStatusLine": {
