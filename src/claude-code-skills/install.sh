@@ -7,6 +7,11 @@ USER_HOME="${_REMOTE_USER_HOME:-$HOME}"
 CLAUDE_DIR="${USER_HOME}/.claude"
 SKILLS_DIR="${CLAUDE_DIR}/skills"
 
+INSTALL_ENGINEERING="${INSTALLENGINEERING:-true}"
+INSTALL_PRODUCTIVITY="${INSTALLPRODUCTIVITY:-true}"
+INSTALL_MISC="${INSTALLMISC:-false}"
+INSTALL_PERSONAL="${INSTALLPERSONAL:-false}"
+
 # Ensure git is available
 if ! command -v git >/dev/null 2>&1; then
     echo "Installing git..."
@@ -37,33 +42,46 @@ git clone --depth 1 "$REPO_URL" "$TEMP_DIR/skills"
 # Ensure the destination directory exists
 mkdir -p "$SKILLS_DIR"
 
-# Copy skill directories from stable categories
-for category in engineering productivity misc personal; do
-    src_dir="$TEMP_DIR/skills/skills/$category"
-    if [ -d "$src_dir" ]; then
-        for skill in "$src_dir"/*; do
-            if [ -d "$skill" ]; then
-                skill_name="$(basename "$skill")"
-                # Skip README files and other non-directory entries
-                if [ "$skill_name" = "README.md" ]; then
-                    continue
-                fi
-                dest="$SKILLS_DIR/$skill_name"
+# Helper to copy a category if enabled
+copy_category() {
+    local category="$1"
+    local enabled="$2"
+    local src_dir="$TEMP_DIR/skills/skills/$category"
 
-                # Remove existing directory to avoid conflicts
-                if [ -d "$dest" ]; then
-                    echo "Replacing existing $dest..."
-                    rm -rf "$dest"
-                fi
-
-                cp -r "$skill" "$dest"
-                echo "Skill copied: $skill_name"
-            fi
-        done
-    else
-        echo "WARN: category directory $src_dir not found"
+    if [ "$enabled" != "true" ]; then
+        echo "Skipping ${category} (disabled)"
+        return 0
     fi
-done
+
+    if [ ! -d "$src_dir" ]; then
+        echo "WARN: category directory ${src_dir} not found"
+        return 0
+    fi
+
+    for skill in "$src_dir"/*; do
+        if [ -d "$skill" ]; then
+            skill_name="$(basename "$skill")"
+            if [ "$skill_name" = "README.md" ]; then
+                continue
+            fi
+            dest="$SKILLS_DIR/$skill_name"
+
+            if [ -d "$dest" ]; then
+                echo "Replacing existing ${skill_name}..."
+                rm -rf "$dest"
+            fi
+
+            cp -r "$skill" "$dest"
+            echo "Skill copied: ${skill_name}"
+        fi
+    done
+}
+
+# Copy enabled categories
+copy_category "engineering" "$INSTALL_ENGINEERING"
+copy_category "productivity" "$INSTALL_PRODUCTIVITY"
+copy_category "misc" "$INSTALL_MISC"
+copy_category "personal" "$INSTALL_PERSONAL"
 
 # Clean up the temporary clone
 rm -rf "$TEMP_DIR"

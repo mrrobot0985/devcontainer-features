@@ -1,0 +1,19 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {}
+        }
+    },
+    "engineering_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {
+                "installEngineering": true,
+                "installProductivity": false,
+                "installMisc": false,
+                "installPersonal": false
+            }
+        }
+    }
+}

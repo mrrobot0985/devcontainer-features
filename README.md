@@ -22,6 +22,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `claude-code-privacy` | Disables telemetry, error reporting, feedback, and automatic updates for Claude Code.       |
 | `claude-code-hooks`   | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
 | `claude-code-rules`   | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.   |
+| `claude-code-skills`  | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories.         |
 
 These features are designed to be composed with official features:
 
@@ -148,6 +149,36 @@ Rules are organized into four declarative groups:
             "standardizeWorkflow": true,
             "protectGit": true,
             "preferPythonTooling": false
+        }
+    }
+}
+```
+
+### `claude-code-skills`
+
+Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) into `~/.claude/skills/` with selectable categories.
+
+**Options:**
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `installEngineering` | boolean | `true` | Install engineering skills |
+| `installProductivity` | boolean | `true` | Install productivity skills |
+| `installMisc` | boolean | `false` | Install miscellaneous skills |
+| `installPersonal` | boolean | `false` | Install personal skills |
+
+**Example:**
+
+```jsonc
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-skills:0": {
+            "installEngineering": true,
+            "installProductivity": true,
+            "installMisc": false,
+            "installPersonal": false
         }
     }
 }
