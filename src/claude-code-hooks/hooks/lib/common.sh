@@ -44,9 +44,14 @@ hook_HOOK_SLUG() {
 hook_init() {
   HOOK_SLUG="${1:?hook_init requires a slug}"
   local base="${CLAUDE_CONFIG_DIR:-${HOME}/.claude}"
-  # Strip trailing /.claude if CLAUDE_CONFIG_DIR already includes it
-  base="${base%/\.claude}"
-  base="${base%/}"
+  # Ensure absolute path so state never leaks into the process's cwd.
+  # If CLAUDE_CONFIG_DIR or HOME is relative, resolve it.
+  if [[ "$base" != /* ]]; then
+    base="${HOME}/$base"
+  fi
+  if [[ "$base" != /* ]]; then
+    base="$(pwd)/$base"
+  fi
   local scope="${2:-}"
   if [ -z "$scope" ]; then
     local caller_dir
