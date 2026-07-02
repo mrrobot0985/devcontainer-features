@@ -8,6 +8,9 @@ This feature is self-contained — all hook scripts are bundled directly in the 
 
 | Options Id | Description | Type | Default Value |
 | ----- | ----- | ----- | ----- |
+| `installSessionHooks` | Install session lifecycle hooks (start, end, setup, compact, etc.) | boolean | true |
+| `installAgentHooks` | Install agent behavior hooks (tool use, permissions, subagents, tasks) | boolean | true |
+| `installTurnHooks` | Install turn-level hooks (prompt submission, stop, notifications) | boolean | true |
 | `installStatusLine` | Also install the status line hook configuration | boolean | true |
 
 ## Example Usage
@@ -18,12 +21,28 @@ This feature is self-contained — all hook scripts are bundled directly in the 
 }
 ```
 
-To disable the status line hook:
+To disable specific hook categories:
 
 ```json
 "features": {
     "ghcr.io/mrrobot0985/devcontainer-features/claude-code-hooks:0": {
+        "installSessionHooks": false,
+        "installAgentHooks": true,
+        "installTurnHooks": true,
         "installStatusLine": false
+    }
+}
+```
+
+To install only session hooks:
+
+```json
+"features": {
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-hooks:0": {
+        "installSessionHooks": true,
+        "installAgentHooks": false,
+        "installTurnHooks": false,
+        "installStatusLine": true
     }
 }
 ```

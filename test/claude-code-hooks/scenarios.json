@@ -6,5 +6,38 @@
                 "installStatusLine": false
             }
         }
+    },
+    "session_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installSessionHooks": true,
+                "installAgentHooks": false,
+                "installTurnHooks": false,
+                "installStatusLine": true
+            }
+        }
+    },
+    "agent_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installSessionHooks": false,
+                "installAgentHooks": true,
+                "installTurnHooks": false,
+                "installStatusLine": false
+            }
+        }
+    },
+    "turn_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installSessionHooks": false,
+                "installAgentHooks": false,
+                "installTurnHooks": true,
+                "installStatusLine": false
+            }
+        }
     }
 }
