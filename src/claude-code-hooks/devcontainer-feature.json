@@ -1,9 +1,24 @@
 {
   "id": "claude-code-hooks",
   "name": "Claude Code Hooks",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement (self-contained, pinned to v0)",
   "options": {
+    "installSessionHooks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install session lifecycle hooks (start, end, setup, compact, etc.)"
+    },
+    "installAgentHooks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install agent behavior hooks (tool use, permissions, subagents, tasks)"
+    },
+    "installTurnHooks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install turn-level hooks (prompt submission, stop, notifications)"
+    },
     "installStatusLine": {
       "type": "boolean",
       "default": true,
