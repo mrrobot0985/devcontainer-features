@@ -21,6 +21,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `claude-code-backend` | Configures Claude Code to use a custom API backend, such as Ollama.                         |
 | `claude-code-privacy` | Disables telemetry, error reporting, feedback, and automatic updates for Claude Code.       |
 | `claude-code-hooks`   | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
+| `claude-code-rules`   | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.   |
 
 These features are designed to be composed with official features:
 
@@ -107,6 +108,46 @@ Installs [claude-code-hooks](https://github.com/mrrobot0985/claude-code-hooks) i
             "repository": "https://github.com/mrrobot0985/claude-code-hooks.git",
             "branch": "main",
             "installStatusLine": true
+        }
+    }
+}
+```
+
+### `claude-code-rules`
+
+Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.
+
+Rules are organized into four declarative groups:
+
+**Safety (`enforceSafety`):** `human-sovereignty`, `no-attribution`, `no-secrets`
+
+**Workflow (`standardizeWorkflow`):** `mcp-tools-first`, `skill-discovery`, `anti-overengineering`, `conventional-commits`, `branch-strategy`
+
+**Git Protection (`protectGit`):** `no-git-config-override`
+
+**Python Tooling (`preferPythonTooling`):** `prefer-uv`, `markdown-formatting`
+
+**Options:**
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `enforceSafety` | boolean | `true` | Enforce safety invariants |
+| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow and process |
+| `protectGit` | boolean | `true` | Protect git configuration |
+| `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules |
+
+**Example:**
+
+```jsonc
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-rules:0": {
+            "enforceSafety": true,
+            "standardizeWorkflow": true,
+            "protectGit": true,
+            "preferPythonTooling": false
         }
     }
 }

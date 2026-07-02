@@ -1,0 +1,32 @@
+{
+  "id": "claude-code-rules",
+  "name": "Claude Code Rules",
+  "version": "0.1.0",
+  "description": "Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/rules/",
+  "options": {
+    "enforceSafety": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enforce safety invariants: human sovereignty, no-attribution, no-secrets"
+    },
+    "standardizeWorkflow": {
+      "type": "boolean",
+      "default": true,
+      "description": "Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy"
+    },
+    "protectGit": {
+      "type": "boolean",
+      "default": true,
+      "description": "Protect git configuration: never override git config inline"
+    },
+    "preferPythonTooling": {
+      "type": "boolean",
+      "default": false,
+      "description": "Prefer Python toolchain rules: uv/uvx for Python, mdformat with frontmatter/gfm plugins"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}
