@@ -2,13 +2,13 @@
     "default": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "claude-code-skills": {}
+            "claude-code-skills-matt-pocock": {}
         }
     },
     "engineering_only": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "claude-code-skills": {
+            "claude-code-skills-matt-pocock": {
                 "installEngineering": true,
                 "installProductivity": false,
                 "installMisc": false,
