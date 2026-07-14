@@ -36,8 +36,8 @@ fi
 TEMP_DIR="$(mktemp -d)"
 REPO_URL="https://github.com/mattpocock/skills.git"
 
-echo "Cloning ${REPO_URL}..."
-git clone --depth 1 "$REPO_URL" "$TEMP_DIR/skills"
+echo "Cloning ${REPO_URL} at v1.1.0..."
+git clone --branch v1.1.0 --depth 1 "$REPO_URL" "$TEMP_DIR/skills"
 
 # Ensure the destination directory exists
 mkdir -p "$SKILLS_DIR"
