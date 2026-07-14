@@ -8,3 +8,7 @@ package.json
 
 # Claude Code artifacts
 .claude/
+
+# Python
+__pycache__/
+*.pyc

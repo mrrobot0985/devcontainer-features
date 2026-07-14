@@ -14,7 +14,7 @@ SETTINGS_FILE="${CLAUDE_DIR}/settings.json"
 
 mkdir -p "$CLAUDE_DIR"
 
-# Ensure jq is available for JSON manipulation
+# Ensure jq is available for JSON manipulation.
 if ! command -v jq >/dev/null 2>&1; then
     echo "Installing jq..."
     if command -v apt-get >/dev/null 2>&1; then
@@ -34,7 +34,13 @@ if ! command -v jq >/dev/null 2>&1; then
     fi
 fi
 
-# Build the env object with base backend settings
+# Source shared settings merge helper.
+HELPER_FILE="$(dirname "$0")/merge-settings.sh"
+# shellcheck source=merge-settings.sh
+# shellcheck disable=SC1091
+. "$HELPER_FILE"
+
+# Build the env object with base backend settings.
 ENV_JSON=$(jq -n \
     --arg base_url "$BASE_URL" \
     --arg auth_token "$AUTH_TOKEN" \
@@ -76,18 +82,8 @@ if [ -n "$MODELS" ]; then
     IFS="$OLD_IFS"
 fi
 
-# Load existing settings or start fresh
-if [ -f "$SETTINGS_FILE" ]; then
-    SETTINGS=$(jq '.' "$SETTINGS_FILE" || echo '{}')
-else
-    SETTINGS='{}'
-fi
-
-# Merge env vars (new values take precedence)
-UPDATED=$(printf '%s' "$SETTINGS" | jq --argjson env "$ENV_JSON" '.env = ((.env // {}) + $env)')
-
-# Write settings back atomically
-printf '%s\n' "$UPDATED" | jq . > "$SETTINGS_FILE"
+# Merge env vars into settings.json (new values take precedence).
+merge_settings_json "$SETTINGS_FILE" "$ENV_JSON" "env"
 
 chown -R "${_REMOTE_USER:-root}:${_REMOTE_USER:-root}" "$CLAUDE_DIR"
 

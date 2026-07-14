@@ -23,6 +23,12 @@ if ! command -v jq >/dev/null 2>&1; then
     fi
 fi
 
+# Source shared settings merge helper.
+HELPER_FILE="$(dirname "$0")/merge-settings.sh"
+# shellcheck source=merge-settings.sh
+# shellcheck disable=SC1091
+. "$HELPER_FILE"
+
 # Convert a boolean option string to a Claude Code flag value.
 bool_to_flag() {
     if [ "$1" = "true" ]; then
@@ -55,17 +61,8 @@ ENV_JSON=$(jq -n \
         "DISABLE_UPDATES": $du
     }')
 
-if [ -f "$SETTINGS_FILE" ]; then
-    if ! jq -e . "$SETTINGS_FILE" >/dev/null 2>&1; then
-        echo "ERROR: existing $SETTINGS_FILE is not valid JSON"
-        exit 1
-    fi
-    jq --argjson env "$ENV_JSON" '
-        .env = ((.env // {}) + $env)
-    ' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
-else
-    printf '%s\n' "$ENV_JSON" | jq '{env: .}' > "$SETTINGS_FILE"
-fi
+# Merge privacy flags into settings.json (new values take precedence).
+merge_settings_json "$SETTINGS_FILE" "$ENV_JSON" "env"
 
 chown -R "${_REMOTE_USER:-root}:${_REMOTE_USER:-root}" "$CLAUDE_DIR"
 

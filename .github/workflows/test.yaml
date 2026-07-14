@@ -17,6 +17,7 @@ jobs:
           - claude-code-privacy
           - claude-code-hooks
           - container-firewall
+          - claude-code-rules
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -40,6 +41,8 @@ jobs:
           - claude-code-privacy
           - claude-code-hooks
           - container-firewall
+          - claude-code-rules
+          - claude-code-skills
     steps:
       - uses: actions/checkout@v7
 

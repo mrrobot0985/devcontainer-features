@@ -63,15 +63,15 @@ fi
 
 pass "prerequisites (act, docker)"
 
-# --- Shellcheck all install.sh ---
+# --- Shellcheck all install.sh and uninstall.sh ---
 echo ""
-echo "--- Running shellcheck on install.sh files ---"
-for script in src/*/install.sh; do
+echo "--- Running shellcheck on install.sh and uninstall.sh files ---"
+for script in src/*/install.sh src/*/uninstall.sh; do
     if [ -f "$script" ]; then
         if shellcheck "$script"; then
-            pass "shellcheck $(basename "$(dirname "$script")")"
+            pass "shellcheck $(basename "$script")"
         else
-            fail "shellcheck $(basename "$(dirname "$script")")"
+            fail "shellcheck $(basename "$script")"
         fi
     fi
 done

@@ -10,6 +10,7 @@ check "settings.json exists" test -f "$SETTINGS_JSON"
 check "settings.json contains ANTHROPIC_BASE_URL" grep -q '"ANTHROPIC_BASE_URL"' "$SETTINGS_JSON"
 check "settings.json contains DISABLE_TELEMETRY" grep -q '"DISABLE_TELEMETRY"' "$SETTINGS_JSON"
 check "settings.json contains hooks" grep -q '"hooks"' "$SETTINGS_JSON"
+check "skills directory exists" test -d "${_REMOTE_USER_HOME:-$HOME}/.claude/skills"
 check "container-firewall init script exists" test -x /usr/local/bin/container-firewall-init
 
 reportResults

@@ -10,6 +10,7 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
 | `customDomains` | Comma-separated extra domains to allow (used only with profile=custom) | string | "" |
 | `blockTelemetry` | Block known telemetry and tracking endpoints at the network level | boolean | false |
 | `policy` | whitelist drops non-matching traffic; monitor logs but does not block | string | whitelist |
+| `enableIPv6` | Also apply whitelist rules to IPv6 (ip6tables) | boolean | true |
 
 ## Example Usage
 

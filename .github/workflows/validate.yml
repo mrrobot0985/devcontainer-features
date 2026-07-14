@@ -14,3 +14,19 @@ jobs:
         with:
           validate-only: "true"
           base-path-to-features: "./src"
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Install shellcheck"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: "Run shellcheck"
+        run: |
+          shellcheck --severity=warning src/*/install.sh src/*/uninstall.sh
+          shellcheck --severity=warning test/*/*.sh
+          shellcheck --severity=warning test/_global/*.sh

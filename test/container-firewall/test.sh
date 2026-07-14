@@ -4,6 +4,7 @@ set -e
 source dev-container-features-test-lib
 
 check "iptables exists" command -v iptables
+check "ip6tables exists" command -v ip6tables
 check "ipset exists" command -v ipset
 check "container-firewall-init exists" test -x /usr/local/bin/container-firewall-init
 
@@ -20,9 +21,17 @@ if sudo ipset list allowed-domains >/dev/null 2>&1; then
         check "github api reachable" bash -c "curl -4 -s --connect-timeout 10 https://api.github.com/zen >/dev/null"
     fi
 
-    # If blockTelemetry is enabled, verify blocked ipset exists
+    # If IPv6 is enabled, verify the IPv6 ipset exists
+    if [ "${ENABLEIPV6:-true}" = "true" ]; then
+        check "allowed-domains-v6 ipset exists" sudo ipset list allowed-domains-v6
+    fi
+
+    # If blockTelemetry is enabled, verify blocked ipsets exist
     if [ "${BLOCKTELEMETRY:-false}" = "true" ]; then
         check "blocked-domains ipset exists" sudo ipset list blocked-domains
+        if [ "${ENABLEIPV6:-true}" = "true" ]; then
+            check "blocked-domains-v6 ipset exists" sudo ipset list blocked-domains-v6
+        fi
     fi
 else
     echo "WARNING: Firewall was not applied by postStartCommand. Skipping live verification."

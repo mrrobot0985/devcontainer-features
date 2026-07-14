@@ -16,25 +16,33 @@ PREFER_PYTHON_TOOLING="${PREFERPYTHONTOOLING:-false}"
 # Ensure the destination directory exists
 mkdir -p "$RULES_DIR"
 
+# Clear existing rules to ensure idempotency when options change.
+# In a devcontainer, the rules directory is managed by this feature.
+for _existing in "$RULES_DIR"/*.md; do
+    if [ -f "$_existing" ]; then
+        rm -f "$_existing"
+    fi
+done
+
 # Helper to copy all rules from a group directory if enabled
 copy_group() {
-    local group_dir="$1"
-    local group_name="$2"
-    local enabled="$3"
+    _group_dir="$1"
+    _group_name="$2"
+    _enabled="$3"
 
-    if [ "$enabled" != "true" ]; then
+    if [ "$_enabled" != "true" ]; then
         return 0
     fi
 
-    if [ ! -d "$group_dir" ]; then
-        echo "WARN: group directory not found: $group_dir"
+    if [ ! -d "$_group_dir" ]; then
+        echo "WARN: group directory not found: $_group_dir"
         return 0
     fi
 
-    for file in "$group_dir"/*.md; do
-        if [ -f "$file" ]; then
-            cp "$file" "$RULES_DIR/"
-            echo "Installed ($group_name): $(basename "$file")"
+    for _file in "$_group_dir"/*.md; do
+        if [ -f "$_file" ]; then
+            cp "$_file" "$RULES_DIR/"
+            echo "Installed ($_group_name): $(basename "$_file")"
         fi
     done
 }

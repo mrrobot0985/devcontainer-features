@@ -12,6 +12,9 @@
                 "models": "sonnet:qwen2.5"
             },
             "claude-code-hooks": {},
+            "claude-code-skills": {
+                "skipOnFailure": true
+            },
             "container-firewall": {
                 "blockTelemetry": true
             }

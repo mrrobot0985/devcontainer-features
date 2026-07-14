@@ -33,6 +33,11 @@
       ],
       "default": "whitelist",
       "description": "whitelist drops non-matching traffic; monitor logs but does not block"
+    },
+    "enableIPv6": {
+      "type": "boolean",
+      "default": true,
+      "description": "Also apply whitelist rules to IPv6 (ip6tables)"
     }
   },
   "capAdd": [
