@@ -12,15 +12,15 @@ POLICY="${POLICY:-whitelist}"
 install_deps() {
     if command -v apt-get >/dev/null 2>&1; then
         apt-get update
-        apt-get install -y --no-install-recommends iptables ipset dnsutils curl jq aggregate
+        apt-get install -y --no-install-recommends iptables ipset dnsutils curl jq aggregate sudo iproute2 ca-certificates
         apt-get clean
         rm -rf /var/lib/apt/lists/*
     elif command -v apk >/dev/null 2>&1; then
-        apk add --no-cache iptables ipset bind-tools curl jq aggregate
+        apk add --no-cache iptables ipset bind-tools curl jq aggregate sudo iproute2 ca-certificates
     elif command -v yum >/dev/null 2>&1; then
-        yum install -y iptables ipset bind-utils curl jq aggregate
+        yum install -y iptables ipset bind-utils curl jq aggregate sudo iproute ca-certificates
     elif command -v dnf >/dev/null 2>&1; then
-        dnf install -y iptables ipset bind-utils curl jq aggregate
+        dnf install -y iptables ipset bind-utils curl jq aggregate sudo iproute ca-certificates
     else
         echo "ERROR: could not install firewall dependencies"
         exit 1
@@ -104,10 +104,22 @@ TELEMETRY_DOMAINS="statsig.anthropic.com statsig.com sentry.io google-analytics.
 resolve_and_add() {
     _domain="\$1"
     _ipset="\$2"
-    echo "Resolving \$_domain..."
-    _ips=\$(dig +noall +answer A "\$_domain" | awk '\$4 == "A" {print \$5}')
+    _attempts=0
+    _max_attempts=3
+    while [ "\$_attempts" -lt "\$_max_attempts" ]; do
+        echo "Resolving \$_domain..."
+        _ips=\$(dig +noall +answer A "\$_domain" | awk '\$4 == "A" {print \$5}')
+        if [ -n "\$_ips" ]; then
+            break
+        fi
+        _attempts=\$((_attempts + 1))
+        if [ "\$_attempts" -lt "\$_max_attempts" ]; then
+            echo "WARNING: Failed to resolve \$_domain, retrying in 2s..."
+            sleep 2
+        fi
+    done
     if [ -z "\$_ips" ]; then
-        echo "WARNING: Failed to resolve \$_domain"
+        echo "WARNING: Failed to resolve \$_domain after \$_max_attempts attempts"
         return 0
     fi
     echo "\$_ips" | while read -r _ip; do
@@ -138,9 +150,24 @@ esac
 # 5. GitHub dynamic IPs (for claude-code and github-only profiles)
 if [ "\$PROFILE" = "claude-code" ] || [ "\$PROFILE" = "github-only" ]; then
     echo "Fetching GitHub IP ranges..."
-    gh_ranges=\$(curl -s --connect-timeout 10 https://api.github.com/meta || true)
+    _gh_attempts=0
+    _gh_max_attempts=3
+    gh_ranges=""
+    while [ "\$_gh_attempts" -lt "\$_gh_max_attempts" ]; do
+        gh_ranges=\$(curl -4 -s --connect-timeout 10 https://api.github.com/meta || true)
+        if [ -n "\$gh_ranges" ]; then
+            break
+        fi
+        _gh_attempts=\$((_gh_attempts + 1))
+        if [ "\$_gh_attempts" -lt "\$_gh_max_attempts" ]; then
+            echo "WARNING: Failed to fetch GitHub IP ranges, retrying in 3s..."
+            sleep 3
+        fi
+    done
     if [ -z "\$gh_ranges" ]; then
-        echo "WARNING: Failed to fetch GitHub IP ranges"
+        echo "WARNING: Failed to fetch GitHub IP ranges after \$_gh_max_attempts attempts, falling back to DNS resolution"
+        resolve_and_add "api.github.com" "allowed-domains"
+        resolve_and_add "github.com" "allowed-domains"
     else
         if echo "\$gh_ranges" | jq -e '.web and .api and .git' >/dev/null 2>&1; then
             echo "\$gh_ranges" | jq -r '(.web + .api + .git)[]' | while read -r cidr; do

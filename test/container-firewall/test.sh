@@ -17,7 +17,7 @@ if sudo ipset list allowed-domains >/dev/null 2>&1; then
 
     # For claude-code and github-only profiles, verify GitHub is reachable
     if [ "${PROFILE:-claude-code}" = "claude-code" ] || [ "${PROFILE:-claude-code}" = "github-only" ]; then
-        check "github api reachable" bash -c "curl -s --connect-timeout 10 https://api.github.com/zen >/dev/null"
+        check "github api reachable" bash -c "curl -4 -s --connect-timeout 10 https://api.github.com/zen >/dev/null"
     fi
 
     # If blockTelemetry is enabled, verify blocked ipset exists
