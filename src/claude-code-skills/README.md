@@ -1,10 +1,10 @@
-# Claude Code Matt Pocock Skills (claude-code-skills-matt-pocock)
+# Claude Code Skills (claude-code-skills)
 
-Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) (v1.1.0) into `~/.claude/skills/` with selectable categories.
+Installs skills into `~/.claude/skills/` with configurable sources.
 
 ## What it installs
 
-Individual skills from the `skills/` directory are copied into `~/.claude/skills/` for Claude Code discovery.
+By default, Matt Pocock's skills are cloned from [github.com/mattpocock/skills](https://github.com/mattpocock/skills) and copied into `~/.claude/skills/` for Claude Code discovery.
 
 ## Skill Categories
 
@@ -60,10 +60,13 @@ Personal development and writing skills.
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `installEngineering` | boolean | `true` | Install engineering skills |
-| `installProductivity` | boolean | `true` | Install productivity skills |
-| `installMisc` | boolean | `false` | Install miscellaneous skills |
-| `installPersonal` | boolean | `false` | Install personal skills |
+| `enableMattPocockSkills` | boolean | `true` | Clone and install Matt Pocock's skills from github.com/mattpocock/skills |
+| `mattPocockSkillsVersion` | string | `v1.1` | Version/tag of mattpocock/skills to clone |
+| `installEngineering` | boolean | `true` | Install engineering skills (requires enableMattPocockSkills) |
+| `installProductivity` | boolean | `true` | Install productivity skills (requires enableMattPocockSkills) |
+| `installMisc` | boolean | `false` | Install miscellaneous skills (requires enableMattPocockSkills) |
+| `installPersonal` | boolean | `false` | Install personal skills (requires enableMattPocockSkills) |
+| `skipOnFailure` | boolean | `false` | Skip skill installation if clone fails instead of failing the build |
 
 ## Requirements
 

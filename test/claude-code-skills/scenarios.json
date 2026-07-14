@@ -1,0 +1,49 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {}
+        }
+    },
+    "engineering_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {
+                "installEngineering": true,
+                "installProductivity": false,
+                "installMisc": false,
+                "installPersonal": false
+            }
+        }
+    },
+    "all_categories": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {
+                "installEngineering": true,
+                "installProductivity": true,
+                "installMisc": true,
+                "installPersonal": true
+            }
+        }
+    },
+    "none": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {
+                "installEngineering": false,
+                "installProductivity": false,
+                "installMisc": false,
+                "installPersonal": false
+            }
+        }
+    },
+    "disabled_matt_pocock": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-skills": {
+                "enableMattPocockSkills": false
+            }
+        }
+    }
+}

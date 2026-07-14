@@ -1,0 +1,48 @@
+{
+  "id": "claude-code-skills",
+  "name": "Claude Code Skills",
+  "version": "0.1.0",
+  "description": "Installs skills into ~/.claude/skills/ with configurable sources",
+  "options": {
+    "enableMattPocockSkills": {
+      "type": "boolean",
+      "default": true,
+      "description": "Clone and install Matt Pocock's skills from github.com/mattpocock/skills"
+    },
+    "mattPocockSkillsVersion": {
+      "type": "string",
+      "default": "v1.1",
+      "description": "Version/tag of mattpocock/skills to clone"
+    },
+    "installEngineering": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install engineering skills (requires enableMattPocockSkills)"
+    },
+    "installProductivity": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install productivity skills (requires enableMattPocockSkills)"
+    },
+    "installMisc": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install miscellaneous skills (requires enableMattPocockSkills)"
+    },
+    "installPersonal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install personal skills (requires enableMattPocockSkills)"
+    },
+    "skipOnFailure": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skip skill installation if clone fails instead of failing the build"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/git",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

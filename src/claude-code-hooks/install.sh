@@ -45,7 +45,7 @@ fi
 # Ensure scripts are executable
 find "$HOOKS_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
-# Ensure jq is available for JSON manipulation
+# Ensure jq is available for JSON manipulation.
 if ! command -v jq >/dev/null 2>&1; then
     echo "Installing jq..."
     if command -v apt-get >/dev/null 2>&1; then
@@ -65,50 +65,32 @@ if ! command -v jq >/dev/null 2>&1; then
     fi
 fi
 
-# Merge JSON config into settings.json
-merge_config() {
-    _config_file="$1"
-    _settings_file="$2"
-
-    _tmp="$(mktemp)"
-    jq 'del(.["$schema"])' "$_config_file" > "$_tmp"
-
-    if [ -f "$_settings_file" ]; then
-        if ! jq -e . "$_settings_file" >/dev/null 2>&1; then
-            echo "ERROR: existing $_settings_file is not valid JSON"
-            rm -f "$_tmp"
-            exit 1
-        fi
-        jq -s '.[0] * .[1]' "$_settings_file" "$_tmp" > "${_settings_file}.tmp" && mv "${_settings_file}.tmp" "$_settings_file"
-    else
-        jq '.' "$_tmp" > "$_settings_file"
-    fi
-
-    rm -f "$_tmp"
-}
+# Source shared settings merge helper.
+# shellcheck disable=SC1091
+. "${FEATURE_DIR}/hooks/lib/merge-settings.sh"
 
 # Conditionally merge session hooks configuration
 if [ "$INSTALL_SESSION" = "true" ] && [ -f "${HOOKS_DIR}/config/settings.session.json" ]; then
     echo "Merging session hooks configuration into ${SETTINGS_FILE}..."
-    merge_config "${HOOKS_DIR}/config/settings.session.json" "${SETTINGS_FILE}"
+    merge_settings_json "${SETTINGS_FILE}" "${HOOKS_DIR}/config/settings.session.json"
 fi
 
 # Conditionally merge agent hooks configuration
 if [ "$INSTALL_AGENT" = "true" ] && [ -f "${HOOKS_DIR}/config/settings.agent.json" ]; then
     echo "Merging agent hooks configuration into ${SETTINGS_FILE}..."
-    merge_config "${HOOKS_DIR}/config/settings.agent.json" "${SETTINGS_FILE}"
+    merge_settings_json "${SETTINGS_FILE}" "${HOOKS_DIR}/config/settings.agent.json"
 fi
 
 # Conditionally merge turn hooks configuration
 if [ "$INSTALL_TURN" = "true" ] && [ -f "${HOOKS_DIR}/config/settings.turn.json" ]; then
     echo "Merging turn hooks configuration into ${SETTINGS_FILE}..."
-    merge_config "${HOOKS_DIR}/config/settings.turn.json" "${SETTINGS_FILE}"
+    merge_settings_json "${SETTINGS_FILE}" "${HOOKS_DIR}/config/settings.turn.json"
 fi
 
 # Optionally merge status line config
 if [ "$INSTALL_STATUSLINE" = "true" ] && [ -f "${HOOKS_DIR}/config/settings.statusline.json" ]; then
     echo "Merging status line configuration into ${SETTINGS_FILE}..."
-    merge_config "${HOOKS_DIR}/config/settings.statusline.json" "${SETTINGS_FILE}"
+    merge_settings_json "${SETTINGS_FILE}" "${HOOKS_DIR}/config/settings.statusline.json"
 fi
 
 # Fix ownership

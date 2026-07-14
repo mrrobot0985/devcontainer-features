@@ -7,27 +7,41 @@ PROFILE="${PROFILE:-claude-code}"
 CUSTOM_DOMAINS="${CUSTOMDOMAINS:-}"
 BLOCK_TELEMETRY="${BLOCKTELEMETRY:-false}"
 POLICY="${POLICY:-whitelist}"
+ENABLE_IPV6="${ENABLEIPV6:-true}"
 
 # Install dependencies
 install_deps() {
     if command -v apt-get >/dev/null 2>&1; then
         apt-get update
         apt-get install -y --no-install-recommends iptables ipset dnsutils curl jq aggregate sudo iproute2 ca-certificates
+        # On older distributions ip6tables may be packaged separately; install if missing
+        if ! command -v ip6tables >/dev/null 2>&1; then
+            apt-get install -y --no-install-recommends ip6tables || true
+        fi
         apt-get clean
         rm -rf /var/lib/apt/lists/*
     elif command -v apk >/dev/null 2>&1; then
         apk add --no-cache iptables ipset bind-tools curl jq aggregate sudo iproute2 ca-certificates
+        if ! command -v ip6tables >/dev/null 2>&1; then
+            apk add --no-cache ip6tables || true
+        fi
     elif command -v yum >/dev/null 2>&1; then
         yum install -y iptables ipset bind-utils curl jq aggregate sudo iproute ca-certificates
+        if ! command -v ip6tables >/dev/null 2>&1; then
+            yum install -y ip6tables || true
+        fi
     elif command -v dnf >/dev/null 2>&1; then
         dnf install -y iptables ipset bind-utils curl jq aggregate sudo iproute ca-certificates
+        if ! command -v ip6tables >/dev/null 2>&1; then
+            dnf install -y ip6tables || true
+        fi
     else
         echo "ERROR: could not install firewall dependencies"
         exit 1
     fi
 }
 
-if ! command -v iptables >/dev/null 2>&1 || ! command -v ipset >/dev/null 2>&1 || ! command -v dig >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+if ! command -v iptables >/dev/null 2>&1 || ! command -v ipset >/dev/null 2>&1 || ! command -v dig >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1 || { [ "$ENABLE_IPV6" = "true" ] && ! command -v ip6tables >/dev/null 2>&1; }; then
     echo "Installing firewall dependencies..."
     install_deps
 fi
@@ -48,6 +62,7 @@ PROFILE="$PROFILE"
 CUSTOM_DOMAINS="$CUSTOM_DOMAINS"
 BLOCK_TELEMETRY="$BLOCK_TELEMETRY"
 POLICY="$POLICY"
+ENABLE_IPV6="$ENABLE_IPV6"
 
 # Verify iptables is usable (requires CAP_NET_ADMIN)
 if ! iptables -L >/dev/null 2>&1; then
@@ -57,10 +72,25 @@ if ! iptables -L >/dev/null 2>&1; then
     exit 0
 fi
 
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    if ! ip6tables -L >/dev/null 2>&1; then
+        echo "WARNING: ip6tables is not functional in this environment (missing CAP_NET_ADMIN or no IPv6 support)."
+        echo "         Continuing with IPv4-only firewall."
+        ENABLE_IPV6=false
+    fi
+fi
+
 # 1. Extract Docker DNS before flushing
 DOCKER_DNS_RULES=""
 if command -v iptables-save >/dev/null 2>&1; then
     DOCKER_DNS_RULES=\$(iptables-save -t nat 2>/dev/null | grep "127\\.0\\.0\\.11" || true)
+fi
+
+DOCKER_DNS_RULES_V6=""
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    if command -v ip6tables-save >/dev/null 2>&1; then
+        DOCKER_DNS_RULES_V6=\$(ip6tables-save -t nat 2>/dev/null | grep "::11" || true)
+    fi
 fi
 
 iptables -F 2>/dev/null || true
@@ -69,8 +99,20 @@ iptables -t nat -F 2>/dev/null || true
 iptables -t nat -X 2>/dev/null || true
 iptables -t mangle -F 2>/dev/null || true
 iptables -t mangle -X 2>/dev/null || true
+
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    ip6tables -F 2>/dev/null || true
+    ip6tables -X 2>/dev/null || true
+    ip6tables -t nat -F 2>/dev/null || true
+    ip6tables -t nat -X 2>/dev/null || true
+    ip6tables -t mangle -F 2>/dev/null || true
+    ip6tables -t mangle -X 2>/dev/null || true
+fi
+
 ipset destroy allowed-domains 2>/dev/null || true
 ipset destroy blocked-domains 2>/dev/null || true
+ipset destroy allowed-domains-v6 2>/dev/null || true
+ipset destroy blocked-domains-v6 2>/dev/null || true
 
 # 2. Restore Docker DNS
 if [ -n "\$DOCKER_DNS_RULES" ]; then
@@ -83,6 +125,16 @@ if [ -n "\$DOCKER_DNS_RULES" ]; then
     done
 fi
 
+if [ -n "\$DOCKER_DNS_RULES_V6" ]; then
+    echo "Restoring Docker IPv6 DNS rules..."
+    ip6tables -t nat -N DOCKER_OUTPUT 2>/dev/null || true
+    ip6tables -t nat -N DOCKER_POSTROUTING 2>/dev/null || true
+    echo "\$DOCKER_DNS_RULES_V6" | while read -r line; do
+        [ -z "\$line" ] && continue
+        eval "ip6tables -t nat \$line" 2>/dev/null || true
+    done
+fi
+
 # 3. Base allowances
 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
 iptables -A INPUT -p udp --sport 53 -j ACCEPT
@@ -91,10 +143,26 @@ iptables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    ip6tables -A OUTPUT -p udp --dport 53 -j ACCEPT
+    ip6tables -A INPUT -p udp --sport 53 -j ACCEPT
+    ip6tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+    ip6tables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+    ip6tables -A INPUT -i lo -j ACCEPT
+    ip6tables -A OUTPUT -o lo -j ACCEPT
+fi
+
 ipset create allowed-domains hash:net
 
 if [ "\$BLOCK_TELEMETRY" = "true" ]; then
     ipset create blocked-domains hash:net
+fi
+
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    ipset create allowed-domains-v6 hash:net family inet6
+    if [ "\$BLOCK_TELEMETRY" = "true" ]; then
+        ipset create blocked-domains-v6 hash:net family inet6
+    fi
 fi
 
 # 4. Build domain list from preset
@@ -104,11 +172,12 @@ TELEMETRY_DOMAINS="statsig.anthropic.com statsig.com sentry.io google-analytics.
 resolve_and_add() {
     _domain="\$1"
     _ipset="\$2"
+    _qtype="\${3:-A}"
     _attempts=0
     _max_attempts=3
     while [ "\$_attempts" -lt "\$_max_attempts" ]; do
-        echo "Resolving \$_domain..."
-        _ips=\$(dig +noall +answer A "\$_domain" | awk '\$4 == "A" {print \$5}')
+        echo "Resolving \$_domain (\$_qtype)..."
+        _ips=\$(dig +noall +answer "\$_qtype" "\$_domain" | awk -v qt="\$_qtype" '\$4 == qt {print \$5}')
         if [ -n "\$_ips" ]; then
             break
         fi
@@ -119,7 +188,7 @@ resolve_and_add() {
         fi
     done
     if [ -z "\$_ips" ]; then
-        echo "WARNING: Failed to resolve \$_domain after \$_max_attempts attempts"
+        echo "WARNING: Failed to resolve \$_domain (\$_qtype) after \$_max_attempts attempts"
         return 0
     fi
     echo "\$_ips" | while read -r _ip; do
@@ -168,6 +237,10 @@ if [ "\$PROFILE" = "claude-code" ] || [ "\$PROFILE" = "github-only" ]; then
         echo "WARNING: Failed to fetch GitHub IP ranges after \$_gh_max_attempts attempts, falling back to DNS resolution"
         resolve_and_add "api.github.com" "allowed-domains"
         resolve_and_add "github.com" "allowed-domains"
+        if [ "\$ENABLE_IPV6" = "true" ]; then
+            resolve_and_add "api.github.com" "allowed-domains-v6" "AAAA"
+            resolve_and_add "github.com" "allowed-domains-v6" "AAAA"
+        fi
     else
         if echo "\$gh_ranges" | jq -e '.web and .api and .git' >/dev/null 2>&1; then
             echo "\$gh_ranges" | jq -r '(.web + .api + .git)[]' | while read -r cidr; do
@@ -204,6 +277,9 @@ for domain in \$CLY_DOMAINS; do
         fi
     fi
     resolve_and_add "\$domain" "allowed-domains"
+    if [ "\$ENABLE_IPV6" = "true" ]; then
+        resolve_and_add "\$domain" "allowed-domains-v6" "AAAA"
+    fi
 done
 
 # 7. Block telemetry domains if requested
@@ -211,6 +287,9 @@ if [ "\$BLOCK_TELEMETRY" = "true" ]; then
     echo "Blocking telemetry domains..."
     for domain in \$TELEMETRY_DOMAINS; do
         resolve_and_add "\$domain" "blocked-domains"
+        if [ "\$ENABLE_IPV6" = "true" ]; then
+            resolve_and_add "\$domain" "blocked-domains-v6" "AAAA"
+        fi
     done
 fi
 
@@ -221,6 +300,16 @@ if [ -n "\$HOST_IP" ]; then
     echo "Host network detected as: \$HOST_NETWORK"
     iptables -A INPUT -s "\$HOST_NETWORK" -j ACCEPT
     iptables -A OUTPUT -d "\$HOST_NETWORK" -j ACCEPT
+fi
+
+if [ "\$ENABLE_IPV6" = "true" ]; then
+    HOST_IPV6=\$(ip -6 route 2>/dev/null | grep default | awk '{print \$3}' | head -n 1)
+    if [ -n "\$HOST_IPV6" ]; then
+        HOST_NETWORK_V6=\$(printf '%s' "\$HOST_IPV6" | awk -F: '{printf "%s:%s:%s:%s::/64\\n", \$1, \$2, \$3, \$4}')
+        echo "Host IPv6 network detected as: \$HOST_NETWORK_V6"
+        ip6tables -A INPUT -s "\$HOST_NETWORK_V6" -j ACCEPT
+        ip6tables -A OUTPUT -d "\$HOST_NETWORK_V6" -j ACCEPT
+    fi
 fi
 
 # 9. Apply policy
@@ -238,12 +327,37 @@ if [ "\$POLICY" = "whitelist" ]; then
 
     iptables -A OUTPUT -m set --match-set allowed-domains dst -j ACCEPT
     iptables -A OUTPUT -j REJECT --reject-with icmp-admin-prohibited
+
+    if [ "\$ENABLE_IPV6" = "true" ]; then
+        if [ "\$BLOCK_TELEMETRY" = "true" ]; then
+            ip6tables -I OUTPUT -m set --match-set blocked-domains-v6 dst -j DROP
+        fi
+
+        ip6tables -P INPUT DROP
+        ip6tables -P FORWARD DROP
+        ip6tables -P OUTPUT DROP
+
+        ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+        ip6tables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+        ip6tables -A OUTPUT -m set --match-set allowed-domains-v6 dst -j ACCEPT
+        ip6tables -A OUTPUT -j REJECT --reject-with icmp6-adm-prohibited
+    fi
+
     echo "Firewall configured in whitelist mode"
 else
     if [ "\$BLOCK_TELEMETRY" = "true" ]; then
         iptables -I OUTPUT -m set --match-set blocked-domains dst -j DROP
     fi
     iptables -A OUTPUT -m set ! --match-set allowed-domains dst -j LOG --log-prefix "FIREWALL-DROP: " --log-level 4
+
+    if [ "\$ENABLE_IPV6" = "true" ]; then
+        if [ "\$BLOCK_TELEMETRY" = "true" ]; then
+            ip6tables -I OUTPUT -m set --match-set blocked-domains-v6 dst -j DROP
+        fi
+        ip6tables -A OUTPUT -m set ! --match-set allowed-domains-v6 dst -j LOG --log-prefix "FIREWALL-DROP-V6: " --log-level 4
+    fi
+
     echo "Firewall configured in monitor mode (logging only)"
 fi
 

@@ -9,6 +9,40 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "claude-code-rules": {
+                "enforceSafety": true,
+                "standardizeWorkflow": false,
+                "protectGit": false,
+                "preferPythonTooling": false
+            }
+        }
+    },
+    "python_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-rules": {
+                "enforceSafety": false,
+                "standardizeWorkflow": false,
+                "protectGit": false,
+                "preferPythonTooling": true
+            }
+        }
+    },
+    "all_enabled": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-rules": {
+                "enforceSafety": true,
+                "standardizeWorkflow": true,
+                "protectGit": true,
+                "preferPythonTooling": true
+            }
+        }
+    },
+    "all_disabled": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-rules": {
+                "enforceSafety": false,
                 "standardizeWorkflow": false,
                 "protectGit": false,
                 "preferPythonTooling": false
