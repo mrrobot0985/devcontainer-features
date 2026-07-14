@@ -34,7 +34,7 @@ These features are designed to be composed with official features:
 
 ### `claude-code-backend`
 
-Configures Claude Code to use a custom API backend by writing environment variables to `~/.claude/settings.local.json`.
+Configures Claude Code to use a custom API backend by writing environment variables to `~/.claude/settings.json`.
 
 **Options:**
 
@@ -65,7 +65,7 @@ Model overrides with key `subagent` map to `CLAUDE_CODE_SUBAGENT_MODEL`; all oth
 
 ### `claude-code-privacy`
 
-Hardens Claude Code privacy settings by writing flags to `~/.claude/settings.local.json`.
+Hardens Claude Code privacy settings by writing flags to `~/.claude/settings.json`.
 
 **Options:**
 
@@ -90,15 +90,16 @@ Hardens Claude Code privacy settings by writing flags to `~/.claude/settings.loc
 
 ### `claude-code-hooks`
 
-Installs [claude-code-hooks](https://github.com/mrrobot0985/claude-code-hooks) into `~/.claude/hooks/` and wires them into `~/.claude/settings.local.json`.
+Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement. This feature is self-contained — all hook scripts are bundled directly in the feature package.
 
 **Options:**
 
-| Option              | Type    | Default                                                | Description                                      |
-| ------------------- | ------- | ------------------------------------------------------ | ------------------------------------------------ |
-| `repository`        | string  | `https://github.com/mrrobot0985/claude-code-hooks.git` | Git repository URL containing the hooks.         |
-| `branch`            | string  | `main`                                                 | Git branch, tag, or commit to checkout.          |
-| `installStatusLine` | boolean | `true`                                                 | Also install the status line hook configuration. |
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `installSessionHooks` | boolean | `true` | Install session lifecycle hooks (start, end, setup, compact, etc.) |
+| `installAgentHooks` | boolean | `true` | Install agent behavior hooks (tool use, permissions, subagents, tasks) |
+| `installTurnHooks` | boolean | `true` | Install turn-level hooks (prompt submission, stop, notifications) |
+| `installStatusLine` | boolean | `true` | Also install the status line hook configuration |
 
 **Example:**
 
@@ -108,8 +109,9 @@ Installs [claude-code-hooks](https://github.com/mrrobot0985/claude-code-hooks) i
     "features": {
         "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
         "ghcr.io/mrrobot0985/devcontainer-features/claude-code-hooks:0": {
-            "repository": "https://github.com/mrrobot0985/claude-code-hooks.git",
-            "branch": "main",
+            "installSessionHooks": true,
+            "installAgentHooks": true,
+            "installTurnHooks": true,
             "installStatusLine": true
         }
     }
@@ -134,10 +136,10 @@ Rules are organized into four declarative groups:
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `enforceSafety` | boolean | `true` | Enforce safety invariants |
-| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow and process |
-| `protectGit` | boolean | `true` | Protect git configuration |
-| `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules |
+| `enforceSafety` | boolean | `true` | Enforce safety invariants: human sovereignty, no-attribution, no-secrets |
+| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy |
+| `protectGit` | boolean | `true` | Protect git configuration: never override git config inline |
+| `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules: uv/uvx for Python, mdformat with frontmatter/gfm plugins |
 
 **Example:**
 
@@ -158,16 +160,19 @@ Rules are organized into four declarative groups:
 
 ### `claude-code-skills`
 
-Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) into `~/.claude/skills/` with selectable categories.
+Installs skills into `~/.claude/skills/` with configurable sources.
 
 **Options:**
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `installEngineering` | boolean | `true` | Install engineering skills |
-| `installProductivity` | boolean | `true` | Install productivity skills |
-| `installMisc` | boolean | `false` | Install miscellaneous skills |
-| `installPersonal` | boolean | `false` | Install personal skills |
+| `enableMattPocockSkills` | boolean | `true` | Clone and install Matt Pocock's skills from github.com/mattpocock/skills |
+| `mattPocockSkillsVersion` | string | `v1.1.0` | Version/tag of mattpocock/skills to clone |
+| `installEngineering` | boolean | `true` | Install engineering skills (requires enableMattPocockSkills) |
+| `installProductivity` | boolean | `true` | Install productivity skills (requires enableMattPocockSkills) |
+| `installMisc` | boolean | `false` | Install miscellaneous skills (requires enableMattPocockSkills) |
+| `installPersonal` | boolean | `false` | Install personal skills (requires enableMattPocockSkills) |
+| `skipOnFailure` | boolean | `false` | Skip skill installation if clone fails instead of failing the build |
 
 **Example:**
 
@@ -177,10 +182,13 @@ Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) into `~/.cla
     "features": {
         "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
         "ghcr.io/mrrobot0985/devcontainer-features/claude-code-skills:0": {
+            "enableMattPocockSkills": true,
+            "mattPocockSkillsVersion": "v1.1.0",
             "installEngineering": true,
             "installProductivity": true,
             "installMisc": false,
-            "installPersonal": false
+            "installPersonal": false,
+            "skipOnFailure": false
         }
     }
 }
@@ -198,6 +206,7 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
 | `customDomains` | string | `""` | Comma-separated extra domains to allow (used only with `profile=custom`) |
 | `blockTelemetry` | boolean | `false` | Block known telemetry and tracking endpoints at the network level |
 | `policy` | string | `whitelist` | `whitelist` drops non-matching traffic; `monitor` logs but does not block |
+| `enableIPv6` | boolean | `true` | Also apply whitelist rules to IPv6 (ip6tables) |
 
 **Automation:** This feature automatically requests `NET_ADMIN` via `capAdd` and applies the firewall at container start via `postStartCommand`. No manual `devcontainer.json` configuration is required.
 

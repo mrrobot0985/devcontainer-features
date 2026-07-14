@@ -41,11 +41,12 @@ Rules are organized into four declarative groups:
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `enforceSafety` | boolean | `true` | Enforce safety invariants (sovereignty, attribution, secrets) |
-| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow and process |
-| `protectGit` | boolean | `true` | Protect git configuration |
-| `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules |
+| `enforceSafety` | boolean | `true` | Enforce safety invariants: human sovereignty, no-attribution, no-secrets |
+| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy |
+| `protectGit` | boolean | `true` | Protect git configuration: never override git config inline |
+| `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules: uv/uvx for Python, mdformat with frontmatter/gfm plugins |
 
 ## Requirements
 
 - `ghcr.io/anthropics/devcontainer-features/claude-code` must be installed first (for the `~/.claude` directory to exist).
+- `ghcr.io/devcontainers/features/common-utils` is also required (declared via `installsAfter`).
