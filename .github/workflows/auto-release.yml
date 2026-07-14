@@ -1,0 +1,91 @@
+name: "Auto-release changed features"
+
+on:
+  schedule:
+    # Every Sunday at 03:17 UTC (off-peak, avoids :00 and :30)
+    - cron: "17 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: "Install jq"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends jq
+
+      - name: "Configure git"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: "Bump and tag changed features"
+        id: bump
+        run: |
+          set -euo pipefail
+
+          changed=0
+          for feature_dir in src/*/; do
+              feature_dir="${feature_dir%/}"
+              feature_id="$(basename "$feature_dir")"
+              json_file="$feature_dir/devcontainer-feature.json"
+
+              if [ ! -f "$json_file" ]; then
+                  echo "SKIP: $feature_id — no devcontainer-feature.json"
+                  continue
+              fi
+
+              # Find latest tag for this feature
+              latest_tag="$(git tag -l "$feature_id-v*" --sort=-v:refname | head -n 1)"
+              if [ -z "$latest_tag" ]; then
+                  echo "SKIP: $feature_id — no existing tag"
+                  continue
+              fi
+
+              tag_commit="$(git rev-parse "$latest_tag^{commit}")"
+
+              # Check for changes since last tag
+              if git diff --quiet "$tag_commit" HEAD -- "$feature_dir"; then
+                  echo "UNCHANGED: $feature_id ($latest_tag)"
+                  continue
+              fi
+
+              echo "CHANGED: $feature_id ($latest_tag → bumping patch)"
+
+              current_version="$(jq -r '.version' "$json_file")"
+              major="$(echo "$current_version" | cut -d. -f1)"
+              minor="$(echo "$current_version" | cut -d. -f2)"
+              patch="$(echo "$current_version" | cut -d. -f3)"
+              new_patch="$((patch + 1))"
+              new_version="${major}.${minor}.${new_patch}"
+
+              # Update version
+              jq --arg v "$new_version" '.version = $v' "$json_file" > "${json_file}.tmp"
+              mv "${json_file}.tmp" "$json_file"
+
+              git add "$json_file"
+              git commit -m "chore($feature_id): bump version to $new_version"
+              git tag "${feature_id}-v${new_version}" -m "release $feature_id v${new_version}"
+
+              changed=1
+              echo "TAGGED: ${feature_id}-v${new_version}"
+          done
+
+          if [ "$changed" -eq 0 ]; then
+              echo "No features changed since their last tag."
+              exit 0
+          fi
+
+          echo "Pushing version bumps and tags..."
+          git push origin HEAD
+          git push origin --tags
