@@ -1,7 +1,7 @@
 {
   "id": "claude-code-rules",
   "name": "Claude Code Rules",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/rules/",
   "options": {
     "enforceSafety": {
