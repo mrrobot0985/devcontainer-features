@@ -10,14 +10,14 @@ This feature:
 
 1. Installs `nvidia-container-toolkit` inside the devcontainer.
 2. Configures `/etc/docker/daemon.json` to register the `nvidia` runtime.
-3. Restarts the inner `dockerd` (if running) so the runtime is available immediately.
+3. Reloads the inner `dockerd` (if running) so the runtime is available immediately.
 
 ## Options
 
 | Options Id | Description | Type | Default Value |
 | ---------- | ----------- | ---- | ------------- |
 | `defaultRuntime` | Set `nvidia` as the default container runtime for the inner dockerd | boolean | `false` |
-| `restartDockerd` | Automatically restart the inner dockerd after configuration if it is running | boolean | `true` |
+| `restartDockerd` | Automatically reload the inner dockerd after configuration if it is running | boolean | `true` |
 
 ## Example Usage
 

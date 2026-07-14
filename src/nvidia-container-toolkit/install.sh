@@ -101,7 +101,7 @@ echo "Docker daemon configuration updated"
 # Restart dockerd if requested and running
 if [ "$RESTART_DOCKERD" = "true" ]; then
     if pgrep -x dockerd >/dev/null 2>&1 || pgrep -f "dockerd" >/dev/null 2>&1; then
-        echo "Restarting dockerd to apply new runtime configuration..."
+        echo "Reloading dockerd to apply new runtime configuration..."
         pkill -SIGHUP dockerd >/dev/null 2>&1 || true
         sleep 2
 
@@ -114,7 +114,7 @@ if [ "$RESTART_DOCKERD" = "true" ]; then
         echo "dockerd is not currently running. The NVIDIA runtime will be available when dockerd starts."
     fi
 else
-    echo "dockerd restart skipped (restartDockerd=false). The NVIDIA runtime will be available after the next dockerd restart."
+    echo "dockerd reload skipped (restartDockerd=false). The NVIDIA runtime will be available after the next dockerd restart."
 fi
 
 echo "NVIDIA Container Toolkit feature installation complete"
