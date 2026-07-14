@@ -16,14 +16,15 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 
 ## Features
 
-| Feature               | Description                                                                                 |
-| --------------------- | ------------------------------------------------------------------------------------------- |
-| `claude-code-backend` | Configures Claude Code to use a custom API backend, such as Ollama.                         |
-| `claude-code-privacy` | Disables telemetry, error reporting, feedback, and automatic updates for Claude Code.       |
-| `claude-code-hooks`   | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
-| `claude-code-rules`   | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.   |
-| `claude-code-skills`  | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories.         |
-| `container-firewall`  | Configures an iptables/ipset whitelist firewall with selectable service presets.          |
+| Feature | Version | Description |
+| ------- | ------- | ----------- |
+| `claude-code-backend` | ![claude-code-backend version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-backend/devcontainer-feature.json&label=&query=$.version&color=blue) | Configures Claude Code to use a custom API backend, such as Ollama. |
+| `claude-code-privacy` | ![claude-code-privacy version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-privacy/devcontainer-feature.json&label=&query=$.version&color=blue) | Disables telemetry, error reporting, feedback, and automatic updates for Claude Code. |
+| `claude-code-hooks` | ![claude-code-hooks version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-hooks/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
+| `claude-code-rules` | ![claude-code-rules version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-rules/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`. |
+| `claude-code-skills` | ![claude-code-skills version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-skills/devcontainer-feature.json&label=&query=$.version&color=blue) | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories. |
+| `container-firewall` | ![container-firewall version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/container-firewall/devcontainer-feature.json&label=&query=$.version&color=blue) | Configures an iptables/ipset whitelist firewall with selectable service presets. |
+| `nvidia-container-toolkit` | ![nvidia-container-toolkit version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/nvidia-container-toolkit/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs and configures the NVIDIA Container Toolkit for Docker-in-Docker GPU support. |
 
 These features are designed to be composed with official features:
 
@@ -209,6 +210,33 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
         "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
             "profile": "claude-code",
             "blockTelemetry": true
+        }
+    }
+}
+```
+
+### `nvidia-container-toolkit`
+
+Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from an inner Docker daemon (Docker-in-Docker).
+
+**Options:**
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `enable` | boolean | `true` | Enable the NVIDIA Container Toolkit feature. When `false`, the feature is a no-op. |
+| `defaultRuntime` | boolean | `false` | Set `nvidia` as the default container runtime for the inner dockerd. |
+| `restartDockerd` | boolean | `true` | Automatically reload the inner dockerd after configuration if it is running. |
+
+**Example:**
+
+```jsonc
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/nvidia-container-toolkit:1": {
+            "defaultRuntime": true,
+            "restartDockerd": true
         }
     }
 }
