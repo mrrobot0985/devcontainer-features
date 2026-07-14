@@ -12,7 +12,7 @@
     "restartDockerd": {
       "type": "boolean",
       "default": true,
-      "description": "Automatically restart the inner dockerd after configuration if it is running"
+      "description": "Automatically reload the inner dockerd after configuration if it is running"
     }
   },
   "installsAfter": [
