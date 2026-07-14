@@ -18,6 +18,7 @@ jobs:
           - claude-code-hooks
           - container-firewall
           - claude-code-rules
+          - nvidia-container-toolkit
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -43,6 +44,7 @@ jobs:
           - container-firewall
           - claude-code-rules
           - claude-code-skills
+          - nvidia-container-toolkit
     steps:
       - uses: actions/checkout@v7
 

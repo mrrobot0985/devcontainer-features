@@ -1,0 +1,11 @@
+{
+    "default_runtime": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "nvidia-container-toolkit": {
+                "defaultRuntime": true,
+                "restartDockerd": false
+            }
+        }
+    }
+}
