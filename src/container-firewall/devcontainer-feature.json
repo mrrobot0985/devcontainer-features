@@ -1,0 +1,45 @@
+{
+  "id": "container-firewall",
+  "name": "Container Firewall",
+  "version": "0.1.0",
+  "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service presets and optional telemetry blocking",
+  "options": {
+    "profile": {
+      "type": "string",
+      "enum": [
+        "claude-code",
+        "github-only",
+        "minimal",
+        "custom"
+      ],
+      "default": "claude-code",
+      "description": "Preset bundle of allowed outbound services"
+    },
+    "customDomains": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated extra domains to allow (used only with profile=custom)"
+    },
+    "blockTelemetry": {
+      "type": "boolean",
+      "default": false,
+      "description": "Block known telemetry and tracking endpoints at the network level"
+    },
+    "policy": {
+      "type": "string",
+      "enum": [
+        "whitelist",
+        "monitor"
+      ],
+      "default": "whitelist",
+      "description": "whitelist drops non-matching traffic; monitor logs but does not block"
+    }
+  },
+  "capAdd": [
+    "NET_ADMIN"
+  ],
+  "postStartCommand": "sudo /usr/local/bin/container-firewall-init",
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

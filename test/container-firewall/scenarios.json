@@ -1,0 +1,28 @@
+{
+    "github_only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "profile": "github-only"
+            }
+        }
+    },
+    "custom_profile": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "profile": "custom",
+                "customDomains": "api.github.com"
+            }
+        }
+    },
+    "block_telemetry": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "profile": "claude-code",
+                "blockTelemetry": true
+            }
+        }
+    }
+}
