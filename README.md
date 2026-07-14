@@ -126,7 +126,7 @@ Rules are organized into four declarative groups:
 
 **Safety (`enforceSafety`):** `human-sovereignty`, `no-attribution`, `no-secrets`
 
-**Workflow (`standardizeWorkflow`):** `mcp-tools-first`, `skill-discovery`, `anti-overengineering`, `conventional-commits`, `branch-strategy`
+**Workflow (`standardizeWorkflow`):** `mcp-tools-first`, `skill-discovery`, `anti-overengineering`, `conventional-commits`, `no-orphans`, `branch-strategy`
 
 **Git Protection (`protectGit`):** `no-git-config-override`
 
@@ -137,7 +137,7 @@ Rules are organized into four declarative groups:
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `enforceSafety` | boolean | `true` | Enforce safety invariants: human sovereignty, no-attribution, no-secrets |
-| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy |
+| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, no-orphans, branch strategy |
 | `protectGit` | boolean | `true` | Protect git configuration: never override git config inline |
 | `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules: uv/uvx for Python, mdformat with frontmatter/gfm plugins |
 

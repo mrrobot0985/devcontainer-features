@@ -1,7 +1,7 @@
 {
   "id": "claude-code-rules",
   "name": "Claude Code Rules",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/rules/",
   "options": {
     "enforceSafety": {
@@ -12,7 +12,7 @@
     "standardizeWorkflow": {
       "type": "boolean",
       "default": true,
-      "description": "Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy"
+      "description": "Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, no-orphans, branch strategy"
     },
     "protectGit": {
       "type": "boolean",
