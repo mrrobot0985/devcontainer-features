@@ -23,6 +23,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `claude-code-hooks`   | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
 | `claude-code-rules`   | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.   |
 | `claude-code-skills`  | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories.         |
+| `container-firewall`  | Configures an iptables/ipset whitelist firewall with selectable service presets.          |
 
 These features are designed to be composed with official features:
 
@@ -184,6 +185,35 @@ Clones [Matt Pocock's skills](https://github.com/mattpocock/skills) into `~/.cla
 }
 ```
 
+### `container-firewall`
+
+Configures an iptables/ipset whitelist firewall for the container with selectable service presets and optional telemetry blocking.
+
+**Options:**
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `profile` | string | `claude-code` | Preset bundle of allowed outbound services (`claude-code`, `github-only`, `minimal`, `custom`) |
+| `customDomains` | string | `""` | Comma-separated extra domains to allow (used only with `profile=custom`) |
+| `blockTelemetry` | boolean | `false` | Block known telemetry and tracking endpoints at the network level |
+| `policy` | string | `whitelist` | `whitelist` drops non-matching traffic; `monitor` logs but does not block |
+
+**Automation:** This feature automatically requests `NET_ADMIN` via `capAdd` and applies the firewall at container start via `postStartCommand`. No manual `devcontainer.json` configuration is required.
+
+**Example:**
+
+```jsonc
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
+            "profile": "claude-code",
+            "blockTelemetry": true
+        }
+    }
+}
+```
+
 ## CI
 
 Feature changes are validated by [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
@@ -209,6 +239,7 @@ git config core.hooksPath .githooks
 ```
 
 The hook:
+
 - Auto-generates any missing `src/<feature>/README.md` files from their JSON metadata.
 - Warns when a staged `devcontainer-feature.json` is not accompanied by its `README.md` update.
 
