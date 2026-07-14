@@ -61,7 +61,7 @@ Personal development and writing skills.
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `enableMattPocockSkills` | boolean | `true` | Clone and install Matt Pocock's skills from github.com/mattpocock/skills |
-| `mattPocockSkillsVersion` | string | `v1.1` | Version/tag of mattpocock/skills to clone |
+| `mattPocockSkillsVersion` | string | `v1.1.0` | Version/tag of mattpocock/skills to clone |
 | `installEngineering` | boolean | `true` | Install engineering skills (requires enableMattPocockSkills) |
 | `installProductivity` | boolean | `true` | Install productivity skills (requires enableMattPocockSkills) |
 | `installMisc` | boolean | `false` | Install miscellaneous skills (requires enableMattPocockSkills) |

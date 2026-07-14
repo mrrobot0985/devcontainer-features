@@ -18,7 +18,7 @@ This feature writes documented, stable environment variables into `~/.claude/set
 ```json
 {
   "features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-privacy:0.1": {
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-privacy:0": {
       "disableTelemetry": true,
       "disableErrorReporting": true,
       "disableFeedback": true,
