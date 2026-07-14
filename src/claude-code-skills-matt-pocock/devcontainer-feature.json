@@ -1,7 +1,7 @@
 {
   "id": "claude-code-skills-matt-pocock",
   "name": "Claude Code Matt Pocock Skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Clones Matt Pocock's skills into ~/.claude/skills/ with selectable categories",
   "options": {
     "installEngineering": {
