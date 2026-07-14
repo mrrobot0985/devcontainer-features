@@ -18,7 +18,6 @@ jobs:
           - claude-code-hooks
           - container-firewall
           - claude-code-rules
-          - claude-code-skills
         baseImage:
           - debian:latest
           - ubuntu:latest

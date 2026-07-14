@@ -16,6 +16,14 @@ PREFER_PYTHON_TOOLING="${PREFERPYTHONTOOLING:-false}"
 # Ensure the destination directory exists
 mkdir -p "$RULES_DIR"
 
+# Clear existing rules to ensure idempotency when options change.
+# In a devcontainer, the rules directory is managed by this feature.
+for _existing in "$RULES_DIR"/*.md; do
+    if [ -f "$_existing" ]; then
+        rm -f "$_existing"
+    fi
+done
+
 # Helper to copy all rules from a group directory if enabled
 copy_group() {
     _group_dir="$1"
