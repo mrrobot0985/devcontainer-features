@@ -22,6 +22,7 @@ Rules are organized into four declarative groups:
 | `00-skill-discovery.md` | High | Scan and invoke skills before every request. |
 | `04-anti-overengineering.md` | Essential | Ground in physical reality; no speculative futures. |
 | `01-conventional-commits.md` | Strict | All commit messages follow Conventional Commits. |
+| `02-no-orphans.md` | Strict | Every created resource must have an owner and a deletion plan. |
 | `03-branch-strategy.md` | Strict | Branch naming, CI gate, and merge requirements. |
 
 ### Git Protection (`protectGit`)
@@ -42,7 +43,7 @@ Rules are organized into four declarative groups:
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `enforceSafety` | boolean | `true` | Enforce safety invariants: human sovereignty, no-attribution, no-secrets |
-| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, branch strategy |
+| `standardizeWorkflow` | boolean | `true` | Standardize agent workflow: skill discovery, MCP tools first, anti-overengineering, conventional commits, no-orphans, branch strategy |
 | `protectGit` | boolean | `true` | Protect git configuration: never override git config inline |
 | `preferPythonTooling` | boolean | `false` | Prefer Python toolchain rules: uv/uvx for Python, mdformat with frontmatter/gfm plugins |
 
