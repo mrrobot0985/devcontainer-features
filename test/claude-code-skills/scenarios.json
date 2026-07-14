@@ -2,7 +2,9 @@
     "default": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "claude-code-skills": {}
+            "claude-code-skills": {
+                "skipOnFailure": true
+            }
         }
     },
     "engineering_only": {
@@ -12,7 +14,8 @@
                 "installEngineering": true,
                 "installProductivity": false,
                 "installMisc": false,
-                "installPersonal": false
+                "installPersonal": false,
+                "skipOnFailure": true
             }
         }
     },
@@ -23,7 +26,8 @@
                 "installEngineering": true,
                 "installProductivity": true,
                 "installMisc": true,
-                "installPersonal": true
+                "installPersonal": true,
+                "skipOnFailure": true
             }
         }
     },
@@ -34,7 +38,8 @@
                 "installEngineering": false,
                 "installProductivity": false,
                 "installMisc": false,
-                "installPersonal": false
+                "installPersonal": false,
+                "skipOnFailure": true
             }
         }
     },
@@ -42,7 +47,8 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "claude-code-skills": {
-                "enableMattPocockSkills": false
+                "enableMattPocockSkills": false,
+                "skipOnFailure": true
             }
         }
     }

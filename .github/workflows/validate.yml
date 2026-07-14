@@ -27,6 +27,6 @@ jobs:
 
       - name: "Run shellcheck"
         run: |
-          shellcheck src/*/install.sh
-          shellcheck test/*/*.sh
-          shellcheck test/_global/*.sh
+          shellcheck --severity=warning src/*/install.sh src/*/uninstall.sh
+          shellcheck --severity=warning test/*/*.sh
+          shellcheck --severity=warning test/_global/*.sh

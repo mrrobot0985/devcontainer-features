@@ -11,7 +11,7 @@
     },
     "mattPocockSkillsVersion": {
       "type": "string",
-      "default": "v1.1",
+      "default": "v1.1.0",
       "description": "Version/tag of mattpocock/skills to clone"
     },
     "installEngineering": {
