@@ -3,6 +3,13 @@ set -e
 
 echo "Activating feature 'nvidia-container-toolkit'"
 
+ENABLE="${ENABLE:-true}"
+
+if [ "$ENABLE" = "false" ]; then
+    echo "Feature is disabled (enable=false). Skipping NVIDIA Container Toolkit installation."
+    exit 0
+fi
+
 DEFAULT_RUNTIME="${DEFAULTRUNTIME:-false}"
 RESTART_DOCKERD="${RESTARTDOCKERD:-true}"
 

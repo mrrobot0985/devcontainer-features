@@ -16,6 +16,7 @@ This feature:
 
 | Options Id | Description | Type | Default Value |
 | ---------- | ----------- | ---- | ------------- |
+| `enable` | Enable the NVIDIA Container Toolkit feature. When `false`, the feature is a no-op. | boolean | `true` |
 | `defaultRuntime` | Set `nvidia` as the default container runtime for the inner dockerd | boolean | `false` |
 | `restartDockerd` | Automatically reload the inner dockerd after configuration if it is running | boolean | `true` |
 
