@@ -6,8 +6,8 @@
   "options": {
     "baseUrl": {
       "type": "string",
-      "default": "http://host.docker.internal:11434",
-      "description": "Custom API base URL"
+      "default": "",
+      "description": "Custom API base URL (auto-defaults to http://host.docker.internal:11434 when authToken is ollama)"
     },
     "authToken": {
       "type": "string",
