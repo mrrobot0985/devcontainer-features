@@ -1,0 +1,88 @@
+# Monorepo Design
+
+This repository holds multiple independent dev container features in a single codebase. This document explains why that design was chosen and how versioning, tags, and packaging avoid the collisions that monorepos can introduce.
+
+## Why one repository for many features
+
+All eight features extend Claude Code and container tooling in related ways. Keeping them together gives several practical advantages:
+
+- **Shared CI and scripts.** One set of workflows runs shellcheck, schema validation, README generation, and release automation for every feature.
+- **Shared patterns.** Helper scripts like `merge-settings.sh` and the `.githooks/pre-commit` hook live in one place and are reused across features.
+- **Atomic cross-cutting changes.** A change that affects how several features write to `~/.claude/settings.json` can be made and reviewed in a single pull request.
+- **Simpler maintenance.** There is one local CI gate, one set of issue templates, and one contribution guide.
+
+The trade-off is that git tags, GitHub releases, and container packages must be scoped per feature. This repository solves that with prefixed tags.
+
+## Prefixed tags prevent collisions
+
+A plain SemVer tag like `v0.1.0` would be ambiguous: which feature does it release? Instead, every release tag carries the feature id as a prefix:
+
+```
+claude-code-backend-v0.1.1
+container-firewall-v0.2.0
+nvidia-container-toolkit-v0.1.1
+```
+
+This convention is enforced by `.github/workflows/tag-release.yml`, which creates tags from each `devcontainer-feature.json` version, and by `.github/workflows/release.yaml`, which triggers only on `*-v*` tags.
+
+A consumer still references a feature by its major version, not the git tag:
+
+```jsonc
+"features": {
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {}
+}
+```
+
+The `:0` suffix resolves the latest published release whose major version is `0`. The prefixed git tag is an internal release handle.
+
+## Namespace design
+
+Every feature is published to a dedicated package under the same GitHub Container Registry namespace:
+
+```
+ghcr.io/mrrobot0985/devcontainer-features/<feature-id>:<version>
+```
+
+For example:
+
+```
+ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0.1.1
+ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0.2.0
+```
+
+This layout is consistent with the official dev container features convention. Each feature gets its own package page and version history, while the monorepo groups them under one organization namespace.
+
+## Repository layout
+
+```
+.
+├── src/<feature>/              # One directory per feature
+│   ├── devcontainer-feature.json
+│   ├── install.sh
+│   ├── uninstall.sh (optional)
+│   └── README.md (auto-generated)
+├── test/<feature>/             # Scenario tests
+├── test/_global/               # Cross-feature integration scenarios
+├── scripts/                    # Shared local helpers
+├── .githooks/                  # Pre-commit hook
+└── .github/workflows/          # Shared CI/CD definitions
+```
+
+Each `src/<feature>/` directory is an independent package. The shared tooling at the repository root is what makes the monorepo maintainable.
+
+## Automation relies on the monorepo structure
+
+- `auto-release.yml` walks `src/*/` and compares each directory against its latest prefixed tag.
+- `tag-release.yml` derives the expected prefixed tag from each `src/<feature>/devcontainer-feature.json`.
+- `release.yaml` publishes only the feature whose tag prefix matches a source directory.
+- `generate-feature-readmes.py` discovers features by scanning `src/`.
+
+This would be harder to coordinate across separate repositories.
+
+## Trade-offs
+
+- **Tighter coupling.** A change to shared scripts or workflows affects all features, so updates must be safe for every feature.
+- **Single release cadence.** Weekly auto-release bumps patch versions for any changed feature. If you need a single feature released sooner, use the manual emergency path.
+- **Larger CI matrix.** The test workflow builds every feature, which takes longer than testing a single-feature repo.
+
+For this collection, the benefits of shared tooling and cross-cutting consistency outweigh the costs.
