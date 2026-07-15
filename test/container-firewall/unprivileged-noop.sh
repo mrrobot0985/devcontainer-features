@@ -15,7 +15,7 @@ EOF
 chmod +x /tmp/fakebin/iptables
 
 set +e
-sudo bash -c "PATH=/tmp/fakebin:$PATH /usr/local/bin/container-firewall-init >/tmp/init-noop.log 2>&1"
+sudo env "PATH=/tmp/fakebin:$PATH" /usr/local/bin/container-firewall-init >/tmp/init-noop.log 2>&1
 _init_status=$?
 set -e
 
