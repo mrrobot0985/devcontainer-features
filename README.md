@@ -38,12 +38,12 @@ Configures Claude Code to use a custom API backend by writing environment variab
 
 **Options:**
 
-| Option      | Type   | Default                             | Description                                                    |
-| ----------- | ------ | ----------------------------------- | -------------------------------------------------------------- |
-| `baseUrl`   | string | `http://host.docker.internal:11434` | Custom API base URL.                                           |
-| `authToken` | string | `ollama`                            | Auth token for the custom backend.                             |
-| `models`    | string | `""`                                | Comma-separated model overrides in `key:value` format.         |
-| `logLevel`  | string | `error`                             | Anthropic client log level (`error`, `warn`, `info`, `debug`). |
+| Option      | Type   | Default  | Description                                                                       |
+| ----------- | ------ | -------- | --------------------------------------------------------------------------------- |
+| `baseUrl`   | string | `""`     | Custom API base URL (auto-defaults to `http://host.docker.internal:11434` when `authToken` is `ollama`). |
+| `authToken` | string | `ollama` | Auth token for the custom backend.                                                |
+| `models`    | string | `""`     | Comma-separated model overrides in `key:value` format.                            |
+| `logLevel`  | string | `error`  | Anthropic client log level (`error`, `warn`, `info`, `debug`).                    |
 
 Model overrides with key `subagent` map to `CLAUDE_CODE_SUBAGENT_MODEL`; all other keys map to `ANTHROPIC_DEFAULT_<KEY>_MODEL`.
 

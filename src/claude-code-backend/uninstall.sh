@@ -35,6 +35,17 @@ else
     echo "No settings file found at $SETTINGS_FILE"
 fi
 
+# Remove the ollama healthcheck block from shell rc files.
+HEALTHCHECK_MARK="# claude-code-backend: ollama healthcheck"
+for rc_file in "$USER_HOME/.bashrc" "$USER_HOME/.zshrc"; do
+    if [ -f "$rc_file" ]; then
+        if grep -q "$HEALTHCHECK_MARK" "$rc_file"; then
+            sed -i "/$HEALTHCHECK_MARK/,/unset -f _ollama_healthcheck/d" "$rc_file"
+            echo "Removed ollama healthcheck from $rc_file"
+        fi
+    fi
+done
+
 if [ -d "$CLAUDE_DIR" ]; then
     chown -R "${_REMOTE_USER:-root}:${_REMOTE_USER:-root}" "$CLAUDE_DIR"
 fi
