@@ -23,6 +23,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `claude-code-hooks` | ![claude-code-hooks version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-hooks/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs lifecycle hooks for Claude Code telemetry, state tracking, and policy enforcement. |
 | `claude-code-rules` | ![claude-code-rules version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-rules/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`. |
 | `claude-code-skills` | ![claude-code-skills version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-skills/devcontainer-feature.json&label=&query=$.version&color=blue) | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories. |
+| `claude-code-plugins` | ![claude-code-plugins version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/claude-code-plugins/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs Claude Code plugins from marketplaces at build time. |
 | `container-firewall` | ![container-firewall version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/container-firewall/devcontainer-feature.json&label=&query=$.version&color=blue) | Configures an iptables/ipset whitelist firewall with selectable service presets. |
 | `nvidia-container-toolkit` | ![nvidia-container-toolkit version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/mrrobot0985/devcontainer-features/main/src/nvidia-container-toolkit/devcontainer-feature.json&label=&query=$.version&color=blue) | Installs and configures the NVIDIA Container Toolkit for Docker-in-Docker GPU support. |
 
@@ -259,7 +260,8 @@ Feature changes are validated by [`.github/workflows/test.yaml`](.github/workflo
 - `test-scenarios` — runs each feature's scenario definitions.
 - `test-global` — runs multi-feature integration scenarios from `test/_global/scenarios.json`.
 
-Run the local CI gate before pushing:
+Run the local CI gate before pushing (this is a local helper; CI still runs
+`.github/workflows/test.yaml` and `.github/workflows/validate.yml` independently):
 
 ```bash
 ./scripts/local-ci.sh
