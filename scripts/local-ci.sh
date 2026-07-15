@@ -1,5 +1,7 @@
 #!/bin/bash
 # Local CI gate — run this before pushing to catch failures early.
+# NOTE: This script is not invoked by CI; it is a convenience helper for
+# local pre-push validation only.
 # Uses act (https://github.com/nektos/act) for workflow simulation and
 # npx @devcontainers/cli for feature-level testing.
 #
@@ -75,6 +77,19 @@ for script in src/*/install.sh src/*/uninstall.sh; do
         fi
     fi
 done
+
+# --- Sync per-feature READMEs with devcontainer-feature.json ---
+echo ""
+echo "--- Running README generator check ---"
+if ! command -v uv >/dev/null 2>&1; then
+    fail "uv is not installed. Install from https://docs.astral.sh/uv/getting-started/installation/"
+    exit 1
+fi
+if uv run python scripts/generate-feature-readmes.py --check; then
+    pass "README generator check"
+else
+    fail "README generator check"
+fi
 
 # --- Validate devcontainer-feature.json files ---
 echo ""
