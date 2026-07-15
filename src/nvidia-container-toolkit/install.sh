@@ -10,6 +10,15 @@ if [ "$ENABLE" = "false" ]; then
     exit 0
 fi
 
+# Detect NVIDIA GPU presence. Skip gracefully when no GPU is available.
+if [ -c /dev/nvidia0 ] || { command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; }; then
+    echo "NVIDIA GPU detected."
+else
+    echo "WARNING: No NVIDIA GPU detected (/dev/nvidia0 missing and nvidia-smi unavailable)."
+    echo "         Skipping NVIDIA Container Toolkit installation."
+    exit 0
+fi
+
 DEFAULT_RUNTIME="${DEFAULTRUNTIME:-false}"
 RESTART_DOCKERD="${RESTARTDOCKERD:-true}"
 

@@ -53,3 +53,4 @@ With `defaultRuntime: true`, you can omit `--runtime=nvidia` when running inner 
 
 - This feature currently supports **apt-based** distributions (Debian, Ubuntu). Contributions for other package managers are welcome.
 - If `dockerd` is not running at install time, the configuration is written to `/etc/docker/daemon.json` and will be picked up automatically when `dockerd` starts.
+- **Auto-skip:** The feature automatically skips installation when no NVIDIA GPU is detected (`/dev/nvidia0` missing and `nvidia-smi` unavailable), even when `enable` is `true`. This makes it safe to include in templates that may run on both GPU and non-GPU hosts.
