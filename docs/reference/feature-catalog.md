@@ -18,7 +18,7 @@ Use the `:0` suffix to follow the latest release within major version `0`.
 | Claude Code Rules        | `claude-code-rules`        | `0.1.2` | Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.    | [`src/claude-code-rules/README.md`](../../src/claude-code-rules/README.md)               |
 | Claude Code Skills       | `claude-code-skills`       | `0.1.0` | Clones Matt Pocock's skills into `~/.claude/skills/` with selectable categories.            | [`src/claude-code-skills/README.md`](../../src/claude-code-skills/README.md)             |
 | Claude Code Plugins      | `claude-code-plugins`      | `0.1.0` | Installs Claude Code plugins from marketplaces at build time.                               | [`src/claude-code-plugins/README.md`](../../src/claude-code-plugins/README.md)           |
-| Container Firewall       | `container-firewall`       | `0.2.0` | Configures an iptables/ipset whitelist firewall with selectable service presets.            | [`src/container-firewall/README.md`](../../src/container-firewall/README.md)             |
+| Container Firewall       | `container-firewall`       | `0.3.0` | Configures an iptables/ipset whitelist firewall with selectable service tags.               | [`src/container-firewall/README.md`](../../src/container-firewall/README.md)             |
 | NVIDIA Container Toolkit | `nvidia-container-toolkit` | `0.1.1` | Installs and configures the NVIDIA Container Toolkit for Docker-in-Docker GPU support.      | [`src/nvidia-container-toolkit/README.md`](../../src/nvidia-container-toolkit/README.md) |
 
 These features compose with official features. Useful companions:
@@ -238,13 +238,13 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
 
 ### Options
 
-| Option           | Type    | Default       | Description                                                                                       |
-| ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| `profile`        | string  | `claude-code` | Preset bundle of allowed outbound services: `claude-code`, `github-only`, `minimal`, or `custom`. |
-| `customDomains`  | string  | `""`          | Comma-separated extra domains to allow (used only with `profile=custom`).                         |
-| `blockTelemetry` | boolean | `false`       | Block known telemetry and tracking endpoints at the network level.                                |
-| `policy`         | string  | `whitelist`   | `whitelist` drops non-matching traffic; `monitor` logs but does not block.                        |
-| `enableIPv6`     | boolean | `true`        | Also apply whitelist rules to IPv6 (ip6tables).                                                   |
+| Option           | Type    | Default       | Description                                                                                                                                    |
+| ---------------- | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `services`       | string  | `claude-code` | Comma-separated service tags to whitelist. Use `minimal` for an empty baseline. Composite tags like `claude-code` expand to multiple services. |
+| `extraDomains`   | string  | `""`          | Additional comma-separated domains to whitelist beyond the selected services.                                                                  |
+| `blockTelemetry` | boolean | `false`       | Block known telemetry and tracking endpoints at the network level.                                                                             |
+| `policy`         | string  | `whitelist`   | `whitelist` drops non-matching traffic; `monitor` logs but does not block.                                                                     |
+| `enableIPv6`     | boolean | `true`        | Also apply whitelist rules to IPv6 (ip6tables).                                                                                                |
 
 The feature automatically requests `NET_ADMIN` via `capAdd` and applies the firewall at container start via `postStartCommand`. No manual `devcontainer.json` configuration is required.
 
@@ -255,7 +255,21 @@ The feature automatically requests `NET_ADMIN` via `capAdd` and applies the fire
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
         "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
-            "profile": "claude-code",
+            "services": "claude-code",
+            "blockTelemetry": true
+        }
+    }
+}
+```
+
+### Composite services example
+
+```jsonc
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
+            "services": "claude-code,pypi,docker",
             "blockTelemetry": true
         }
     }

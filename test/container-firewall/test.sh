@@ -16,8 +16,9 @@ if sudo ipset list allowed-domains >/dev/null 2>&1; then
     # Verify loopback interface is functional (ping may not be installed)
     check "loopback interface up" bash -c "ip addr show lo | grep -q '127.0.0.1'"
 
-    # For claude-code and github-only profiles, verify GitHub is reachable
-    if [ "${PROFILE:-claude-code}" = "claude-code" ] || [ "${PROFILE:-claude-code}" = "github-only" ]; then
+    # For claude-code and github service selections, verify GitHub is reachable
+    services="${SERVICES:-claude-code}"
+    if [[ ",$services," == *",claude-code,"* ]] || [[ ",$services," == *",github,"* ]]; then
         check "github api reachable" bash -c "curl -4 -s --connect-timeout 10 https://api.github.com/zen >/dev/null"
     fi
 
