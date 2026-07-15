@@ -1,13 +1,25 @@
+# Validate devcontainer-feature.json files
+#
+# Triggered on every push to main, every pull request, and manual dispatch.
+# This workflow runs the non-test validation gate in three parallel jobs:
+#   1. JSON schema validation of every devcontainer-feature.json file.
+#   2. shellcheck on all shell scripts (installers, tests, helpers, hooks).
+#   3. README sync check ensuring each feature README matches its JSON metadata.
+
 name: "Validate devcontainer-feature.json files"
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
+  # Validate the JSON metadata schema for every feature.
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
       - name: "Validate devcontainer-feature.json files"
         uses: devcontainers/action@v1
@@ -15,10 +27,11 @@ jobs:
           validate-only: "true"
           base-path-to-features: "./src"
 
+  # Static analysis for all shell scripts in the repo.
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
       - name: "Install shellcheck"
         run: |
@@ -27,6 +40,20 @@ jobs:
 
       - name: "Run shellcheck"
         run: |
+          shellcheck --severity=warning scripts/local-ci.sh .githooks/pre-commit
           shellcheck --severity=warning src/*/install.sh src/*/uninstall.sh
           shellcheck --severity=warning test/*/*.sh
           shellcheck --severity=warning test/_global/*.sh
+
+  # Ensure feature READMEs stay in sync with devcontainer-feature.json metadata.
+  # The pre-commit hook enforces the same check locally.
+  readme-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Install uv"
+        uses: astral-sh/setup-uv@v5
+
+      - name: "Check feature READMEs are in sync"
+        run: uv run python scripts/generate-feature-readmes.py --check

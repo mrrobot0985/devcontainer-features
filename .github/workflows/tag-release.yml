@@ -1,0 +1,89 @@
+# Tag feature releases
+#
+# Triggered on every push to main and on demand. Reads each feature's current
+# version from devcontainer-feature.json and creates a prefixed git tag of the
+# form `<feature-name>-v<semver>` when the tag does not already exist. Pushing
+# those tags triggers `.github/workflows/release.yaml` to publish the feature.
+
+name: "Tag feature releases"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: "Create missing feature release tags"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          sha="$(git rev-parse HEAD)"
+
+          # For each feature, derive the expected tag from the JSON version and
+          # create it only if it does not already exist locally or remotely.
+          for feature_dir in src/*/; do
+              feature_dir="${feature_dir%/}"
+              feature_id="$(basename "$feature_dir")"
+              json_file="$feature_dir/devcontainer-feature.json"
+
+              if [ ! -f "$json_file" ]; then
+                  echo "SKIP: $feature_id — no devcontainer-feature.json"
+                  continue
+              fi
+
+              current_version="$(jq -r '.version' "$json_file")"
+              tag="${feature_id}-v${current_version}"
+
+              if git rev-parse "$tag" >/dev/null 2>&1; then
+                  echo "EXISTS: $tag"
+                  continue
+              fi
+
+              echo "CREATING: $tag"
+
+              # Create the annotated tag object through the GitHub API, then
+              # create the refs/tags/* reference pointing to that object.
+              tag_obj="$(
+                jq -n \
+                  --arg tag "$tag" \
+                  --arg message "release $feature_id v$current_version" \
+                  --arg object "$sha" \
+                  --arg type "commit" \
+                  --arg name "github-actions[bot]" \
+                  --arg email "github-actions[bot]@users.noreply.github.com" \
+                  '{
+                    tag: $tag,
+                    message: $message,
+                    object: $object,
+                    type: $type,
+                    tagger: { name: $name, email: $email, date: now | todate }
+                  }' \
+                | gh api --method POST \
+                    -H "Accept: application/vnd.github+json" \
+                    -H "X-GitHub-Api-Version: 2022-11-28" \
+                    "/repos/${{ github.repository }}/git/tags" \
+                    --input -
+              )"
+              tag_sha="$(echo "$tag_obj" | jq -r '.sha')"
+
+              gh api --method POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "/repos/${{ github.repository }}/git/refs" \
+                -f ref="refs/tags/$tag" \
+                -f sha="$tag_sha"
+          done

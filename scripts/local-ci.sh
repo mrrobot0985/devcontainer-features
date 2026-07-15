@@ -1,15 +1,29 @@
 #!/bin/bash
 # Local CI gate — run this before pushing to catch failures early.
-# Uses act (https://github.com/nektos/act) for workflow simulation and
-# npx @devcontainers/cli for feature-level testing.
+#
+# This script is a convenience helper for local pre-push validation. It is NOT
+# invoked by GitHub Actions; CI runs the workflows below independently.
+#
+# Checks performed:
+#   1. shellcheck on every install.sh, uninstall.sh, test script, and helper script
+#      (mirrors the shellcheck job in .github/workflows/validate.yml).
+#   2. README sync check with scripts/generate-feature-readmes.py --check
+#      (mirrors the readme-sync job in .github/workflows/validate.yml).
+#   3. Workflow validation via act -j validate
+#      (runs the validate job from .github/workflows/validate.yml).
+#   4. Dry-run release via act -j deploy --dryrun
+#      (exercises .github/workflows/release.yaml without publishing).
+#   5. Feature smoke tests with npx @devcontainers/cli
+#      (runs --skip-scenarios --skip-duplicated for every feature).
 #
 # Prerequisites:
 #   - Docker running
 #   - act installed (https://github.com/nektos/act#installation)
 #   - gh CLI authenticated (for GITHUB_TOKEN injection)
+#   - uv installed (https://docs.astral.sh/uv/)
 #
 # Limitations:
-#   - Full matrix tests via act hit Docker-in-Docker edge cases; use npx directly for those
+#   - Full matrix tests via act hit Docker-in-Docker edge cases; use npx directly for those.
 
 set -euo pipefail
 
@@ -76,6 +90,19 @@ for script in src/*/install.sh src/*/uninstall.sh; do
     fi
 done
 
+# --- Sync per-feature READMEs with devcontainer-feature.json ---
+echo ""
+echo "--- Running README generator check ---"
+if ! command -v uv >/dev/null 2>&1; then
+    fail "uv is not installed. Install from https://docs.astral.sh/uv/getting-started/installation/"
+    exit 1
+fi
+if uv run python scripts/generate-feature-readmes.py --check; then
+    pass "README generator check"
+else
+    fail "README generator check"
+fi
+
 # --- Validate devcontainer-feature.json files ---
 echo ""
 echo "--- Running act: validate workflow ---"
@@ -95,12 +122,18 @@ else
 fi
 
 # --- Feature-level smoke tests ---
+# These are quick default-install tests for every feature, run directly with
+# npx to avoid Docker-in-Docker issues that act sometimes hits. Scenario and
+# global integration tests are left for the full CI matrix in test.yaml.
 echo ""
 echo "--- Running npx devcontainer features test (dynamic discovery) ---"
 
 BASE_IMAGE="mcr.microsoft.com/devcontainers/base:ubuntu"
+# Reserved for features that cannot be exercised without an authenticated
+# GitHub token (currently none). Add feature IDs here if that changes.
 TOKEN_REQUIRED_FEATURES=()
 
+# Discover all feature IDs from src/*/ directories that contain JSON metadata.
 mapfile -t features < <(for dir in src/*/; do
     if [ -f "${dir}devcontainer-feature.json" ]; then
         basename "$dir"

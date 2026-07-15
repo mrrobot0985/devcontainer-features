@@ -1,14 +1,21 @@
 #!/bin/bash
 set -euo pipefail
 
-# Pre-commit hook: ensure feature READMEs stay in sync with devcontainer-feature.json.
-# Install with: git config core.hooksPath .githooks
+# Pre-commit hook: keep every src/<feature>/README.md in sync with its
+# devcontainer-feature.json metadata.
+#
+# Install once with:
+#   git config core.hooksPath .githooks
+#
+# The same checks run in CI via the readme-sync job in
+# .github/workflows/validate.yml, so drift that passes this hook will also
+# pass CI.
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 # Generate any missing READMEs from devcontainer-feature.json files.
-python3 scripts/generate-feature-readmes.py
+uv run python scripts/generate-feature-readmes.py
 
 # If new READMEs were created (untracked), stage them and abort so the user reviews.
 if git ls-files --others --exclude-standard | grep -qE '^src/.*/README\.md$'; then
@@ -22,9 +29,9 @@ if git ls-files --others --exclude-standard | grep -qE '^src/.*/README\.md$'; th
     exit 1
 fi
 
-# Warn when devcontainer-feature.json is staged but README.md is not.
-# We warn instead of failing because READMEs often contain manual
-# enhancements (usage examples, notes) beyond what the generator produces.
+# Fail when devcontainer-feature.json is staged but README.md is not.
+# This catches edits where the generator updated an existing README but the
+# user forgot to stage it.
 STAGED_JSONS=$(git diff --cached --name-only --diff-filter=ACM | grep 'devcontainer-feature\.json$' || true)
 if [ -n "$STAGED_JSONS" ]; then
     MISSING_README_UPDATES=""
@@ -36,11 +43,11 @@ if [ -n "$STAGED_JSONS" ]; then
     done
     if [ -n "$MISSING_README_UPDATES" ]; then
         echo ""
-        echo "WARNING: The following devcontainer-feature.json files are staged"
-        echo "but their README.md counterparts are not. Consider updating them:"
+        echo "ERROR: The following devcontainer-feature.json files are staged"
+        echo "but their README.md counterparts are not. Stage README updates before committing:"
         printf '%b\n' "$MISSING_README_UPDATES"
         echo ""
-        # Non-fatal: manual README content is common.
+        exit 1
     fi
 fi
 

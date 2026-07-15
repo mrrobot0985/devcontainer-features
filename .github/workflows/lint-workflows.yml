@@ -1,0 +1,27 @@
+# Lint GitHub Actions workflows
+#
+# Triggered on every push to main, every pull request, and manual dispatch.
+# Runs actionlint (https://github.com/rhysd/actionlint) against every workflow
+# file to catch syntax errors, missing permissions, insecure expressions, and
+# other GitHub Actions-specific issues.
+
+name: "Lint workflows"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Install actionlint"
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
+          sudo install actionlint /usr/local/bin/
+      - name: "Lint workflow files"
+        run: actionlint .github/workflows/*.yml .github/workflows/*.yaml

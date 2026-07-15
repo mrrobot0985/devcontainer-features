@@ -1,0 +1,38 @@
+# Conventional Commits check for pull requests
+#
+# Triggered whenever a PR is opened, edited, or synchronized. Validates that the
+# PR title follows Conventional Commits. Because squash merges use the PR title
+# as the commit message, this keeps the main branch history consistent.
+
+name: "Conventional Commits"
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  semantic-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            test
+            chore
+            ci
+            build
+            perf
+          requireScope: false
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The PR subject must not start with an uppercase letter.
