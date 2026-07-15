@@ -18,8 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - name: "Install actionlint"
-        run: uv tool install actionlint
-      - name: "Lint workflow files"
-        run: uv run actionlint .github/workflows/*.yml .github/workflows/*.yaml
+      - uses: rhysd/actionlint@v1
+        with:
+          fail-level: error
