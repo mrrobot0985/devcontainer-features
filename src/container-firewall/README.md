@@ -62,3 +62,22 @@ By default, the feature now fails container creation when `iptables` is not func
     }
 }
 ```
+
+## Available Service Tags
+
+| Tag | Domains | Description |
+|-----|---------|-------------|
+| `minimal` | (none) | Empty baseline; use with `extraDomains` |
+| `claude-code` | github, npm, anthropic, vscode | Composite tag for Claude Code workflow |
+| `github` | github.com, api.github.com | GitHub API and web (with dynamic IP range fetching) |
+| `npm` | registry.npmjs.org | Node.js package registry |
+| `pypi` | pypi.org, files.pythonhosted.org | Python package registry |
+| `apt` | deb.debian.org, archive.ubuntu.com, ... | Debian/Ubuntu package repositories |
+| `docker` | registry-1.docker.io, production.cloudflare.docker.com | Docker Hub image registry |
+| `vscode` | marketplace.visualstudio.com, ... | VS Code marketplace and updates |
+| `astral` | astral.sh | Astral tools (uv, ruff) |
+| `anthropic` | api.anthropic.com | Anthropic API |
+| `huggingface` | huggingface.co, hf.co, cdn.huggingface.co | Hugging Face model hub |
+| `gitlab` | gitlab.com, registry.gitlab.com | GitLab and Container Registry |
+| `openrouter` | openrouter.ai, api.openrouter.ai | OpenRouter unified AI API |
+| `google` | generativelanguage.googleapis.com, ... | Google AI Platform and Gemini APIs |

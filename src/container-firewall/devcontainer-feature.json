@@ -16,7 +16,11 @@
         "docker",
         "vscode",
         "astral",
-        "anthropic"
+        "anthropic",
+        "huggingface",
+        "gitlab",
+        "openrouter",
+        "google"
       ],
       "default": "claude-code",
       "description": "Comma-separated service tags to whitelist. Use 'minimal' for an empty baseline. Composite tags like 'claude-code' expand to multiple services."
