@@ -8,28 +8,21 @@ on:
 
 permissions:
   contents: write
-  packages: write
+  pull-requests: write
 
 jobs:
-  release:
+  bump:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: "Install jq"
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends jq
+      - name: "Install uv"
+        uses: astral-sh/setup-uv@v5
 
-      - name: "Configure git"
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: "Bump and tag changed features"
+      - name: "Bump changed feature versions"
         id: bump
         run: |
           set -euo pipefail
@@ -73,19 +66,26 @@ jobs:
               jq --arg v "$new_version" '.version = $v' "$json_file" > "${json_file}.tmp"
               mv "${json_file}.tmp" "$json_file"
 
-              git add "$json_file"
-              git commit -m "chore($feature_id): bump version to $new_version"
-              git tag "${feature_id}-v${new_version}" -m "release $feature_id v${new_version}"
-
               changed=1
-              echo "TAGGED: ${feature_id}-v${new_version}"
           done
 
           if [ "$changed" -eq 0 ]; then
+              echo "changed=false" >> "$GITHUB_OUTPUT"
               echo "No features changed since their last tag."
-              exit 0
+          else
+              echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-          echo "Pushing version bumps and tags..."
-          git push origin HEAD
-          git push origin --tags
+      - name: "Create release pull request"
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/bump-feature-versions
+          delete-branch: true
+          title: "chore: bump feature versions"
+          body: |
+            Automated patch version bumps for features that changed since their
+            latest release tag. CI must pass before this PR is merged; tags are
+            created only after merge by the `tag-release.yml` workflow.
+          commit-message: "chore: bump feature versions"
