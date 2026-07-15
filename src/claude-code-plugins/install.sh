@@ -17,6 +17,12 @@ SKIP_ON_FAILURE="${SKIPONFAILURE:-false}"
 
 mkdir -p "$CLAUDE_DIR"
 
+# Ensure settings.json exists so downstream tests and features can rely on it.
+SETTINGS_FILE="${CLAUDE_DIR}/settings.json"
+if [ ! -f "$SETTINGS_FILE" ]; then
+    echo '{}' > "$SETTINGS_FILE"
+fi
+
 # Ensure git is available so the CLI can clone marketplace repositories.
 if ! command -v git >/dev/null 2>&1; then
     echo "Installing git..."
