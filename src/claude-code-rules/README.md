@@ -1,5 +1,7 @@
 # Claude Code Rules (claude-code-rules)
 
+![Version](https://img.shields.io/badge/version-0.1.2-blue?style=flat-square)
+
 Installs a curated, condensed set of Claude Code behavior rules into `~/.claude/rules/`.
 
 ## What it installs

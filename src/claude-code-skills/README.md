@@ -1,5 +1,7 @@
 # Claude Code Skills (claude-code-skills)
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Installs skills into `~/.claude/skills/` with configurable sources.
 
 ## What it installs

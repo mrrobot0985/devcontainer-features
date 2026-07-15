@@ -21,6 +21,8 @@ from pathlib import Path
 
 README_TEMPLATE = """# {name}
 
+![Version](https://img.shields.io/badge/version-{version}-blue?style=flat-square)
+
 {description}
 
 ## Options
@@ -79,6 +81,7 @@ def generate_readme(feature_dir: Path) -> str:
         description=data.get("description", ""),
         options_table=_build_options_table(options),
         id=data["id"],
+        version=version,
         version_major=version_major,
     )
 

@@ -1,5 +1,7 @@
 # NVIDIA Container Toolkit for Docker-in-Docker
 
+![Version](https://img.shields.io/badge/version-0.1.1-blue?style=flat-square)
+
 Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from an inner Docker daemon (Docker-in-Docker).
 
 ## Problem Solved

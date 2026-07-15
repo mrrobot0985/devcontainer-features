@@ -1,5 +1,7 @@
 # Claude Code Privacy
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Privacy-hardened defaults for [Claude Code](https://claude.ai/code).
 
 This feature writes documented, stable environment variables into `~/.claude/settings.json` so that Claude Code starts with telemetry, error reporting, the `/feedback` command, and automatic updates disabled by default.
