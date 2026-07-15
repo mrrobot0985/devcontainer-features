@@ -6,7 +6,7 @@ source dev-container-features-test-lib
 check "container-firewall-init exists" test -x /usr/local/bin/container-firewall-init
 
 set +e
-sudo /usr/local/bin/container-firewall-init >/tmp/dryrun.log 2>&1
+sudo bash -c '/usr/local/bin/container-firewall-init >/tmp/dryrun.log 2>&1'
 _init_status=$?
 set -e
 
