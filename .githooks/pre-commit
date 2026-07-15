@@ -1,8 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-# Pre-commit hook: ensure feature READMEs stay in sync with devcontainer-feature.json.
-# Install with: git config core.hooksPath .githooks
+# Pre-commit hook: keep every src/<feature>/README.md in sync with its
+# devcontainer-feature.json metadata.
+#
+# Install once with:
+#   git config core.hooksPath .githooks
+#
+# The same checks run in CI via the readme-sync job in
+# .github/workflows/validate.yml, so drift that passes this hook will also
+# pass CI.
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
@@ -23,7 +30,8 @@ if git ls-files --others --exclude-standard | grep -qE '^src/.*/README\.md$'; th
 fi
 
 # Fail when devcontainer-feature.json is staged but README.md is not.
-# The CI readme-sync job enforces the same check, so drift cannot merge.
+# This catches edits where the generator updated an existing README but the
+# user forgot to stage it.
 STAGED_JSONS=$(git diff --cached --name-only --diff-filter=ACM | grep 'devcontainer-feature\.json$' || true)
 if [ -n "$STAGED_JSONS" ]; then
     MISSING_README_UPDATES=""

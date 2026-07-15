@@ -1,3 +1,10 @@
+# Tag feature releases
+#
+# Triggered on every push to main and on demand. Reads each feature's current
+# version from devcontainer-feature.json and creates a prefixed git tag of the
+# form `<feature-name>-v<semver>` when the tag does not already exist. Pushing
+# those tags triggers `.github/workflows/release.yaml` to publish the feature.
+
 name: "Tag feature releases"
 
 on:
@@ -26,6 +33,8 @@ jobs:
 
           sha="$(git rev-parse HEAD)"
 
+          # For each feature, derive the expected tag from the JSON version and
+          # create it only if it does not already exist locally or remotely.
           for feature_dir in src/*/; do
               feature_dir="${feature_dir%/}"
               feature_id="$(basename "$feature_dir")"
@@ -46,6 +55,8 @@ jobs:
 
               echo "CREATING: $tag"
 
+              # Create the annotated tag object through the GitHub API, then
+              # create the refs/tags/* reference pointing to that object.
               tag_obj="$(
                 jq -n \
                   --arg tag "$tag" \

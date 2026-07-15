@@ -1,3 +1,10 @@
+# Lint GitHub Actions workflows
+#
+# Triggered on every push to main, every pull request, and manual dispatch.
+# Runs actionlint (https://github.com/rhysd/actionlint) against every workflow
+# file to catch syntax errors, missing permissions, insecure expressions, and
+# other GitHub Actions-specific issues.
+
 name: "Lint workflows"
 
 on:
@@ -12,5 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv tool install actionlint
-      - run: uv run actionlint .github/workflows/*.yml .github/workflows/*.yaml
+      - name: "Install actionlint"
+        run: uv tool install actionlint
+      - name: "Lint workflow files"
+        run: uv run actionlint .github/workflows/*.yml .github/workflows/*.yaml

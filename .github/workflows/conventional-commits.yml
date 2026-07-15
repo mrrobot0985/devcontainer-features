@@ -1,3 +1,9 @@
+# Conventional Commits check for pull requests
+#
+# Triggered whenever a PR is opened, edited, or synchronized. Validates that the
+# PR title follows Conventional Commits. Because squash merges use the PR title
+# as the commit message, this keeps the main branch history consistent.
+
 name: "Conventional Commits"
 
 on:

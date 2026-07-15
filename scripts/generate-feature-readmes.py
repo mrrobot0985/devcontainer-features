@@ -163,6 +163,8 @@ def main() -> int:
     src_dir = Path(__file__).parent.parent / "src"
     changed = False
 
+    # Iterate over every feature directory and either generate, regenerate, or
+    # validate its README.md based on the CLI mode.
     for feature_dir in sorted(src_dir.iterdir()):
         if not feature_dir.is_dir():
             continue
@@ -220,6 +222,8 @@ def main() -> int:
                     "use --force to regenerate"
                 )
 
+    # In --check mode a non-zero exit code signals that READMEs are missing or
+    # out of sync, which is used by CI to block merge of drifted docs.
     return 1 if (args.check and changed) else 0
 
 

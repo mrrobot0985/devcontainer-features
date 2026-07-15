@@ -1,3 +1,11 @@
+# Auto-release changed features
+#
+# Runs weekly and on demand. For each feature that has changed since its latest
+# prefixed release tag, this workflow bumps the patch version in
+# devcontainer-feature.json and opens a pull request. After the PR merges,
+# `.github/workflows/tag-release.yml` creates the release tags, which in turn
+# trigger `.github/workflows/release.yaml` to publish to GHCR.
+
 name: "Auto-release changed features"
 
 on:
@@ -28,6 +36,8 @@ jobs:
           set -euo pipefail
 
           changed=0
+          # Walk every feature source directory and compare it against the
+          # latest prefixed tag (e.g. claude-code-hooks-v0.2.0).
           for feature_dir in src/*/; do
               feature_dir="${feature_dir%/}"
               feature_id="$(basename "$feature_dir")"
@@ -38,7 +48,7 @@ jobs:
                   continue
               fi
 
-              # Find latest tag for this feature
+              # Find latest tag for this feature.
               latest_tag="$(git tag -l "$feature_id-v*" --sort=-v:refname | head -n 1)"
               if [ -z "$latest_tag" ]; then
                   echo "SKIP: $feature_id — no existing tag"
@@ -47,7 +57,7 @@ jobs:
 
               tag_commit="$(git rev-parse "$latest_tag^{commit}")"
 
-              # Check for changes since last tag
+              # Compare only the feature's own source directory against the tag.
               if git diff --quiet "$tag_commit" HEAD -- "$feature_dir"; then
                   echo "UNCHANGED: $feature_id ($latest_tag)"
                   continue
@@ -62,13 +72,14 @@ jobs:
               new_patch="$((patch + 1))"
               new_version="${major}.${minor}.${new_patch}"
 
-              # Update version
+              # Update the version field in place.
               jq --arg v "$new_version" '.version = $v' "$json_file" > "${json_file}.tmp"
               mv "${json_file}.tmp" "$json_file"
 
               changed=1
           done
 
+          # Set step output so the PR creation step can be skipped when nothing changed.
           if [ "$changed" -eq 0 ]; then
               echo "changed=false" >> "$GITHUB_OUTPUT"
               echo "No features changed since their last tag."

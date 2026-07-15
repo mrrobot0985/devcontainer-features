@@ -1,3 +1,9 @@
+# Release dev container features
+#
+# Triggered only when a prefixed tag of the form `<feature-name>-v<semver>` is
+# pushed. Publishes the feature whose source directory matches the tag prefix
+# to GitHub Container Registry using the devcontainers publish action.
+
 name: "Release dev container features"
 on:
   push:
