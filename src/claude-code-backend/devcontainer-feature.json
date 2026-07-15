@@ -1,7 +1,7 @@
 {
   "id": "claude-code-backend",
   "name": "Claude Code Backend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Configures Claude Code to use a custom API backend",
   "options": {
     "baseUrl": {
