@@ -44,6 +44,7 @@ jobs:
           - container-firewall
           - claude-code-rules
           - claude-code-skills
+          - claude-code-plugins
           - nvidia-container-toolkit
     steps:
       - uses: actions/checkout@v7
