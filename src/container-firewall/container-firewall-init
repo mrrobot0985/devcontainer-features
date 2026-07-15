@@ -27,7 +27,7 @@ else
         echo "         Ensure the devcontainer feature declares capAdd: [\"NET_ADMIN\"], or add"
         echo "         --cap-add NET_ADMIN to your devcontainer.json runArgs."
         if [ "$FAILIFUNPRIVILEGED" = "true" ]; then
-            echo "ERROR: failIfUnprivileged is enabled; aborting container start."
+            echo "ERROR: failIfUnprivileged is enabled; aborting container creation."
             exit 1
         fi
         exit 0

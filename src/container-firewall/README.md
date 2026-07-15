@@ -19,7 +19,7 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
 | `blockTelemetry` | Block known telemetry and tracking endpoints at the network level | boolean | false |
 | `policy` | whitelist drops non-matching traffic; monitor logs but does not block | string | whitelist |
 | `enableIPv6` | Also apply whitelist rules to IPv6 (ip6tables) | boolean | true |
-| `failIfUnprivileged` | Fail container start when iptables cannot be used (missing CAP_NET_ADMIN). When false, emit a warning and continue as a no-op. | boolean | true |
+| `failIfUnprivileged` | Fail container creation when iptables cannot be used (missing CAP_NET_ADMIN). When false, emit a warning and continue as a no-op. | boolean | true |
 | `dryRun` | Resolve all configured domains and print the IPs/CIDRs and policy that would be applied without modifying iptables or ipset rules. | boolean | false |
 
 ## Example Usage

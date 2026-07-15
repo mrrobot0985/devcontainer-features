@@ -48,7 +48,7 @@
     "failIfUnprivileged": {
       "type": "boolean",
       "default": true,
-      "description": "Fail container start when iptables cannot be used (missing CAP_NET_ADMIN). When false, emit a warning and continue as a no-op."
+      "description": "Fail container creation when iptables cannot be used (missing CAP_NET_ADMIN). When false, emit a warning and continue as a no-op."
     },
     "dryRun": {
       "type": "boolean",
