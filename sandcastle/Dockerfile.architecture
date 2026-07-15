@@ -1,0 +1,9 @@
+FROM mrrobot0985/review-base:latest
+
+# Install architecture-analysis tooling.
+RUN pip3 install --no-cache-dir pydeps jscpd 2>/dev/null || true
+
+COPY scripts/review-architecture.sh /usr/local/bin/review-architecture.sh
+RUN chmod +x /usr/local/bin/review-architecture.sh
+
+ENTRYPOINT ["/usr/local/bin/review-architecture.sh"]

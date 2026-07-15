@@ -1,0 +1,31 @@
+name: Multi-Perspective Review
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  multi-perspective-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run multi-perspective review
+        run: |
+          chmod +x scripts/review-orchestrator.sh
+          BASE_REF="${{ github.base_ref || 'main' }}"
+          TARGET_REF="${{ github.head_ref || github.ref_name }}"
+          scripts/review-orchestrator.sh "${TARGET_REF}" "${BASE_REF}"
+
+      - name: Upload review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-report
+          path: .ralph/reports/review-*.json
+          if-no-files-found: ignore

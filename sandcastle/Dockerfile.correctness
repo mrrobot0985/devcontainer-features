@@ -1,0 +1,14 @@
+FROM mrrobot0985/review-base:latest
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        shellcheck \
+    && rm -rf /var/lib/apt/lists/*
+
+# Optional: install Python test runners if the repo uses Python.
+RUN pip3 install --no-cache-dir pytest mdformat mdformat-gfm mdformat-frontmatter 2>/dev/null || true
+
+COPY scripts/review-correctness.sh /usr/local/bin/review-correctness.sh
+RUN chmod +x /usr/local/bin/review-correctness.sh
+
+ENTRYPOINT ["/usr/local/bin/review-correctness.sh"]

@@ -56,22 +56,6 @@ Personal development and writing skills.
 - `edit-article` — Edit and improve articles
 - `obsidian-vault` — Manage Obsidian vault workflows
 
-### Sandcastle Headless (`installSandcastleHeadless`)
-
-Custom skills designed for AFK (away-from-keyboard) sandcastle automation. These mirror Matt Pocock's engineering skills but skip interactive confirmation loops, producing `.scratch/` output deterministically for headless CI/devcontainer use.
-
-| Skill | Mirrors | Purpose |
-|-------|---------|---------|
-| `local-markdown-tracker` | `setup-matt-pocock-skills` | Scaffold `.scratch/` issue tracker conventions |
-| `to-spec-headless` | `to-spec` | Synthesize spec from repo context, write to `.scratch/` |
-| `wayfinder-headless` | `wayfinder` | Create decision map + tickets in `.scratch/` |
-| `to-tickets-headless` | `to-tickets` | Break spec into tracer-bullet tickets with blocking edges |
-| `implement-headless` | `implement` | Implement AFK-capable tickets, TDD, commit |
-| `code-review-headless` | `code-review` | Parallel Standards + Spec review, write report |
-| `prototype-headless` | `prototype` | Throwaway prototype (degraded HITL mode) |
-
-These skills are **not** a fork of Matt's skills — they consume the same `.scratch/` conventions and are meant to be installed alongside them.
-
 ## Options
 
 | Option | Type | Default | Description |
@@ -83,7 +67,6 @@ These skills are **not** a fork of Matt's skills — they consume the same `.scr
 | `installMisc` | boolean | `false` | Install miscellaneous skills (requires enableMattPocockSkills) |
 | `installPersonal` | boolean | `false` | Install personal skills (requires enableMattPocockSkills) |
 | `skipOnFailure` | boolean | `false` | Skip skill installation if clone fails instead of failing the build |
-| `installSandcastleHeadless` | boolean | `true` | Install sandcastle headless skill wrappers for AFK automation |
 
 ## Requirements
 

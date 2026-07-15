@@ -14,7 +14,6 @@ INSTALL_PRODUCTIVITY="${INSTALLPRODUCTIVITY:-true}"
 INSTALL_MISC="${INSTALLMISC:-false}"
 INSTALL_PERSONAL="${INSTALLPERSONAL:-false}"
 SKIP_ON_FAILURE="${SKIPONFAILURE:-false}"
-INSTALL_SANDCASTLE_HEADLESS="${INSTALLSANDCASTLEHEADLESS:-true}"
 
 # Ensure the destination directory exists
 mkdir -p "$SKILLS_DIR"
@@ -102,32 +101,6 @@ copy_category "engineering" "$INSTALL_ENGINEERING"
 copy_category "productivity" "$INSTALL_PRODUCTIVITY"
 copy_category "misc" "$INSTALL_MISC"
 copy_category "personal" "$INSTALL_PERSONAL"
-
-# Copy custom sandcastle headless skills from feature source
-if [ "$INSTALL_SANDCASTLE_HEADLESS" = "true" ]; then
-    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-    CUSTOM_SKILLS_DIR="${SCRIPT_DIR}/skills/sandcastle"
-    if [ -d "$CUSTOM_SKILLS_DIR" ]; then
-        for _skill in "$CUSTOM_SKILLS_DIR"/*; do
-            if [ -d "$_skill" ]; then
-                _skill_name="$(basename "$_skill")"
-                _dest="$SKILLS_DIR/$_skill_name"
-
-                if [ -d "$_dest" ]; then
-                    echo "Replacing existing custom skill ${_skill_name}..."
-                    rm -rf "$_dest"
-                fi
-
-                cp -r "$_skill" "$_dest"
-                echo "Custom skill copied: ${_skill_name}"
-            fi
-        done
-    else
-        echo "WARN: Custom sandcastle skills not found at ${CUSTOM_SKILLS_DIR}"
-    fi
-else
-    echo "Sandcastle headless skills disabled (installSandcastleHeadless=false), skipping"
-fi
 
 # Clean up the temporary clone
 rm -rf "$TEMP_DIR"
