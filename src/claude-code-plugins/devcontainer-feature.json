@@ -1,0 +1,48 @@
+{
+  "id": "claude-code-plugins",
+  "name": "Claude Code Plugins",
+  "version": "0.1.0",
+  "description": "Installs Claude Code plugins from marketplaces at build time",
+  "options": {
+    "enableRalphLoop": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install Ralph Loop plugin from the official marketplace"
+    },
+    "enableObraSuperpowers": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install Obra Superpowers plugin from the official marketplace"
+    },
+    "enableWorkflows": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install claude-code-workflows plugin"
+    },
+    "enableEverythingClaudeCode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install everything-claude-code plugin"
+    },
+    "customPlugins": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of additional plugins to install as plugin@marketplace"
+    },
+    "customMarketplaces": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of additional marketplaces to add as owner/repo or owner/repo#ref"
+    },
+    "skipOnFailure": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skip plugin installation if a plugin or marketplace fails instead of failing the build"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/git",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}
