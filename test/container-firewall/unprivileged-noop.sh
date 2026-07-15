@@ -5,6 +5,18 @@ source dev-container-features-test-lib
 
 check "container-firewall-init exists" test -x /usr/local/bin/container-firewall-init
 
+# Clear any rules/ipsets applied by the postCreateCommand during container build.
+sudo iptables -F 2>/dev/null || true
+sudo iptables -X 2>/dev/null || true
+sudo iptables -t nat -F 2>/dev/null || true
+sudo iptables -t nat -X 2>/dev/null || true
+sudo iptables -t mangle -F 2>/dev/null || true
+sudo iptables -t mangle -X 2>/dev/null || true
+sudo ipset destroy allowed-domains 2>/dev/null || true
+sudo ipset destroy blocked-domains 2>/dev/null || true
+sudo ipset destroy allowed-domains-v6 2>/dev/null || true
+sudo ipset destroy blocked-domains-v6 2>/dev/null || true
+
 # Simulate an environment where iptables is not functional.
 mkdir -p /tmp/fakebin
 cat > /tmp/fakebin/iptables <<'EOF'
