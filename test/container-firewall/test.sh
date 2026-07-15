@@ -8,7 +8,7 @@ check "ip6tables exists" command -v ip6tables
 check "ipset exists" command -v ipset
 check "container-firewall-init exists" test -x /usr/local/bin/container-firewall-init
 
-# The firewall is applied automatically by postStartCommand (via sudo).
+# The firewall is applied automatically by postCreateCommand (via sudo).
 # Verify it was applied by checking the ipset state.
 if sudo ipset list allowed-domains >/dev/null 2>&1; then
     check "allowed-domains ipset exists" true
@@ -35,7 +35,7 @@ if sudo ipset list allowed-domains >/dev/null 2>&1; then
         fi
     fi
 else
-    echo "WARNING: Firewall was not applied by postStartCommand. Skipping live verification."
+    echo "WARNING: Firewall was not applied by postCreateCommand. Skipping live verification."
 fi
 
 reportResults

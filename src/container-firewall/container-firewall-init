@@ -1,0 +1,481 @@
+#!/bin/sh
+set -e
+
+# container-firewall-init — runtime firewall configuration
+# Installed by the container-firewall devcontainer feature.
+# It requires root and CAP_NET_ADMIN to apply rules (unless dryRun=true).
+
+SERVICES="__SERVICES__"
+EXTRADOMAINS="__EXTRADOMAINS__"
+BLOCKTELEMETRY="__BLOCKTELEMETRY__"
+POLICY="__POLICY__"
+ENABLEIPV6="__ENABLEIPV6__"
+FAILIFUNPRIVILEGED="__FAILIFUNPRIVILEGED__"
+DRYRUN="__DRYRUN__"
+
+REGISTRY="/usr/local/share/container-firewall/services.json"
+
+TELEMETRY_DOMAINS="statsig.anthropic.com statsig.com sentry.io google-analytics.com doubleclick.net facebook.com googletagmanager.com"
+
+# Dry run never touches iptables; resolve and print only.
+if [ "$DRYRUN" = "true" ]; then
+    echo "DRY RUN: resolving configured domains without applying any iptables/ipset rules"
+else
+    # Verify iptables is usable (requires CAP_NET_ADMIN)
+    if ! iptables -L >/dev/null 2>&1; then
+        echo "WARNING: iptables is not functional in this environment (missing CAP_NET_ADMIN)."
+        echo "         Ensure the devcontainer feature declares capAdd: [\"NET_ADMIN\"], or add"
+        echo "         --cap-add NET_ADMIN to your devcontainer.json runArgs."
+        if [ "$FAILIFUNPRIVILEGED" = "true" ]; then
+            echo "ERROR: failIfUnprivileged is enabled; aborting container start."
+            exit 1
+        fi
+        exit 0
+    fi
+fi
+
+DRYRUN_DIR=""
+if [ "$DRYRUN" = "true" ]; then
+    DRYRUN_DIR=$(mktemp -d)
+    # Ensure the temporary directory is removed on early exit.
+    trap '[ -n "$DRYRUN_DIR" ] && rm -rf "$DRYRUN_DIR"' EXIT
+fi
+
+# Helper to write either to a real ipset or to the dry-run collection file.
+add_to_set() {
+    _set="$1"
+    _entry="$2"
+    if [ "$DRYRUN" = "true" ]; then
+        case "$_entry" in
+            [0-9]*.[0-9]*.[0-9]*.[0-9]*/*|[0-9]*.[0-9]*.[0-9]*.[0-9]*)
+                printf '%s\n' "$_entry" >> "${DRYRUN_DIR}/${_set}"
+                ;;
+            *:*/*|*:*)
+                printf '%s\n' "$_entry" >> "${DRYRUN_DIR}/${_set}"
+                ;;
+            *)
+                echo "WARNING: Skipping invalid entry for $_set: $_entry"
+                ;;
+        esac
+    else
+        ipset add "$_set" "$_entry" 2>/dev/null || true
+    fi
+}
+
+# Print the dry-run summary from the logical sets collected in DRYRUN_DIR.
+print_dry_run() {
+    echo ""
+    echo "Resolved sets that would be created:"
+    for _set in allowed-domains allowed-domains-v6 blocked-domains blocked-domains-v6; do
+        _file="${DRYRUN_DIR}/${_set}"
+        if [ -s "$_file" ]; then
+            case "$_set" in
+                *-v6)
+                    echo "ipset create ${_set} hash:net family inet6"
+                    ;;
+                *)
+                    echo "ipset create ${_set} hash:net"
+                    ;;
+            esac
+            sort -u "$_file" | while read -r _entry; do
+                echo "ipset add ${_set} ${_entry}"
+            done
+        fi
+    done
+
+    echo ""
+    echo "Would apply ${POLICY} policy."
+    if [ "$BLOCKTELEMETRY" = "true" ]; then
+        echo "Would drop traffic to blocked-domains (and blocked-domains-v6 if IPv6 enabled)."
+    fi
+    if [ "$POLICY" = "whitelist" ]; then
+        echo "Default chains would be set to DROP; only allowed-domains (and allowed-domains-v6 if IPv6 enabled) would be accepted."
+    else
+        echo "Non-matching traffic would be logged but not dropped."
+    fi
+    echo "Base allowances (DNS, SSH, loopback) and detected host networks would also be applied."
+    if [ -n "$HOST_NETWORK" ]; then
+        echo "Detected IPv4 host network: $HOST_NETWORK"
+    fi
+    if [ -n "$HOST_NETWORK_V6" ]; then
+        echo "Detected IPv6 host network: $HOST_NETWORK_V6"
+    fi
+    echo "DRY RUN complete; no iptables/ipset changes were made"
+}
+
+# Skip destructive firewall setup when in dry-run mode.
+if [ "$DRYRUN" != "true" ]; then
+    if [ "$ENABLEIPV6" = "true" ]; then
+        if ! ip6tables -L >/dev/null 2>&1; then
+            echo "WARNING: ip6tables is not functional in this environment (missing CAP_NET_ADMIN or no IPv6 support)."
+            echo "         Continuing with IPv4-only firewall."
+            ENABLEIPV6=false
+        fi
+    fi
+
+    # 1. Extract Docker DNS rules before flushing
+    DOCKER_DNS_RULES=""
+    if command -v iptables-save >/dev/null 2>&1; then
+        DOCKER_DNS_RULES=$(iptables-save -t nat 2>/dev/null | grep "127\.0\.0\.11" || true)
+    fi
+
+    DOCKER_DNS_RULES_V6=""
+    if [ "$ENABLEIPV6" = "true" ]; then
+        if command -v ip6tables-save >/dev/null 2>&1; then
+            DOCKER_DNS_RULES_V6=$(ip6tables-save -t nat 2>/dev/null | grep "::11" || true)
+        fi
+    fi
+
+    # 2. Flush chains and destroy old ipsets
+    iptables -F 2>/dev/null || true
+    iptables -X 2>/dev/null || true
+    iptables -t nat -F 2>/dev/null || true
+    iptables -t nat -X 2>/dev/null || true
+    iptables -t mangle -F 2>/dev/null || true
+    iptables -t mangle -X 2>/dev/null || true
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        ip6tables -F 2>/dev/null || true
+        ip6tables -X 2>/dev/null || true
+        ip6tables -t nat -F 2>/dev/null || true
+        ip6tables -t nat -X 2>/dev/null || true
+        ip6tables -t mangle -F 2>/dev/null || true
+        ip6tables -t mangle -X 2>/dev/null || true
+    fi
+
+    ipset destroy allowed-domains 2>/dev/null || true
+    ipset destroy blocked-domains 2>/dev/null || true
+    ipset destroy allowed-domains-v6 2>/dev/null || true
+    ipset destroy blocked-domains-v6 2>/dev/null || true
+
+    # 3. Restore Docker DNS rules
+    if [ -n "$DOCKER_DNS_RULES" ]; then
+        echo "Restoring Docker DNS rules..."
+        iptables -t nat -N DOCKER_OUTPUT 2>/dev/null || true
+        iptables -t nat -N DOCKER_POSTROUTING 2>/dev/null || true
+        echo "$DOCKER_DNS_RULES" | while read -r line; do
+            [ -z "$line" ] && continue
+            eval "iptables -t nat $line" 2>/dev/null || true
+        done
+    fi
+
+    if [ -n "$DOCKER_DNS_RULES_V6" ]; then
+        echo "Restoring Docker IPv6 DNS rules..."
+        ip6tables -t nat -N DOCKER_OUTPUT 2>/dev/null || true
+        ip6tables -t nat -N DOCKER_POSTROUTING 2>/dev/null || true
+        echo "$DOCKER_DNS_RULES_V6" | while read -r line; do
+            [ -z "$line" ] && continue
+            eval "ip6tables -t nat $line" 2>/dev/null || true
+        done
+    fi
+
+    # 4. Base allowances
+    if ! command -v ipset >/dev/null 2>&1; then
+        echo "ERROR: ipset is required but not installed"
+        exit 1
+    fi
+
+    echo "Applying base allowances (DNS, SSH, loopback)..."
+    iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+    iptables -A INPUT -p udp --sport 53 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+    iptables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+    iptables -A INPUT -i lo -j ACCEPT
+    iptables -A OUTPUT -o lo -j ACCEPT
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        ip6tables -A OUTPUT -p udp --dport 53 -j ACCEPT
+        ip6tables -A INPUT -p udp --sport 53 -j ACCEPT
+        ip6tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+        ip6tables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+        ip6tables -A INPUT -i lo -j ACCEPT
+        ip6tables -A OUTPUT -o lo -j ACCEPT
+    fi
+
+    # 5. Create ipsets
+    ipset create allowed-domains hash:net
+    if [ "$BLOCKTELEMETRY" = "true" ]; then
+        ipset create blocked-domains hash:net
+    fi
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        ipset create allowed-domains-v6 hash:net family inet6
+        if [ "$BLOCKTELEMETRY" = "true" ]; then
+            ipset create blocked-domains-v6 hash:net family inet6
+        fi
+    fi
+fi
+
+# 6. Resolve domains with retries
+resolve_and_add() {
+    _domain="$1"
+    _ipset="$2"
+    _qtype="${3:-A}"
+    _attempts=0
+    _max_attempts=3
+    while [ "$_attempts" -lt "$_max_attempts" ]; do
+        echo "Resolving $_domain ($_qtype)..."
+        _ips=$(dig +noall +answer "$_qtype" "$_domain" | awk -v qt="$_qtype" '$4 == qt {print $5}')
+        if [ -n "$_ips" ]; then
+            break
+        fi
+        _attempts=$((_attempts + 1))
+        if [ "$_attempts" -lt "$_max_attempts" ]; then
+            echo "WARNING: Failed to resolve $_domain, retrying in 2s..."
+            sleep 2
+        fi
+    done
+    if [ -z "$_ips" ]; then
+        echo "WARNING: Failed to resolve $_domain ($_qtype) after $_max_attempts attempts"
+        return 0
+    fi
+    echo "$_ips" | while read -r _ip; do
+        [ -z "$_ip" ] && continue
+        add_to_set "$_ipset" "$_ip"
+    done
+}
+
+# 7. Resolve service tags from the installed registry
+QUEUE=$(mktemp)
+VISITED=$(mktemp)
+DOMAINS_FILE=$(mktemp)
+FETCH_URL_FILE=$(mktemp)
+
+trap 'rm -f "$QUEUE" "$VISITED" "$DOMAINS_FILE" "$FETCH_URL_FILE"; [ -n "$DRYRUN_DIR" ] && rm -rf "$DRYRUN_DIR"' EXIT
+
+MAX_DEPTH=10
+
+if [ -f "$REGISTRY" ]; then
+    echo "Loading service registry from $REGISTRY"
+
+    # Seed the queue with the requested tags (depth 0)
+    printf '%s\n' "$SERVICES" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | while read -r _tag; do
+        [ -z "$_tag" ] && continue
+        echo "0 $_tag" >> "$QUEUE"
+    done
+
+    while [ -s "$QUEUE" ]; do
+        _line=$(head -n 1 "$QUEUE")
+        _depth=${_line%% *}
+        _tag=${_line#* }
+
+        # Pop the first line
+        tail -n +2 "$QUEUE" > "${QUEUE}.tmp"
+        mv "${QUEUE}.tmp" "$QUEUE"
+
+        [ -z "$_tag" ] && continue
+        if [ "$_depth" -gt "$MAX_DEPTH" ]; then
+            echo "WARNING: Exceeded maximum recursion depth resolving tag '$_tag'"
+            continue
+        fi
+        if grep -qx "$_tag" "$VISITED" 2>/dev/null; then
+            continue
+        fi
+        echo "$_tag" >> "$VISITED"
+
+        if ! jq -e --arg t "$_tag" '.[$t]?' "$REGISTRY" >/dev/null 2>&1; then
+            echo "WARNING: Unknown service tag '$_tag', skipping"
+            continue
+        fi
+
+        _fetch_url=$(jq -r --arg t "$_tag" '.[$t].fetchIpRanges // empty' "$REGISTRY")
+        if [ -n "$_fetch_url" ]; then
+            echo "$_fetch_url" > "$FETCH_URL_FILE"
+        fi
+
+        # Recurse into composite tags
+        jq -r --arg t "$_tag" 'if .[$t] | has("extends") then .[$t].extends[] else empty end' "$REGISTRY" | while read -r _ext; do
+            [ -z "$_ext" ] && continue
+            echo "$((_depth + 1)) $_ext" >> "$QUEUE"
+        done
+
+        # Collect direct domains
+        jq -r --arg t "$_tag" '.[$t].domains[]?' "$REGISTRY" | while read -r _dom; do
+            [ -z "$_dom" ] && continue
+            if ! grep -qx "$_dom" "$DOMAINS_FILE" 2>/dev/null; then
+                echo "$_dom" >> "$DOMAINS_FILE"
+            fi
+        done
+    done
+else
+    echo "WARNING: Service registry not found at $REGISTRY; no service tags will be resolved"
+fi
+
+# 8. Add user-supplied extra domains
+if [ -n "$EXTRADOMAINS" ]; then
+    echo "Adding extra domains: $EXTRADOMAINS"
+    printf '%s\n' "$EXTRADOMAINS" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | while read -r _dom; do
+        [ -z "$_dom" ] && continue
+        if ! grep -qx "$_dom" "$DOMAINS_FILE" 2>/dev/null; then
+            echo "$_dom" >> "$DOMAINS_FILE"
+        fi
+    done
+fi
+
+# 9. Fetch dynamic IP ranges advertised by any resolved tag
+if [ -s "$FETCH_URL_FILE" ]; then
+    _fetch_url=$(head -n 1 "$FETCH_URL_FILE")
+    echo "Fetching dynamic IP ranges from $_fetch_url..."
+    _attempts=0
+    _max_attempts=3
+    _ranges=""
+    while [ "$_attempts" -lt "$_max_attempts" ]; do
+        _ranges=$(curl -4 -s --connect-timeout 10 "$_fetch_url" || true)
+        if [ -n "$_ranges" ]; then
+            break
+        fi
+        _attempts=$((_attempts + 1))
+        if [ "$_attempts" -lt "$_max_attempts" ]; then
+            echo "WARNING: Failed to fetch IP ranges, retrying in 3s..."
+            sleep 3
+        fi
+    done
+
+    if [ -z "$_ranges" ]; then
+        echo "WARNING: Failed to fetch IP ranges after $_max_attempts attempts, falling back to DNS resolution"
+        resolve_and_add "github.com" "allowed-domains"
+        resolve_and_add "api.github.com" "allowed-domains"
+        if [ "$ENABLEIPV6" = "true" ]; then
+            resolve_and_add "github.com" "allowed-domains-v6" "AAAA"
+            resolve_and_add "api.github.com" "allowed-domains-v6" "AAAA"
+        fi
+    else
+        if echo "$_ranges" | jq -e '.web and .api and .git' >/dev/null 2>&1; then
+            echo "$_ranges" | jq -r '(.web + .api + .git)[]' | while read -r _cidr; do
+                [ -z "$_cidr" ] && continue
+                case "$_cidr" in
+                    *:*)
+                        if [ "$ENABLEIPV6" = "true" ]; then
+                            add_to_set allowed-domains-v6 "$_cidr"
+                        fi
+                        ;;
+                    [0-9]*.[0-9]*.[0-9]*.[0-9]*/[0-9]*)
+                        add_to_set allowed-domains "$_cidr"
+                        ;;
+                    *)
+                        echo "WARNING: Skipping invalid CIDR from IP range API: $_cidr"
+                        ;;
+                esac
+            done
+        else
+            echo "WARNING: IP range API response missing expected fields"
+        fi
+    fi
+fi
+
+# 10. Resolve all collected allowed domains
+if [ -s "$DOMAINS_FILE" ]; then
+    echo "Resolving allowed domains..."
+    sort -u "$DOMAINS_FILE" | while read -r _domain; do
+        [ -z "$_domain" ] && continue
+        resolve_and_add "$_domain" "allowed-domains"
+        if [ "$ENABLEIPV6" = "true" ]; then
+            resolve_and_add "$_domain" "allowed-domains-v6" "AAAA"
+        fi
+    done
+fi
+
+# 11. Block telemetry domains if requested
+if [ "$BLOCKTELEMETRY" = "true" ]; then
+    echo "Blocking telemetry domains..."
+    for _domain in $TELEMETRY_DOMAINS; do
+        resolve_and_add "$_domain" "blocked-domains"
+        if [ "$ENABLEIPV6" = "true" ]; then
+            resolve_and_add "$_domain" "blocked-domains-v6" "AAAA"
+        fi
+    done
+fi
+
+# 12. Host network detection
+HOST_NETWORK=""
+HOST_NETWORK_V6=""
+if [ "$DRYRUN" != "true" ]; then
+    HOST_IP=$(ip route 2>/dev/null | grep default | awk '{print $3}' | head -n 1)
+    if [ -n "$HOST_IP" ]; then
+        HOST_NETWORK=$(printf '%s' "$HOST_IP" | sed 's/\.[0-9]*$/.0\/24/')
+        echo "Host network detected as: $HOST_NETWORK"
+        iptables -A INPUT -s "$HOST_NETWORK" -j ACCEPT
+        iptables -A OUTPUT -d "$HOST_NETWORK" -j ACCEPT
+    fi
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        HOST_IPV6=$(ip -6 route 2>/dev/null | grep default | awk '{print $3}' | head -n 1)
+        if [ -n "$HOST_IPV6" ]; then
+            HOST_NETWORK_V6=$(printf '%s' "$HOST_IPV6" | awk -F: '{printf "%s:%s:%s:%s::/64\n", $1, $2, $3, $4}')
+            echo "Host IPv6 network detected as: $HOST_NETWORK_V6"
+            ip6tables -A INPUT -s "$HOST_NETWORK_V6" -j ACCEPT
+            ip6tables -A OUTPUT -d "$HOST_NETWORK_V6" -j ACCEPT
+        fi
+    fi
+else
+    # In dry-run mode, detect host networks for reporting without adding rules.
+    HOST_IP=$(ip route 2>/dev/null | grep default | awk '{print $3}' | head -n 1)
+    if [ -n "$HOST_IP" ]; then
+        HOST_NETWORK=$(printf '%s' "$HOST_IP" | sed 's/\.[0-9]*$/.0\/24/')
+    fi
+    if [ "$ENABLEIPV6" = "true" ]; then
+        HOST_IPV6=$(ip -6 route 2>/dev/null | grep default | awk '{print $3}' | head -n 1)
+        if [ -n "$HOST_IPV6" ]; then
+            HOST_NETWORK_V6=$(printf '%s' "$HOST_IPV6" | awk -F: '{printf "%s:%s:%s:%s::/64\n", $1, $2, $3, $4}')
+        fi
+    fi
+fi
+
+# 13. Dry-run summary and exit before any policy is applied.
+if [ "$DRYRUN" = "true" ]; then
+    print_dry_run
+    exit 0
+fi
+
+# 14. Apply policy
+if [ "$POLICY" = "whitelist" ]; then
+    echo "Applying whitelist policy..."
+    if [ "$BLOCKTELEMETRY" = "true" ]; then
+        iptables -I OUTPUT -m set --match-set blocked-domains dst -j DROP
+    fi
+
+    iptables -P INPUT DROP
+    iptables -P FORWARD DROP
+    iptables -P OUTPUT DROP
+
+    iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+    iptables -A OUTPUT -m set --match-set allowed-domains dst -j ACCEPT
+    iptables -A OUTPUT -j REJECT --reject-with icmp-admin-prohibited
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        if [ "$BLOCKTELEMETRY" = "true" ]; then
+            ip6tables -I OUTPUT -m set --match-set blocked-domains-v6 dst -j DROP
+        fi
+
+        ip6tables -P INPUT DROP
+        ip6tables -P FORWARD DROP
+        ip6tables -P OUTPUT DROP
+
+        ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+        ip6tables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+        ip6tables -A OUTPUT -m set --match-set allowed-domains-v6 dst -j ACCEPT
+        ip6tables -A OUTPUT -j REJECT --reject-with icmp6-adm-prohibited
+    fi
+
+    echo "Firewall configured in whitelist mode"
+else
+    echo "Applying monitor policy (logging only)..."
+    if [ "$BLOCKTELEMETRY" = "true" ]; then
+        iptables -I OUTPUT -m set --match-set blocked-domains dst -j DROP
+    fi
+    iptables -A OUTPUT -m set ! --match-set allowed-domains dst -j LOG --log-prefix "FIREWALL-DROP: " --log-level 4
+
+    if [ "$ENABLEIPV6" = "true" ]; then
+        if [ "$BLOCKTELEMETRY" = "true" ]; then
+            ip6tables -I OUTPUT -m set --match-set blocked-domains-v6 dst -j DROP
+        fi
+        ip6tables -A OUTPUT -m set ! --match-set allowed-domains-v6 dst -j LOG --log-prefix "FIREWALL-DROP-V6: " --log-level 4
+    fi
+
+    echo "Firewall configured in monitor mode (logging only)"
+fi
+
+echo "Container firewall activation complete"

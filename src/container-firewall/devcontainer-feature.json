@@ -1,7 +1,7 @@
 {
   "id": "container-firewall",
   "name": "Container Firewall",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking",
   "options": {
     "services": {
@@ -44,12 +44,22 @@
       "type": "boolean",
       "default": true,
       "description": "Also apply whitelist rules to IPv6 (ip6tables)"
+    },
+    "failIfUnprivileged": {
+      "type": "boolean",
+      "default": true,
+      "description": "Fail container start when iptables cannot be used (missing CAP_NET_ADMIN). When false, emit a warning and continue as a no-op."
+    },
+    "dryRun": {
+      "type": "boolean",
+      "default": false,
+      "description": "Resolve all configured domains and print the IPs/CIDRs and policy that would be applied without modifying iptables or ipset rules."
     }
   },
   "capAdd": [
     "NET_ADMIN"
   ],
-  "postStartCommand": "sudo /usr/local/bin/container-firewall-init",
+  "postCreateCommand": "sudo /usr/local/bin/container-firewall-init",
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
   ]
