@@ -16,7 +16,7 @@ This feature is self-contained — all hook scripts are bundled directly in the 
 | `installStatusLine` | Also install the status line hook configuration | boolean | true |
 | `blockDangerousCommands` | Block dangerous Bash commands at the PreToolUse hook instead of only logging them | boolean | false |
 | `dangerousCommandDenylist` | Additional comma-separated regex patterns to treat as dangerous when blockDangerousCommands is enabled | string | "" |
-| `stateRetentionLimit` | Maximum number of entries to retain in per-tool/per-file state objects | number | 100 |
+| `stateRetentionLimit` | Maximum number of entries to retain in per-tool/per-file state objects. Older entries are pruned automatically. | number | 100 |
 
 ## Example Usage
 
