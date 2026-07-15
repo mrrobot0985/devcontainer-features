@@ -7,9 +7,9 @@ This repository is a monorepo: many features share one git repository and one CI
 The normal release flow is fully automated:
 
 1. **Detect changes** — `.github/workflows/auto-release.yml` runs weekly and on demand. It compares every feature source directory against its latest prefixed tag. If the directory changed, it bumps the patch version in `src/<feature>/devcontainer-feature.json`.
-2. **Open a pull request** — the workflow creates a PR titled `chore: bump feature versions`.
-3. **Merge the PR** — once CI passes and the PR merges to `main`, `.github/workflows/tag-release.yml` reads each feature's current version and creates the prefixed tag if it does not already exist.
-4. **Publish** — pushing the tag triggers `.github/workflows/release.yaml`, which publishes the feature to GitHub Container Registry using the devcontainers publish action.
+1. **Open a pull request** — the workflow creates a PR titled `chore: bump feature versions`.
+1. **Merge the PR** — once CI passes and the PR merges to `main`, `.github/workflows/tag-release.yml` reads each feature's current version and creates the prefixed tag if it does not already exist.
+1. **Publish** — pushing the tag triggers `.github/workflows/release.yaml`, which publishes the feature to GitHub Container Registry using the devcontainers publish action.
 
 You do not need to edit versions or create tags manually unless you are following the emergency path.
 
@@ -23,14 +23,14 @@ Use this path when you must ship a specific feature immediately and cannot wait 
    - Bump the minor version for new functionality.
    - Bump the patch version for fixes.
 
-2. **Commit with a conventional commit message**:
+1. **Commit with a conventional commit message**:
 
    ```bash
    git add src/my-feature/devcontainer-feature.json
    git commit -m "feat(my-feature): bump version to 1.2.3"
    ```
 
-3. **Create and push a signed tag**:
+1. **Create and push a signed tag**:
 
    ```bash
    git tag -s my-feature-v1.2.3 -m "release my-feature v1.2.3"

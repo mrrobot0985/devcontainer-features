@@ -7,8 +7,8 @@ A dev container feature participates in two distinct phases: image build and con
 When you build a dev container that references a feature, the devcontainer CLI:
 
 1. Resolves the feature from the registry or local `src/` directory.
-2. Adds a build step that runs the feature's `install.sh` as `root`.
-3. Passes each option as an environment variable whose name is the option id converted to uppercase. For example, the `baseUrl` option becomes `BASEURL`.
+1. Adds a build step that runs the feature's `install.sh` as `root`.
+1. Passes each option as an environment variable whose name is the option id converted to uppercase. For example, the `baseUrl` option becomes `BASEURL`.
 
 A minimal `install.sh` can therefore read its options like this:
 
@@ -42,14 +42,14 @@ The install script should be idempotent. If the container image is rebuilt, the 
 
 After the image is built and the container starts, the CLI runs lifecycle hooks in a fixed order. These hooks run as the container user, not as `root`.
 
-| Hook | Runs when | Typical use |
-| ---- | --------- | ----------- |
-| `initializeCommand` | Before the container is created, on the host | Prepare host-side state |
-| `onCreateCommand` | Once after first creation | First-time setup that needs a running container |
-| `updateContentCommand` | When content is updated (for example, on branch switch) | Re-sync dependencies |
-| `postCreateCommand` | After `onCreateCommand` | Start services, finalize configuration |
-| `postStartCommand` | Every time the container starts | Apply runtime configuration |
-| `postAttachCommand` | Every time a user attaches | Shell-specific setup |
+| Hook                   | Runs when                                               | Typical use                                     |
+| ---------------------- | ------------------------------------------------------- | ----------------------------------------------- |
+| `initializeCommand`    | Before the container is created, on the host            | Prepare host-side state                         |
+| `onCreateCommand`      | Once after first creation                               | First-time setup that needs a running container |
+| `updateContentCommand` | When content is updated (for example, on branch switch) | Re-sync dependencies                            |
+| `postCreateCommand`    | After `onCreateCommand`                                 | Start services, finalize configuration          |
+| `postStartCommand`     | Every time the container starts                         | Apply runtime configuration                     |
+| `postAttachCommand`    | Every time a user attaches                              | Shell-specific setup                            |
 
 ### Feature-declared hooks
 

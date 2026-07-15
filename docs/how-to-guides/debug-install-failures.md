@@ -59,13 +59,14 @@ Symptom: the `claude-code-backend` feature defaults to `http://host.docker.inter
 Checks:
 
 1. Ensure Ollama is running on the Docker host and listening on `0.0.0.0:11434` or the host's bridge IP.
-2. From inside the container, test connectivity:
+
+1. From inside the container, test connectivity:
 
    ```bash
    curl -sf http://host.docker.internal:11434/api/tags
    ```
 
-3. If that fails, find the host's actual IP and use it in `devcontainer.json`:
+1. If that fails, find the host's actual IP and use it in `devcontainer.json`:
 
    ```jsonc
    "features": {
@@ -75,7 +76,7 @@ Checks:
    }
    ```
 
-4. On Linux, `host.docker.internal` may not resolve by default. Add it to `runArgs`:
+1. On Linux, `host.docker.internal` may not resolve by default. Add it to `runArgs`:
 
    ```jsonc
    "runArgs": ["--add-host=host.docker.internal:host-gateway"]

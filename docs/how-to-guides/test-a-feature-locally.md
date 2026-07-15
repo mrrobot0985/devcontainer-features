@@ -24,11 +24,11 @@ From the repository root:
 The script performs the following checks and prints `PASS`/`FAIL` for each:
 
 1. **Prerequisites** — `act`, `docker`, and a running daemon.
-2. **shellcheck** — on `install.sh`, `uninstall.sh`, test scripts, and helper scripts.
-3. **README sync** — `uv run python scripts/generate-feature-readmes.py --check`.
-4. **Workflow validation** — `act -j validate` runs `.github/workflows/validate.yml`.
-5. **Dry-run release** — `act -j deploy --dryrun` exercises `.github/workflows/release.yaml` without publishing.
-6. **Feature smoke tests** — default-install tests for every feature via `npx @devcontainers/cli features test`.
+1. **shellcheck** — on `install.sh`, `uninstall.sh`, test scripts, and helper scripts.
+1. **README sync** — `uv run python scripts/generate-feature-readmes.py --check`.
+1. **Workflow validation** — `act -j validate` runs `.github/workflows/validate.yml`.
+1. **Dry-run release** — `act -j deploy --dryrun` exercises `.github/workflows/release.yaml` without publishing.
+1. **Feature smoke tests** — default-install tests for every feature via `npx @devcontainers/cli features test`.
 
 Fix any failures before pushing. The gate exits with code `0` only when every check passes.
 

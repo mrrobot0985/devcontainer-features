@@ -89,14 +89,14 @@ Use this only when the default ordering causes problems, because it makes the co
 
 Feature install scripts run during the image build. After the container starts, lifecycle hooks run in the following order:
 
-| Hook | When it runs | Typical use |
-| ---- | ------------ | ----------- |
-| `initializeCommand` | Before the container is created, on the host | Clone repos, create host directories |
-| `onCreateCommand` | Once, after the container is created | One-time setup that needs a running container |
-| `updateContentCommand` | When content is updated | Re-run after branch changes |
-| `postCreateCommand` | After `onCreateCommand` | Start background services |
-| `postStartCommand` | Every time the container starts | Apply runtime configuration |
-| `postAttachCommand` | Every time a user attaches | Shell-specific setup |
+| Hook                   | When it runs                                 | Typical use                                   |
+| ---------------------- | -------------------------------------------- | --------------------------------------------- |
+| `initializeCommand`    | Before the container is created, on the host | Clone repos, create host directories          |
+| `onCreateCommand`      | Once, after the container is created         | One-time setup that needs a running container |
+| `updateContentCommand` | When content is updated                      | Re-run after branch changes                   |
+| `postCreateCommand`    | After `onCreateCommand`                      | Start background services                     |
+| `postStartCommand`     | Every time the container starts              | Apply runtime configuration                   |
+| `postAttachCommand`    | Every time a user attaches                   | Shell-specific setup                          |
 
 ### Feature-declared hooks
 
@@ -114,8 +114,11 @@ The CLI merges `postStartCommand` from all features and the top-level `devcontai
 ### Best practices for composition
 
 - Keep features focused. A feature should do one thing.
+
 - Use `installsAfter` rather than `overrideFeatureInstallOrder` when possible.
+
 - Avoid duplicating work across features. For example, let `claude-code-privacy`, `claude-code-backend`, and `claude-code-hooks` all write to `~/.claude/settings.json` through merge helpers rather than overwriting the file.
+
 - Test composed stacks with the global scenarios:
 
   ```bash
