@@ -1,13 +1,16 @@
 name: "Validate devcontainer-feature.json files"
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
       - name: "Validate devcontainer-feature.json files"
         uses: devcontainers/action@v1
@@ -18,7 +21,7 @@ jobs:
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
       - name: "Install shellcheck"
         run: |
@@ -27,6 +30,18 @@ jobs:
 
       - name: "Run shellcheck"
         run: |
+          shellcheck --severity=warning scripts/local-ci.sh .githooks/pre-commit
           shellcheck --severity=warning src/*/install.sh src/*/uninstall.sh
           shellcheck --severity=warning test/*/*.sh
           shellcheck --severity=warning test/_global/*.sh
+
+  readme-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Install uv"
+        uses: astral-sh/setup-uv@v5
+
+      - name: "Check feature READMEs are in sync"
+        run: uv run python scripts/generate-feature-readmes.py --check
