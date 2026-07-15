@@ -1,0 +1,27 @@
+{
+  "id": "claude-code-sandcastle",
+  "name": "Claude Code Sandcastle",
+  "version": "0.1.0",
+  "description": "AFK sandcastle automation layer for devcontainer templates. Provides bootstrap.sh auto-mode, runner.mjs, ralph-loop.sh, and validate-branch.sh for self-driving project lifecycle.",
+  "options": {
+    "enableAutoMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable auto-mode in bootstrap.sh (runs on devcontainer postStartCommand)"
+    },
+    "maxIterations": {
+      "type": "string",
+      "default": "10",
+      "description": "Maximum iterations per auto-mode run"
+    },
+    "degradedPrototype": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allow degraded-AFK prototype mode (skips human validation)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

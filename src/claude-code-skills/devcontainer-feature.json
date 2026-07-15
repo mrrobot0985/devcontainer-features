@@ -38,6 +38,11 @@
       "type": "boolean",
       "default": false,
       "description": "Skip skill installation if clone fails instead of failing the build"
+    },
+    "installSandcastleHeadless": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install sandcastle headless skill wrappers (local-markdown-tracker, to-spec-headless, wayfinder-headless, to-tickets-headless, implement-headless, code-review-headless, prototype-headless)"
     }
   },
   "installsAfter": [
