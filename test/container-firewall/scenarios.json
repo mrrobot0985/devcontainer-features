@@ -1,27 +1,35 @@
 {
-    "github_only": {
+    "github": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "container-firewall": {
-                "profile": "github-only"
+                "services": "github"
             }
         }
     },
-    "custom_profile": {
+    "custom": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "container-firewall": {
-                "profile": "custom",
-                "customDomains": "api.github.com"
+                "services": "minimal",
+                "extraDomains": "api.github.com"
             }
         }
     },
-    "block_telemetry": {
+    "telemetry": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "container-firewall": {
-                "profile": "claude-code",
+                "services": "claude-code",
                 "blockTelemetry": true
+            }
+        }
+    },
+    "composition": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "github,pypi"
             }
         }
     }

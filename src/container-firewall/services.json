@@ -1,0 +1,42 @@
+{
+  "github": {
+    "domains": ["github.com", "api.github.com"],
+    "fetchIpRanges": "https://api.github.com/meta"
+  },
+  "npm": {
+    "domains": ["registry.npmjs.org"]
+  },
+  "pypi": {
+    "domains": ["pypi.org", "files.pythonhosted.org"]
+  },
+  "astral": {
+    "domains": ["astral.sh"]
+  },
+  "anthropic": {
+    "domains": ["api.anthropic.com"]
+  },
+  "vscode": {
+    "domains": [
+      "marketplace.visualstudio.com",
+      "vscode.blob.core.windows.net",
+      "update.code.visualstudio.com"
+    ]
+  },
+  "apt": {
+    "domains": [
+      "deb.debian.org",
+      "security.debian.org",
+      "archive.ubuntu.com",
+      "security.ubuntu.com"
+    ]
+  },
+  "docker": {
+    "domains": ["registry-1.docker.io", "production.cloudflare.docker.com"]
+  },
+  "claude-code": {
+    "extends": ["github", "npm", "anthropic", "vscode"]
+  },
+  "minimal": {
+    "domains": []
+  }
+}

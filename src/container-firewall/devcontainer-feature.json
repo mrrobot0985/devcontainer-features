@@ -1,24 +1,30 @@
 {
   "id": "container-firewall",
   "name": "Container Firewall",
-  "version": "0.2.0",
-  "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service presets and optional telemetry blocking",
+  "version": "0.3.0",
+  "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking",
   "options": {
-    "profile": {
+    "services": {
       "type": "string",
-      "enum": [
-        "claude-code",
-        "github-only",
+      "proposals": [
         "minimal",
-        "custom"
+        "claude-code",
+        "github",
+        "npm",
+        "pypi",
+        "apt",
+        "docker",
+        "vscode",
+        "astral",
+        "anthropic"
       ],
       "default": "claude-code",
-      "description": "Preset bundle of allowed outbound services"
+      "description": "Comma-separated service tags to whitelist. Use 'minimal' for an empty baseline. Composite tags like 'claude-code' expand to multiple services."
     },
-    "customDomains": {
+    "extraDomains": {
       "type": "string",
       "default": "",
-      "description": "Comma-separated extra domains to allow (used only with profile=custom)"
+      "description": "Additional comma-separated domains to whitelist beyond the selected services."
     },
     "blockTelemetry": {
       "type": "boolean",
