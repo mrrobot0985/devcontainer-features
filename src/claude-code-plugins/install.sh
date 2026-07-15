@@ -14,6 +14,7 @@ ENABLE_EVERYTHING_CLAUDE_CODE="${ENABLEEVERYTHINGCLAUDECODE:-false}"
 CUSTOM_PLUGINS="${CUSTOMPLUGINS:-}"
 CUSTOM_MARKETPLACES="${CUSTOMMARKETPLACES:-}"
 SKIP_ON_FAILURE="${SKIPONFAILURE:-false}"
+VERIFY_ARTIFACTS="${VERIFYARTIFACTS:-false}"
 
 mkdir -p "$CLAUDE_DIR"
 
@@ -152,6 +153,62 @@ for spec in $CUSTOM_PLUGINS; do
 done
 set +f
 IFS="$OLD_IFS"
+
+# Verify artifacts if requested.
+if [ "$VERIFY_ARTIFACTS" = "true" ]; then
+    echo "Verifying plugin artifacts..."
+    _missing=0
+
+    if [ "$ENABLE_RALPH_LOOP" = "true" ]; then
+        if ! jq -e '.enabledPlugins | has("ralph-loop@claude-plugins-official")' "$SETTINGS_FILE" >/dev/null 2>&1; then
+            echo "ERROR: ralph-loop plugin not found in enabledPlugins"
+            _missing=1
+        fi
+    fi
+
+    if [ "$ENABLE_OBRA_SUPERPOWERS" = "true" ]; then
+        if ! jq -e '.enabledPlugins | has("superpowers@claude-plugins-official")' "$SETTINGS_FILE" >/dev/null 2>&1; then
+            echo "ERROR: superpowers plugin not found in enabledPlugins"
+            _missing=1
+        fi
+    fi
+
+    if [ "$ENABLE_WORKFLOWS" = "true" ]; then
+        if ! jq -e '.enabledPlugins | has("dev-workflows@claude-code-workflows")' "$SETTINGS_FILE" >/dev/null 2>&1; then
+            echo "ERROR: dev-workflows plugin not found in enabledPlugins"
+            _missing=1
+        fi
+    fi
+
+    if [ "$ENABLE_EVERYTHING_CLAUDE_CODE" = "true" ]; then
+        if ! jq -e '.enabledPlugins | has("everything-claude-code@everything-claude-code")' "$SETTINGS_FILE" >/dev/null 2>&1; then
+            echo "ERROR: everything-claude-code plugin not found in enabledPlugins"
+            _missing=1
+        fi
+    fi
+
+    if [ -n "$CUSTOM_PLUGINS" ]; then
+        IFS=','
+        set -f
+        for spec in $CUSTOM_PLUGINS; do
+            [ -z "$spec" ] && continue
+            if ! jq -e ".enabledPlugins | has(\"$spec\")" "$SETTINGS_FILE" >/dev/null 2>&1; then
+                echo "ERROR: custom plugin $spec not found in enabledPlugins"
+                _missing=1
+            fi
+        done
+        set +f
+        IFS="$OLD_IFS"
+    fi
+
+    if [ "$_missing" -ne 0 ]; then
+        echo "ERROR: One or more expected plugins are missing from enabledPlugins."
+        echo "       Set verifyArtifacts=false to skip this check, or set skipOnFailure=false to fail the build on installation errors."
+        exit 1
+    fi
+
+    echo "All expected plugin artifacts verified"
+fi
 
 # Fix ownership so the remote user can read/write the config.
 chown -R "${_REMOTE_USER:-root}:${_REMOTE_USER:-root}" "$CLAUDE_DIR"

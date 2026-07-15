@@ -20,6 +20,7 @@ Installs Claude Code plugins from marketplaces at build time.
 | `customPlugins` | string | `""` | Comma-separated list of additional plugins as `plugin@marketplace` |
 | `customMarketplaces` | string | `""` | Comma-separated list of additional marketplaces as `owner/repo` or `owner/repo#ref` |
 | `skipOnFailure` | boolean | `false` | Skip plugin installation if a plugin or marketplace fails instead of failing the build |
+| `verifyArtifacts` | boolean | `false` | After installation, verify all requested plugins appear in `enabledPlugins` and fail the build if any are missing |
 
 ## Example
 

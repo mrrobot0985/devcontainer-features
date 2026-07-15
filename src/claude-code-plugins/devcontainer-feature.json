@@ -38,6 +38,11 @@
       "type": "boolean",
       "default": false,
       "description": "Skip plugin installation if a plugin or marketplace fails instead of failing the build"
+    },
+    "verifyArtifacts": {
+      "type": "boolean",
+      "default": false,
+      "description": "After installation, verify that all requested plugins appear in enabledPlugins and fail the build if any are missing"
     }
   },
   "installsAfter": [
