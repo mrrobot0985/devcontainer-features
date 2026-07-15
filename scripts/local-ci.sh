@@ -103,6 +103,19 @@ else
     fail "README generator check"
 fi
 
+# --- Markdown formatting check ---
+echo ""
+echo "--- Checking markdown formatting ---"
+if command -v uv >/dev/null 2>&1; then
+    if uvx --with mdformat-gfm mdformat --check docs/ .github/CONTRIBUTING.md .github/CODE_OF_CONDUCT.md .github/SECURITY.md; then
+        pass "mdformat check"
+    else
+        fail "mdformat check"
+    fi
+else
+    warn "uv not installed; skipping markdown format check"
+fi
+
 # --- Validate devcontainer-feature.json files ---
 echo ""
 echo "--- Running act: validate workflow ---"
