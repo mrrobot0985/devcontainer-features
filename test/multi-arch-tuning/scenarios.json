@@ -1,0 +1,20 @@
+{
+    "auto": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "multi-arch-tuning": {
+                "ollamaModel": "auto",
+                "pytorchIndex": "auto"
+            }
+        }
+    },
+    "explicit": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "multi-arch-tuning": {
+                "ollamaModel": "llama3.1:8b",
+                "pytorchIndex": "https://download.pytorch.org/whl/cpu"
+            }
+        }
+    }
+}
