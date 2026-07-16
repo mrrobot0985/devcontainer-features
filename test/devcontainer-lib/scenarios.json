@@ -1,0 +1,14 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "devcontainer-lib": {}
+        }
+    },
+    "functions-work": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "devcontainer-lib": {}
+        }
+    }
+}
