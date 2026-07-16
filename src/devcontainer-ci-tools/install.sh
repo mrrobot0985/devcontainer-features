@@ -8,13 +8,6 @@ DEVCONTAINER_CLI_VERSION="${DEVCONTAINERCLIVERSION:-latest}"
 INSTALL_ACT="${INSTALLACT:-true}"
 INSTALL_BUILDX="${INSTALLBUILDX:-true}"
 
-ARCH=$(uname -m)
-case "$ARCH" in
-    x86_64) ARCH="amd64" ;;
-    aarch64) ARCH="arm64" ;;
-    arm64) ARCH="arm64" ;;
-esac
-
 install_nodejs() {
     echo "=== Installing Node.js ==="
     if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
@@ -80,7 +73,15 @@ install_buildx() {
         local plugin_dir="${HOME}/.docker/cli-plugins"
         mkdir -p "$plugin_dir"
 
-        local url="https://github.com/docker/buildx/releases/download/${buildx_version}/buildx-${buildx_version}.linux-${ARCH}"
+        local arch
+        arch=$(uname -m)
+        case "$arch" in
+            x86_64) arch="amd64" ;;
+            aarch64) arch="arm64" ;;
+            arm64) arch="arm64" ;;
+        esac
+
+        local url="https://github.com/docker/buildx/releases/download/${buildx_version}/buildx-${buildx_version}.linux-${arch}"
         curl -fsSL "$url" -o "$plugin_dir/docker-buildx"
         chmod +x "$plugin_dir/docker-buildx"
         echo "docker-buildx installed: ${buildx_version}"
@@ -97,7 +98,15 @@ install_act() {
         act_version="v0.2.70"
     fi
 
-    local url="https://github.com/nektos/act/releases/download/${act_version}/act_Linux_${ARCH}.tar.gz"
+    local arch
+    arch=$(uname -m)
+    case "$arch" in
+        x86_64) arch="x86_64" ;;
+        aarch64) arch="arm64" ;;
+        arm64) arch="arm64" ;;
+    esac
+
+    local url="https://github.com/nektos/act/releases/download/${act_version}/act_Linux_${arch}.tar.gz"
     curl -fsSL "$url" | tar -xzv -C /usr/local/bin act
     chmod +x /usr/local/bin/act
     echo "act installed: $(act --version)"
