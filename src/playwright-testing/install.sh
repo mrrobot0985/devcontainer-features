@@ -65,8 +65,6 @@ else
     else
         npm install --prefix "$WORKSPACE_DIR" "@playwright/test@${VERSION}"
     fi
-    INSTALL_DIR="$WORKSPACE_DIR/node_modules/@playwright/test"
-
     # Add to PATH
     if ! grep -q "\.playwright/bin" "${USER_HOME}/.bashrc" 2>/dev/null; then
         echo 'export PATH="${HOME}/.playwright/bin:${PATH}"' >> "${USER_HOME}/.bashrc"
