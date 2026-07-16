@@ -20,8 +20,6 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
     fi
 fi
 
-USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
-
 # Install kcat
 if [ "$INSTALL_KCAT" = "true" ]; then
     if ! command -v kcat > /dev/null 2>&1 && ! command -v kafkacat > /dev/null 2>&1; then

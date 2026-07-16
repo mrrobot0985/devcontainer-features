@@ -20,8 +20,6 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
     fi
 fi
 
-USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
-
 # Install MongoDB tools
 if command -v apt-get > /dev/null 2>&1; then
     echo "Installing MongoDB tools via apt-get..."
