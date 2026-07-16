@@ -39,5 +39,30 @@
                 "installStatusLine": false
             }
         }
+    },
+    "block_dangerous": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installSessionHooks": false,
+                "installAgentHooks": true,
+                "installTurnHooks": false,
+                "installStatusLine": false,
+                "blockDangerousCommands": true
+            }
+        }
+    },
+    "custom_denylist": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-hooks": {
+                "installSessionHooks": false,
+                "installAgentHooks": true,
+                "installTurnHooks": false,
+                "installStatusLine": false,
+                "blockDangerousCommands": true,
+                "dangerousCommandDenylist": "curl[[:space:]]+https://evil\\.com,curl[[:space:]]+http://evil\\.com"
+            }
+        }
     }
 }

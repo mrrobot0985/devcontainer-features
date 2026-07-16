@@ -7,6 +7,9 @@ INSTALL_SESSION="${INSTALLSESSIONHOOKS:-true}"
 INSTALL_AGENT="${INSTALLAGENTHOOKS:-true}"
 INSTALL_TURN="${INSTALLTURNHOOKS:-true}"
 INSTALL_STATUSLINE="${INSTALLSTATUSLINE:-true}"
+BLOCK_DANGEROUS="${BLOCKDANGEROUSCOMMANDS:-false}"
+DENYLIST="${DANGEROUSCOMMANDDENYLIST:-}"
+RETENTION_LIMIT="${STATERETENTIONLIMIT:-100}"
 
 USER_HOME="${_REMOTE_USER_HOME:-$HOME}"
 CLAUDE_DIR="${USER_HOME}/.claude"
@@ -41,6 +44,15 @@ if [ "$INSTALL_TURN" = "true" ]; then
     echo "Installing turn hooks..."
     cp -r "${FEATURE_DIR}/hooks/turn" "${HOOKS_DIR}/"
 fi
+
+# Write runtime config for hooks to consume
+CONFIG_FILE="${HOOKS_DIR}/config/hooks.env"
+mkdir -p "$(dirname "$CONFIG_FILE")"
+cat > "$CONFIG_FILE" <<EOF
+BLOCK_DANGEROUS_COMMANDS=${BLOCK_DANGEROUS}
+DANGEROUS_COMMAND_DENYLIST=${DENYLIST}
+STATE_RETENTION_LIMIT=${RETENTION_LIMIT}
+EOF
 
 # Ensure scripts are executable
 find "$HOOKS_DIR" -type f -name "*.sh" -exec chmod +x {} \;

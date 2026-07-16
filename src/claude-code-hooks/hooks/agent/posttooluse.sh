@@ -41,6 +41,7 @@ hook_jq_state_update --argjson ts "$TS" --arg tool "$tool" --argjson ok "$ok" --
 '
 
 hook_jq_log_append --argjson ts "$TS" --arg event "$event" --arg tool "$tool" --argjson ok "$ok" --argjson fail "$signal" '{ts:$ts,event:$event,tool:$tool,ok:$ok,fail:$fail}'
+hook_prune_state
 
 # Auto-fix markdown after Write/Edit + track violations in same state file.
 # Guard the whole block so a missing npx can't break the hook.

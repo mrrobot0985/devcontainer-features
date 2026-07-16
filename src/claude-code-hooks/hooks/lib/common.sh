@@ -21,6 +21,13 @@
 
 set -euo pipefail
 
+# Source runtime config if available (written by install.sh).
+CONFIG_ENV="${HOME}/.claude/hooks/config/hooks.env"
+if [ -f "$CONFIG_ENV" ]; then
+    # shellcheck source=/dev/null
+    . "$CONFIG_ENV"
+fi
+
 # Derive a slug from the sourcing script's filename (fallback only).
 # Prefer passing the slug explicitly to hook_init so state-file names are stable
 # across restructures (e.g. session_start.sh -> slug "sessionstart", not "start").
@@ -155,6 +162,38 @@ hook_update_failure() {
 hook_with_lock() {
   local __cmd="$1"
   { flock 9; eval "$__cmd"; } 9>"$LOCK_FILE"
+}
+
+# Prune large associative arrays in state to prevent unbounded growth.
+# Limits by_tool, by_key, and files objects to STATE_RETENTION_LIMIT entries
+# (default 100), keeping the entries with the most recent last_ts. If an entry
+# lacks last_ts, it is treated as 0 (oldest). Call after state updates.
+# Usage: hook_prune_state [limit]
+hook_prune_state() {
+  local limit="${1:-${STATE_RETENTION_LIMIT:-100}}"
+  if [ -z "$limit" ] || ! printf '%s' "$limit" | grep -qE '^[0-9]+$'; then
+    limit=100
+  fi
+  local tmp; tmp=$(mktemp "$CACHE_DIR/$HOOK_SCOPE/.${HOOK_SLUG}.prune.XXXXXX")
+  {
+    flock 9
+    if ( cat "$STATE_FILE" 2>/dev/null || printf '{}' ) | jq --argjson lim "$limit" '
+      .by_tool |= (if type == "object" then
+        to_entries | sort_by(.value.last_ts // 0) | reverse | .[:$lim] | from_entries
+      else . end) |
+      .by_key |= (if type == "object" then
+        to_entries | sort_by(.value.last_ts // 0) | reverse | .[:$lim] | from_entries
+      else . end) |
+      .files |= (if type == "object" then
+        to_entries | sort_by(.value.last_ts // 0) | reverse | .[:$lim] | from_entries
+      else . end)
+    ' > "$tmp"; then
+      mv "$tmp" "$STATE_FILE"
+    else
+      rm -f "$tmp"
+      return 1
+    fi
+  } 9>"$LOCK_FILE"
 }
 
 # Slurp the hook's stdin JSON into $INPUT.
