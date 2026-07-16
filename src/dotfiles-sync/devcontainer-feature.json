@@ -1,0 +1,27 @@
+{
+  "id": "dotfiles-sync",
+  "name": "Dotfiles Sync",
+  "version": "0.1.0",
+  "description": "Clones a dotfiles repository and applies it to the container user, supporting install scripts, symlinks, and direct copying",
+  "options": {
+    "repository": {
+      "type": "string",
+      "default": "",
+      "description": "Git repository URL containing dotfiles (e.g. https://github.com/user/dotfiles.git)"
+    },
+    "installCommand": {
+      "type": "string",
+      "default": "",
+      "description": "Command to run after cloning (e.g. ./install, make install). Leave empty to auto-detect."
+    },
+    "syncMethod": {
+      "type": "string",
+      "default": "auto",
+      "description": "How to apply dotfiles: auto (detect), symlink, copy, or none",
+      "enum": ["auto", "symlink", "copy", "none"]
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

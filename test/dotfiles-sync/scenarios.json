@@ -1,0 +1,8 @@
+{
+    "no-repo": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "dotfiles-sync": {}
+        }
+    }
+}
