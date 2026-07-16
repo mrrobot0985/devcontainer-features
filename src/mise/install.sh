@@ -53,8 +53,8 @@ fi
 # The official installer may place mise in ~/.local/bin; ensure it's in PATH
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
-# If mise is in ~/.local/bin but not /usr/local/bin, copy it system-wide
-if [ -x "$HOME/.local/bin/mise" ] && ! command -v mise >/dev/null 2>&1; then
+# If mise is in ~/.local/bin, copy it system-wide so all users can access it
+if [ -x "$HOME/.local/bin/mise" ] && [ ! -x /usr/local/bin/mise ]; then
     cp "$HOME/.local/bin/mise" /usr/local/bin/mise
     chmod +x /usr/local/bin/mise
 fi
