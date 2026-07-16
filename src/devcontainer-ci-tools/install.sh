@@ -4,9 +4,9 @@ set -e
 # devcontainer-ci-tools install script
 # Installs devcontainer CLI, docker-buildx, and act.
 
-DEVCONTAINER_CLI_VERSION="__DEVCONTAINERCLIVERSION__"
-INSTALL_ACT="__INSTALLACT__"
-INSTALL_BUILDX="__INSTALLBUILDX__"
+DEVCONTAINER_CLI_VERSION="${DEVCONTAINERCLIVERSION:-latest}"
+INSTALL_ACT="${INSTALLACT:-true}"
+INSTALL_BUILDX="${INSTALLBUILDX:-true}"
 
 ARCH=$(uname -m)
 case "$ARCH" in

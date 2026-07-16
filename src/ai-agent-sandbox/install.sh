@@ -4,9 +4,9 @@ set -e
 # ai-agent-sandbox install script
 # Installs a runtime audit script that checks container security posture.
 
-PRESET="__PRESET__"
-FAIL_ON_WARNING="__FAILONWARNING__"
-ALLOWED_DOMAINS="__ALLOWEDDOMAINS__"
+PRESET="${PRESET:-moderate}"
+FAIL_ON_WARNING="${FAILONWARNING:-false}"
+ALLOWED_DOMAINS="${ALLOWEDDOMAINS:-github.com,registry.npmjs.org,pypi.org,crates.io}"
 
 cat > /usr/local/bin/ai-agent-sandbox-check <<EOF
 #!/bin/bash

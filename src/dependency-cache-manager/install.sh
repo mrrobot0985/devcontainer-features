@@ -4,10 +4,10 @@ set -e
 # dependency-cache-manager install script
 # Auto-detects project types and configures package manager caches.
 
-AUTO_DETECT="__AUTODETECT__"
-TOOLS="__TOOLS__"
-CACHE_PATH="__CACHEPATH__"
-PRINT_MOUNT="__PRINTMOUNT__"
+AUTO_DETECT="${AUTODETECT:-true}"
+TOOLS="${TOOLS:-}"
+CACHE_PATH="${CACHEPATH:-/mnt/devcontainer-cache}"
+PRINT_MOUNT="${PRINTMOUNT:-true}"
 
 setup_npm_cache() {
     local npm_cache="${CACHE_PATH}/npm"
