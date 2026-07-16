@@ -104,4 +104,30 @@ else
     fi
 fi
 
+# Install helper script
+cat > /usr/local/bin/dotfiles-status <<'EOF'
+#!/bin/bash
+# dotfiles-status — show dotfiles sync status
+
+DOTFILES_DIR="$HOME/.dotfiles"
+
+echo "Dotfiles Sync Status"
+echo "===================="
+
+if [ -d "$DOTFILES_DIR" ]; then
+    echo "Dotfiles directory: $DOTFILES_DIR"
+    if [ -d "$DOTFILES_DIR/.git" ]; then
+        cd "$DOTFILES_DIR"
+        echo "Repository: $(git remote get-url origin 2>/dev/null || echo 'unknown')"
+        echo "Branch: $(git branch --show-current 2>/dev/null || echo 'unknown')"
+    fi
+else
+    echo "No dotfiles directory found at $DOTFILES_DIR"
+    echo "Set the 'repository' option in your devcontainer.json to enable dotfiles sync"
+fi
+EOF
+
+chmod +x /usr/local/bin/dotfiles-status
+
 echo "Dotfiles sync complete."
+echo "Run 'dotfiles-status' to check sync status."
