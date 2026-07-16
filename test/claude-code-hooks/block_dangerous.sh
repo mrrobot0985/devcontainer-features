@@ -4,7 +4,6 @@ set -e
 source dev-container-features-test-lib
 
 HOOKS_DIR="${_REMOTE_USER_HOME:-$HOME}/.claude/hooks"
-SETTINGS_FILE="${_REMOTE_USER_HOME:-$HOME}/.claude/settings.json"
 
 # Verify hook files exist
 check "pretooluse.sh exists" test -f "$HOOKS_DIR/agent/pretooluse.sh"
@@ -24,10 +23,11 @@ check "error message mentions blocked" echo "$result" | grep -q "blocked by clau
 
 # Simulate a safe command
 set +e
-result2=$(echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/agent/pretooluse.sh" 2>&1)
-status2=$?
+_safe_result=$(echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/agent/pretooluse.sh" 2>&1)
+_safe_status=$?
 set -e
 
-check "safe command is allowed" test "$status2" -eq 0
+check "safe command is allowed" test "$_safe_status" -eq 0
+check "safe command produces no error" bash -c "! echo '$_safe_result' | grep -q 'blocked by claude-code-hooks policy'"
 
 reportResults
