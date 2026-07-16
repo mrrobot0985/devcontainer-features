@@ -2,13 +2,8 @@
   "id": "direnv-integration",
   "name": "direnv Integration",
   "version": "0.1.0",
-  "description": "Installs direnv and hooks it into shell startup for automatic .envrc loading when changing directories inside the devcontainer",
+  "description": "Installs direnv via apt-get and hooks it into shell startup for automatic .envrc loading when changing directories inside the devcontainer",
   "options": {
-    "version": {
-      "type": "string",
-      "default": "latest",
-      "description": "direnv version to install, or 'latest' for auto-resolution from GitHub releases"
-    },
     "shell": {
       "type": "string",
       "default": "auto",

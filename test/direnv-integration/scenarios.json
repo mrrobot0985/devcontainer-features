@@ -20,14 +20,5 @@
                 "autoAllow": true
             }
         }
-    },
-    "specific-version": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-        "features": {
-            "direnv-integration": {
-                "version": "2.34.0",
-                "shell": "bash"
-            }
-        }
     }
 }
