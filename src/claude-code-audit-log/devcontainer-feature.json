@@ -1,0 +1,16 @@
+{
+  "id": "claude-code-audit-log",
+  "name": "Claude Code Audit Log",
+  "version": "0.1.0",
+  "description": "Installs a simple audit-log script that appends structured JSON events to a workspace file for compliance and post-incident review",
+  "options": {
+    "logDir": {
+      "type": "string",
+      "default": "/workspace/.audit-logs",
+      "description": "Directory where audit log files are written"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
