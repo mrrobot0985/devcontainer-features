@@ -49,6 +49,7 @@ jobs:
           - features: claude-code-plugins
           - features: devcontainer-ci-tools
           - features: direnv-integration
+          - features: taskfile-dev
     steps:
       - uses: actions/checkout@v4
 

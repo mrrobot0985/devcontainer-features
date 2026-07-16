@@ -48,7 +48,7 @@ if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
         grep '"tag_name":' | head -n 1 | sed 's/.*"v\{0,1\}\([^"]*\)".*/\1/' || true)
 
     if [ -z "$LATEST_TAG" ]; then
-        LATEST_TAG="3.39.0"
+        LATEST_TAG="3.52.0"
         echo "WARNING: Could not resolve latest Task version; falling back to v$LATEST_TAG"
     fi
     VERSION="$LATEST_TAG"
