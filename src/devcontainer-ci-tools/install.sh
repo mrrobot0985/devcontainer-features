@@ -25,10 +25,14 @@ install_devcontainer_cli() {
     # Use the official install script which bundles its own Node.js runtime
     local install_url="https://raw.githubusercontent.com/devcontainers/cli/main/scripts/install.sh"
     echo "Downloading devcontainer CLI via official install script..."
+    local install_args=""
+    if [ -n "$version" ] && [ "$version" != "latest" ]; then
+        install_args="--version $version"
+    fi
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "$install_url" | sh -s -- ${version:+"$version"}
+        curl -fsSL "$install_url" | sh -s -- $install_args
     else
-        wget -qO- "$install_url" | sh -s -- ${version:+"$version"}
+        wget -qO- "$install_url" | sh -s -- $install_args
     fi
 
     # The official script installs to ~/.devcontainer; link to /usr/local/bin
