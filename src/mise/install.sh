@@ -50,8 +50,14 @@ else
     mv "/tmp/mise-v${VERSION}-${PLATFORM}-${ARCH}/mise" /usr/local/bin/mise 2>/dev/null || mv /tmp/mise /usr/local/bin/mise 2>/dev/null || true
 fi
 
-# Ensure mise is in PATH for subsequent commands
-export PATH="/usr/local/bin:$PATH"
+# The official installer may place mise in ~/.local/bin; ensure it's in PATH
+export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+
+# If mise is in ~/.local/bin but not /usr/local/bin, copy it system-wide
+if [ -x "$HOME/.local/bin/mise" ] && ! command -v mise >/dev/null 2>&1; then
+    cp "$HOME/.local/bin/mise" /usr/local/bin/mise
+    chmod +x /usr/local/bin/mise
+fi
 
 if ! command -v mise >/dev/null 2>&1; then
     echo "ERROR: mise installation failed"
