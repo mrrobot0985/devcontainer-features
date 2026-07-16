@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (63)
+## Features (66)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -46,6 +46,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `duckdb-analytics` | Installs DuckDB CLI for analytical queries and data processing in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/duckdb-analytics/README.md) |
 | `git-config-manager` | Standardizes git configuration for devcontainer users from feature options or host environment va... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-config-manager/README.md) |
 | `git-hooks-manager` | Installs and configures pre-commit hooks for linting, formatting, and conventional commits in dev... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-hooks-manager/README.md) |
+| `gitleaks-scan` | Installs Gitleaks for detecting and preventing hardcoded secrets in git repositories | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/gitleaks-scan/README.md) |
 | `git-lfs` | Installs Git LFS for version controlling large files in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-lfs/README.md) |
 | `host-isolation` | Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/host-isolation/README.md) |
 | `jupyter-ml-dev` | Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interact... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/jupyter-ml-dev/README.md) |
@@ -63,6 +64,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `nvidia-container-toolkit` | Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from a... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nvidia-container-toolkit/README.md) |
 | `ollama-cli` | Installs Ollama CLI for managing and running local AI models in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ollama-cli/README.md) |
 | `otel-collector-dev` | Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/otel-collector-dev/README.md) |
+| `pandoc-convert` | Installs Pandoc universal document converter with optional LaTeX support | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/pandoc-convert/README.md) |
 | `playwright-testing` | Installs Playwright for browser automation and end-to-end testing in devcontainers with configura... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/playwright-testing/README.md) |
 | `plumber-cli` | Installs Plumber CLI for reading and writing messages from Kafka, RabbitMQ, NATS, Redis, and clou... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/plumber-cli/README.md) |
 | `podman-checkpoint-helper` | Installs Podman with checkpoint/restore support (CRIU) for ephemeral AI agent container workflows... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/podman-checkpoint-helper/README.md) |
@@ -77,7 +79,9 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `sudo-audit` | Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sudo-audit/README.md) |
 | `syft-sbom` | Installs Syft and provides helpers for generating SBOMs (CycloneDX/SPDX) from the container files... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/syft-sbom/README.md) |
 | `taskfile-dev` | Installs the Task (go-task) command runner with shell completions and optional alias. Auto-detect... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/taskfile-dev/README.md) |
+| `tmux-terminal` | Installs tmux terminal multiplexer with sensible default configuration | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/tmux-terminal/README.md) |
 | `vitepress-docs` | Installs VitePress for building Vite-powered documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/vitepress-docs/README.md) |
+
 ## Documentation
 
 - [Tutorials](docs/tutorials/)
