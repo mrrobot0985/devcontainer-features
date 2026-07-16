@@ -17,7 +17,7 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "taskfile-dev": {
-                "version": "3.39.0",
+                "version": "3.52.0",
                 "alias": false,
                 "completions": false
             }

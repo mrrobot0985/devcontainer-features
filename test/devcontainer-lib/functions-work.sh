@@ -6,7 +6,7 @@ source dev-container-features-test-lib
 # Source the library
 source /usr/local/share/devcontainer-lib/devcontainer-lib.sh
 
-check "dc_detect_arch returns amd64 or arm64" bash -c "arch=$(dc_detect_arch); [ \"$arch\" = 'amd64' ] || [ \"$arch\" = 'arm64' ]"
+check "dc_detect_arch returns amd64 or arm64" bash -c "dc_detect_arch | grep -qE 'amd64|arm64'"
 check "dc_get_remote_user returns a user" bash -c "[ -n \"$(dc_get_remote_user)\" ]"
 check "dc_get_remote_home returns a path" bash -c "[ -d \"$(dc_get_remote_home)\" ]"
 check "dc_retry succeeds on first try" bash -c "dc_retry 'true'"
