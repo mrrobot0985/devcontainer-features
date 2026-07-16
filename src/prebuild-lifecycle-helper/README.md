@@ -23,7 +23,6 @@ Heavy operations like `npm install` or `pip install` placed in `postCreateComman
 | `failOnWarning` | boolean | `false` | Fail the build if dependency installations are detected in non-prebuild hooks |
 | `fixMode` | boolean | `false` | Automatically rewrite `devcontainer.json` to move dependency installations to `updateContentCommand` |
 | `detectLanguages` | string | `"auto"` | Comma-separated list of languages to scan (`auto`, `node`, `python`, `rust`, `ruby`, `go`, `php`, `java`, `dotnet`) |
-| `commandTimeout` | string | `"60s"` | Timeout for each detected install command when running in fixMode |
 
 ## Detected Languages
 

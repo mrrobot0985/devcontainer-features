@@ -18,11 +18,6 @@
       "type": "string",
       "default": "auto",
       "description": "Comma-separated list of languages to scan for (auto, node, python, rust, ruby, go, php, java, dotnet). 'auto' scans all known lockfiles."
-    },
-    "commandTimeout": {
-      "type": "string",
-      "default": "60s",
-      "description": "Timeout for each detected install command when running in fixMode"
     }
   },
   "installsAfter": [

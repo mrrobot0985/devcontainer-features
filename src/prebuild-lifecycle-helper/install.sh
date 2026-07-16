@@ -17,7 +17,6 @@ fi
 FAIL_ON_WARNING="${FAILONWARNING:-false}"
 FIX_MODE="${FIXMODE:-false}"
 DETECT_LANGUAGES="${DETECTLANGUAGES:-auto}"
-COMMAND_TIMEOUT="${COMMANDTIMEOUT:-60s}"
 
 # Ensure jq is available for JSON manipulation
 if ! command -v jq >/dev/null 2>&1; then
@@ -506,12 +505,12 @@ if [ "$FAIL_ON_WARNING" = "true" ] || [ "$FIX_MODE" = "true" ]; then
     export FIX_MODE
     export DETECT_LANGUAGES
     export FAIL_ON_WARNING
-    /usr/local/bin/prebuild-audit || {
-        if [ "$FAIL_ON_WARNING" = "true" ] && [ $? -eq 1 ]; then
-            echo "ERROR [prebuild-lifecycle-helper]: Audit failed with warnings and failOnWarning is enabled."
-            exit 1
-        fi
-    }
+    /usr/local/bin/prebuild-audit
+    audit_exit=$?
+    if [ "$audit_exit" -eq 1 ] && [ "$FAIL_ON_WARNING" = "true" ]; then
+        echo "ERROR [prebuild-lifecycle-helper]: Audit failed with warnings and failOnWarning is enabled."
+        exit 1
+    fi
 fi
 
 echo "prebuild-lifecycle-helper v0.2.0 installed."
