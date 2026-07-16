@@ -237,7 +237,7 @@ LIB_EOF
 chmod +x "$INSTALL_PATH/devcontainer-lib.sh"
 
 # Write a README for feature authors
-cat > "$INSTALL_PATH/README.md" <>'README_EOF'
+cat > "$INSTALL_PATH/README.md" <<'README_EOF'
 # Devcontainer Shared Library
 
 This directory contains a shared shell utility library for use in devcontainer

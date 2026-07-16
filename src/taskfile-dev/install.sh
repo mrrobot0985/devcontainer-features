@@ -55,7 +55,7 @@ if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
 fi
 
 # Strip 'v' prefix if present
-VERSION=$(echo "$VERSION" | sed 's/^v//')
+VERSION="${VERSION#v}"
 
 echo "Installing Task v${VERSION} for linux-${TASK_ARCH}..."
 
