@@ -1,5 +1,7 @@
 # Claude Code MCP Orchestrator
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Installs and manages MCP server lifecycle from `.mcp.json` configuration.
 Provides `mcp-ctl` utility to start, stop, and check status of configured
 servers.

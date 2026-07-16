@@ -1,5 +1,7 @@
 # Host Isolation Security Profile
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Audits `devcontainer.json` for unsafe `runArgs`, `mounts`, and `capAdd`
 configurations. Warns when `--privileged`, Docker socket binds, or excessive
 capabilities are detected.

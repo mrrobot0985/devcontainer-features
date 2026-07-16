@@ -1,5 +1,7 @@
 # 1Password CLI
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Installs the 1Password CLI (`op`) and provides a `get-secret` helper for
 retrieving secrets from 1Password vaults in devcontainer workflows.
 
