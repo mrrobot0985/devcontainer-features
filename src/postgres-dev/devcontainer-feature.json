@@ -1,0 +1,27 @@
+{
+  "id": "postgres-dev",
+  "name": "PostgreSQL Development Tools",
+  "version": "1.0.0",
+  "description": "Installs PostgreSQL client tools for database development in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "PostgreSQL major version to install (e.g., 16, 15, 14) or 'latest'"
+    },
+    "installPgFormatter": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install pgFormatter for SQL formatting"
+    },
+    "installPgTop": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install pgtop for real-time PostgreSQL monitoring"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/postgres-dev"
+}

@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (45)
+## Features (48)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -51,8 +51,11 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `non-root-enforcer` | Audits devcontainer.json for root remoteUser and warns or fails when the container is configured ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/non-root-enforcer/README.md) |
 | `nvidia-container-toolkit` | Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from a... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nvidia-container-toolkit/README.md) |
 | `otel-collector-dev` | Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/otel-collector-dev/README.md) |
+| `playwright-testing` | Installs Playwright for browser automation and end-to-end testing in devcontainers with configura... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/playwright-testing/README.md) |
 | `podman-checkpoint-helper` | Installs Podman with checkpoint/restore support (CRIU) for ephemeral AI agent container workflows... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/podman-checkpoint-helper/README.md) |
+| `postgres-dev` | Installs PostgreSQL client tools for database development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/postgres-dev/README.md) |
 | `prebuild-lifecycle-helper` | Analyzes devcontainer.json lifecycle commands, detects dependency installations in non-prebuild h... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/prebuild-lifecycle-helper/README.md) |
+| `redis-dev` | Installs Redis CLI tools for cache and session development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/redis-dev/README.md) |
 | `registry-mirror-config` | Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/registry-mirror-config/README.md) |
 | `sops-secret-manager` | Installs Mozilla SOPS with age key generation for encrypting secrets in devcontainer projects | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sops-secret-manager/README.md) |
 | `ssh-agent-forward` | Forwards the host SSH agent into the devcontainer for Git operations without copying private keys... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ssh-agent-forward/README.md) |

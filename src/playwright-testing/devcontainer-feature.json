@@ -1,0 +1,32 @@
+{
+  "id": "playwright-testing",
+  "name": "Playwright Testing",
+  "version": "1.0.0",
+  "description": "Installs Playwright for browser automation and end-to-end testing in devcontainers with configurable browsers and system dependencies",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of @playwright/test to install, or 'latest'"
+    },
+    "browsers": {
+      "type": "string",
+      "default": "chromium",
+      "description": "Comma-separated browsers to install: chromium, firefox, webkit, or 'all'"
+    },
+    "installDeps": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install system dependencies required by browsers (recommended for CI)"
+    },
+    "globalInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install Playwright globally via npm instead of in the workspace"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/node"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/playwright-testing"
+}

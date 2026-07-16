@@ -1,0 +1,22 @@
+{
+    "test": [
+        {
+            "name": "default",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "postgres-dev": {}
+            }
+        },
+        {
+            "name": "with-version",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "postgres-dev": {
+                    "version": "16",
+                    "installPgFormatter": true,
+                    "installPgTop": true
+                }
+            }
+        }
+    ]
+}
