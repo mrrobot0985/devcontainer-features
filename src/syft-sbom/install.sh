@@ -30,14 +30,25 @@ case "$OS" in
         ;;
 esac
 
-# Install Syft
+# Resolve latest version via GitHub API if needed
 if [ "$SYFT_VERSION" = "latest" ] || [ -z "$SYFT_VERSION" ]; then
-    echo "Installing latest Syft..."
-    curl -fsSL https://github.com/anchore/syft/releases/latest/download/syft_${OS}_${ARCH}.tar.gz | tar -xz -C /tmp
-else
-    echo "Installing Syft $SYFT_VERSION..."
-    curl -fsSL "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${OS}_${ARCH}.tar.gz" | tar -xz -C /tmp
+    echo "Resolving latest Syft version..."
+    SYFT_VERSION=$(curl -fsSL "https://api.github.com/repos/anchore/syft/releases/latest" | grep -oP '"tag_name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+    if [ -z "$SYFT_VERSION" ]; then
+        echo "WARNING: Could not resolve latest Syft version, using fallback 1.18.0"
+        SYFT_VERSION="1.18.0"
+    fi
+    echo "Latest Syft version: $SYFT_VERSION"
 fi
+
+# Strip leading 'v' if present
+SYFT_VERSION="${SYFT_VERSION#v}"
+
+# Install Syft
+echo "Installing Syft $SYFT_VERSION..."
+DOWNLOAD_URL="https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_${OS}_${ARCH}.tar.gz"
+echo "Downloading from $DOWNLOAD_URL"
+curl -fsSL "$DOWNLOAD_URL" | tar -xz -C /tmp
 
 mv /tmp/syft /usr/local/bin/syft 2>/dev/null || true
 chmod +x /usr/local/bin/syft 2>/dev/null || true

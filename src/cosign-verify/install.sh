@@ -7,15 +7,15 @@ set -e
 COSIGN_VERSION="${COSIGNVERSION:-latest}"
 VERIFY_ON_INSTALL="${VERIFYONINSTALL:-false}"
 
-# Determine architecture
+# Determine architecture (Cosign uses amd64, not x86_64)
 ARCH=$(uname -m)
 case "$ARCH" in
-    x86_64) ARCH="x86_64" ;;
+    x86_64) ARCH="amd64" ;;
     aarch64) ARCH="arm64" ;;
     arm64) ARCH="arm64" ;;
     *)
-        echo "WARNING: Unsupported architecture $ARCH, attempting x86_64 fallback"
-        ARCH="x86_64"
+        echo "WARNING: Unsupported architecture $ARCH, attempting amd64 fallback"
+        ARCH="amd64"
         ;;
 esac
 
@@ -30,14 +30,25 @@ case "$OS" in
         ;;
 esac
 
-# Install Cosign
+# Resolve latest version via GitHub API if needed
 if [ "$COSIGN_VERSION" = "latest" ] || [ -z "$COSIGN_VERSION" ]; then
-    echo "Installing latest Cosign..."
-    curl -fsSL https://github.com/sigstore/cosign/releases/latest/download/cosign-${OS}-${ARCH} -o /usr/local/bin/cosign
-else
-    echo "Installing Cosign $COSIGN_VERSION..."
-    curl -fsSL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-${OS}-${ARCH}" -o /usr/local/bin/cosign
+    echo "Resolving latest Cosign version..."
+    COSIGN_VERSION=$(curl -fsSL "https://api.github.com/repos/sigstore/cosign/releases/latest" | grep -oP '"tag_name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+    if [ -z "$COSIGN_VERSION" ]; then
+        echo "WARNING: Could not resolve latest Cosign version, using fallback 2.4.0"
+        COSIGN_VERSION="2.4.0"
+    fi
+    echo "Latest Cosign version: $COSIGN_VERSION"
 fi
+
+# Strip leading 'v' if present
+COSIGN_VERSION="${COSIGN_VERSION#v}"
+
+# Install Cosign
+echo "Installing Cosign $COSIGN_VERSION..."
+DOWNLOAD_URL="https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-${OS}-${ARCH}"
+echo "Downloading from $DOWNLOAD_URL"
+curl -fsSL "$DOWNLOAD_URL" -o /usr/local/bin/cosign
 
 chmod +x /usr/local/bin/cosign
 
