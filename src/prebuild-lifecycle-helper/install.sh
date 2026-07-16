@@ -405,6 +405,7 @@ apply_fixes() {
         | if $poststart != "" then .postStartCommand = $poststart else del(.postStartCommand) end
     ' "$json_file" > "$tmp_json" && mv "$tmp_json" "$json_file"
 
+    FIXES_APPLIED=true
     echo "    ✅  devcontainer.json updated"
     echo ""
     echo "    Changes applied:"
@@ -475,6 +476,10 @@ fi
 analyze "$DEVCONTAINER_JSON" "$WORKSPACE_DIR"
 
 if [ "$WARNINGS" -gt 0 ]; then
+    if [ "$FIX_MODE" = "true" ] && [ "${FIXES_APPLIED:-false}" = "true" ]; then
+        echo "INFO [prebuild-audit]: Fixes applied successfully. $WARNINGS issue(s) were resolved."
+        exit 0
+    fi
     echo "WARNING [prebuild-audit]: $WARNINGS optimization opportunity(s) detected."
     exit 1
 else
