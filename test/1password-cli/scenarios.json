@@ -1,0 +1,10 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "1password-cli": {
+                "version": "latest"
+            }
+        }
+    }
+}
