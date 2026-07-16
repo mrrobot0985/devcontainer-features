@@ -25,63 +25,102 @@ echo "  Version: $VERSION"
 echo "  Shell:  $SHELL_CHOICE"
 echo "  Auto-allow: $AUTO_ALLOW"
 
-# Detect architecture
-ARCH=$(uname -m)
-case "$ARCH" in
-    x86_64)
-        DIRENV_ARCH="amd64"
-        ;;
-    aarch64|arm64)
-        DIRENV_ARCH="arm64"
-        ;;
-    *)
-        echo "WARNING: Architecture $ARCH not explicitly supported; trying amd64"
-        DIRENV_ARCH="amd64"
-        ;;
-esac
-
-# Resolve version
-if [ "$VERSION" = "latest" ]; then
-    # Try GitHub API first
-    LATEST_TAG=$(curl -sL --retry 3 --max-time 10 \
-        -H "Accept: application/vnd.github.v3+json" \
-        "https://api.github.com/repos/direnv/direnv/releases/latest" 2>/dev/null | \
-        grep '"tag_name":' | head -n 1 | sed 's/.*"v\{0,1\}\([^"]*\)".*/\1/' || true)
-
-    if [ -z "$LATEST_TAG" ]; then
-        # Fallback: hardcoded known-good version
-        LATEST_TAG="2.35.0"
-        echo "WARNING: Could not resolve latest direnv version; falling back to v$LATEST_TAG"
+# Try package manager first for 'latest'
+if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
+    if command -v apt-get >/dev/null 2>&1; then
+        echo "Installing direnv via apt-get..."
+        apt-get update >/dev/null 2>&1 || true
+        if apt-get install -y direnv >/dev/null 2>&1; then
+            echo "direnv installed via apt-get"
+            DIRECT_INSTALL="false"
+        else
+            echo "WARNING: apt-get install direnv failed; falling back to GitHub download"
+            DIRECT_INSTALL="true"
+        fi
+    else
+        DIRECT_INSTALL="true"
     fi
-    VERSION="$LATEST_TAG"
+else
+    DIRECT_INSTALL="true"
 fi
 
-# Strip 'v' prefix if present
-VERSION=$(echo "$VERSION" | sed 's/^v//')
+# Download from GitHub if needed
+if [ "$DIRECT_INSTALL" = "true" ]; then
+    # Detect architecture
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64)
+            DIRENV_ARCH="amd64"
+            ;;
+        aarch64|arm64)
+            DIRENV_ARCH="arm64"
+            ;;
+        *)
+            echo "WARNING: Architecture $ARCH not explicitly supported; trying amd64"
+            DIRENV_ARCH="amd64"
+            ;;
+    esac
 
-echo "Installing direnv v${VERSION} for linux-${DIRENV_ARCH}..."
+    # Resolve version
+    if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
+        # Try GitHub API first
+        LATEST_TAG=$(curl -sL --retry 3 --max-time 10 \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/direnv/direnv/releases/latest" 2>/dev/null | \
+            grep '"tag_name":' | head -n 1 | sed 's/.*"v\{0,1\}\([^"]*\)".*/\1/' || true)
 
-# Download direnv binary
-DIRENV_URL="https://github.com/direnv/direnv/releases/download/v${VERSION}/direnv.linux-${DIRENV_ARCH}"
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
+        if [ -z "$LATEST_TAG" ]; then
+            # Fallback: hardcoded known-good version
+            LATEST_TAG="2.34.0"
+            echo "WARNING: Could not resolve latest direnv version; falling back to v$LATEST_TAG"
+        fi
+        VERSION="$LATEST_TAG"
+    fi
 
-if ! curl -fsSL --retry 3 --max-time 60 -o "$TMP_DIR/direnv" "$DIRENV_URL" 2>/dev/null; then
-    echo "ERROR: Failed to download direnv from $DIRENV_URL"
-    echo "       Check https://github.com/direnv/direnv/releases for available versions."
+    # Strip 'v' prefix if present
+    VERSION=$(echo "$VERSION" | sed 's/^v//')
+
+    echo "Installing direnv v${VERSION} for linux-${DIRENV_ARCH}..."
+
+    # Download direnv binary
+    DIRENV_URL="https://github.com/direnv/direnv/releases/download/v${VERSION}/direnv.linux-${DIRENV_ARCH}"
+    TMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TMP_DIR"' EXIT
+
+    HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" --retry 3 --max-time 60 -L "$DIRENV_URL")
+    if [ "$HTTP_STATUS" != "200" ]; then
+        echo "ERROR: GitHub returned HTTP $HTTP_STATUS for $DIRENV_URL"
+        echo "       The version or architecture may not exist."
+        exit 1
+    fi
+
+    if ! curl -fsSL --retry 3 --max-time 60 -o "$TMP_DIR/direnv" "$DIRENV_URL" 2>/dev/null; then
+        echo "ERROR: Failed to download direnv from $DIRENV_URL"
+        exit 1
+    fi
+
+    # Verify it's a valid binary
+    if [ ! -s "$TMP_DIR/direnv" ]; then
+        echo "ERROR: Downloaded file is empty"
+        exit 1
+    fi
+
+    if ! file "$TMP_DIR/direnv" | grep -q "ELF.*executable"; then
+        echo "ERROR: Downloaded file is not a valid ELF binary"
+        exit 1
+    fi
+
+    chmod +x "$TMP_DIR/direnv"
+    mv "$TMP_DIR/direnv" /usr/local/bin/direnv
+
+    echo "direnv binary installed to /usr/local/bin/direnv"
+fi
+
+# Verify installation
+if ! command -v direnv >/dev/null 2>&1; then
+    echo "ERROR: direnv installation failed - binary not found in PATH"
     exit 1
 fi
-
-# Verify it's a valid binary
-if ! file "$TMP_DIR/direnv" | grep -q "ELF.*executable"; then
-    echo "ERROR: Downloaded file is not a valid ELF binary"
-    exit 1
-fi
-
-chmod +x "$TMP_DIR/direnv"
-mv "$TMP_DIR/direnv" /usr/local/bin/direnv
-
-echo "direnv binary installed to /usr/local/bin/direnv"
 
 # Determine which shells to hook
 if [ "$SHELL_CHOICE" = "auto" ]; then

@@ -4,10 +4,10 @@ set -e
 source dev-container-features-test-lib
 
 # Create a mock workspace with package-lock.json and misplaced npm install
-mkdir -p /workspace
-touch /workspace/package-lock.json
-mkdir -p /workspace/.devcontainer
-cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
+TMPDIR=$(mktemp -d)
+touch "$TMPDIR/package-lock.json"
+mkdir -p "$TMPDIR/.devcontainer"
+cat > "$TMPDIR/.devcontainer/devcontainer.json" <<'EOF'
 {
   "name": "test",
   "postCreateCommand": "npm install",
@@ -16,16 +16,16 @@ cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
 EOF
 
 # Run fix mode
-check "fix mode rewrites devcontainer.json" bash -c "FIX_MODE=true prebuild-audit /workspace/.devcontainer/devcontainer.json"
+check "fix mode rewrites devcontainer.json" bash -c "FIX_MODE=true prebuild-audit '$TMPDIR/.devcontainer/devcontainer.json'"
 
 # Verify backup exists
-check "backup created" test -f /workspace/.devcontainer/devcontainer.json.prebuild-backup
+check "backup created" test -f "$TMPDIR/.devcontainer/devcontainer.json.prebuild-backup"
 
 # Verify npm install moved to updateContentCommand
-check "npm install moved to updateContentCommand" bash -c "grep -q 'updateContentCommand' /workspace/.devcontainer/devcontainer.json"
-check "postCreateCommand removed or empty" bash -c '! grep -q '"postCreateCommand": *"npm install"' /workspace/.devcontainer/devcontainer.json'"
-check "postStartCommand preserved" bash -c "grep -q 'echo done' /workspace/.devcontainer/devcontainer.json"
+check "npm install moved to updateContentCommand" bash -c "grep -q 'updateContentCommand' '$TMPDIR/.devcontainer/devcontainer.json'"
+check "postCreateCommand removed or empty" bash -c "! grep -q '\"postCreateCommand\": *\"npm install\"' '$TMPDIR/.devcontainer/devcontainer.json'"
+check "postStartCommand preserved" bash -c "grep -q 'echo done' '$TMPDIR/.devcontainer/devcontainer.json'"
 
-rm -rf /workspace/.devcontainer /workspace/package-lock.json
+rm -rf "$TMPDIR"
 
 reportResults
