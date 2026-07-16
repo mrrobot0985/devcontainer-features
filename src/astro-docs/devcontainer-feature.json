@@ -1,0 +1,22 @@
+{
+  "id": "astro-docs",
+  "name": "Astro Static Site",
+  "version": "1.0.0",
+  "description": "Installs Astro CLI for building fast content sites and documentation in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of astro to install, or 'latest'"
+    },
+    "installTypeScript": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install TypeScript support for Astro projects"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/node"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/astro-docs"
+}

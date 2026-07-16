@@ -11,13 +11,14 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (54)
+## Features (57)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
 | `1password-cli` | Installs the 1Password CLI and provides a get-secret helper for retrieving secrets from 1Password... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/1password-cli/README.md) |
 | `act-runner` | Installs nektos/act for running GitHub Actions workflows locally inside devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/act-runner/README.md) |
 | `ai-agent-sandbox` | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime pos... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ai-agent-sandbox/README.md) |
+| `astro-docs` | Installs Astro CLI for building fast content sites and documentation in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/astro-docs/README.md) |
 | `bruno-api-testing` | Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcont... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/bruno-api-testing/README.md) |
 | `claude-code-audit-log` | Installs a simple audit-log script that appends structured JSON events to a workspace file for co... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/claude-code-audit-log/README.md) |
 | `claude-code-backend` | Configures Claude Code to use a custom API backend | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/claude-code-backend/README.md) |
@@ -46,6 +47,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `host-isolation` | Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/host-isolation/README.md) |
 | `jupyter-ml-dev` | Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interact... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/jupyter-ml-dev/README.md) |
 | `kafka-dev` | Installs Kafka CLI tools for event streaming development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/kafka-dev/README.md) |
+| `locust-testing` | Installs Locust for Python-based load and performance testing in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/locust-testing/README.md) |
 | `mcp-server-manager` | Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mcp-server-manager/README.md) |
 | `mise` | Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for manag... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mise/README.md) |
 | `mkdocs-material` | Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mkdocs-material/README.md) |
@@ -62,6 +64,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `prebuild-lifecycle-helper` | Analyzes devcontainer.json lifecycle commands, detects dependency installations in non-prebuild h... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/prebuild-lifecycle-helper/README.md) |
 | `redis-dev` | Installs Redis CLI tools for cache and session development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/redis-dev/README.md) |
 | `registry-mirror-config` | Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/registry-mirror-config/README.md) |
+| `sonar-scanner` | Installs SonarScanner CLI for code quality analysis in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sonar-scanner/README.md) |
 | `sops-secret-manager` | Installs Mozilla SOPS with age key generation for encrypting secrets in devcontainer projects | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sops-secret-manager/README.md) |
 | `ssh-agent-forward` | Forwards the host SSH agent into the devcontainer for Git operations without copying private keys... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ssh-agent-forward/README.md) |
 | `starship-prompt` | Installs the Starship cross-shell prompt and configures it for bash, zsh, and fish | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/starship-prompt/README.md) |

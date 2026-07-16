@@ -1,0 +1,22 @@
+{
+  "id": "locust-testing",
+  "name": "Locust Load Testing",
+  "version": "1.0.0",
+  "description": "Installs Locust for Python-based load and performance testing in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of locust to install, or 'latest'"
+    },
+    "installPlugins": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install common Locust plugins for additional metrics and reporting"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/locust-testing"
+}
