@@ -1,0 +1,26 @@
+{
+  "id": "docker-compose-helper",
+  "name": "Docker Compose Helper",
+  "version": "0.1.0",
+  "description": "Validates docker-compose.yml files and optionally injects health checks and dependency ordering for reliable devcontainer service startup",
+  "options": {
+    "validate": {
+      "type": "boolean",
+      "default": true,
+      "description": "Validate the docker-compose.yml syntax using docker compose config"
+    },
+    "healthChecks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Add health check stanzas to services that are dependencies of other services"
+    },
+    "dependsOnOrdering": {
+      "type": "boolean",
+      "default": true,
+      "description": "Rewrite depends_on to use condition: service_healthy instead of simple service lists"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

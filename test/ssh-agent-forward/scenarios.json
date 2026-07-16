@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ssh-agent-forward": {}
+        }
+    },
+    "custom-socket": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ssh-agent-forward": {
+                "socketPath": "/tmp/my-ssh-sock",
+                "forwardToUser": true
+            }
+        }
+    }
+}

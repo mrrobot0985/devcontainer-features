@@ -1,0 +1,21 @@
+{
+  "id": "ssh-agent-forward",
+  "name": "SSH Agent Forward",
+  "version": "0.1.0",
+  "description": "Forwards the host SSH agent into the devcontainer for Git operations without copying private keys or configuring deploy tokens",
+  "options": {
+    "socketPath": {
+      "type": "string",
+      "default": "auto",
+      "description": "Path to SSH agent socket on host, or 'auto' to detect from SSH_AUTH_SOCK environment variable"
+    },
+    "forwardToUser": {
+      "type": "boolean",
+      "default": true,
+      "description": "Also symlink the socket into the container user's home for non-root tools"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
