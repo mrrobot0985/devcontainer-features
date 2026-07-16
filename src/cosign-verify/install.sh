@@ -7,6 +7,11 @@ set -e
 COSIGN_VERSION="${COSIGNVERSION:-latest}"
 VERIFY_ON_INSTALL="${VERIFYONINSTALL:-false}"
 
+# Ensure curl is available
+if ! command -v curl >/dev/null 2>&1; then
+    apt-get update && apt-get install -y curl ca-certificates 2>/dev/null || true
+fi
+
 # Determine architecture (Cosign uses amd64, not x86_64)
 ARCH=$(uname -m)
 case "$ARCH" in

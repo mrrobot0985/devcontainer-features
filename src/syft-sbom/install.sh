@@ -7,6 +7,11 @@ set -e
 SYFT_VERSION="${SYFTVERSION:-latest}"
 DEFAULT_FORMAT="${DEFAULTFORMAT:-cyclonedx-json}"
 
+# Ensure curl is available
+if ! command -v curl >/dev/null 2>&1; then
+    apt-get update && apt-get install -y curl ca-certificates 2>/dev/null || true
+fi
+
 # Determine architecture
 ARCH=$(uname -m)
 case "$ARCH" in
