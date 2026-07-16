@@ -1,7 +1,7 @@
 {
   "id": "ssh-agent-forward",
   "name": "SSH Agent Forward",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Forwards the host SSH agent into the devcontainer for Git operations without copying private keys or configuring deploy tokens",
   "options": {
     "socketPath": {
@@ -17,5 +17,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/ssh-agent-forward",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

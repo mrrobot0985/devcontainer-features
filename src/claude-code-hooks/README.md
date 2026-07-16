@@ -1,6 +1,6 @@
 # Claude Code Hooks
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement.
 

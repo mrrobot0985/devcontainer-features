@@ -1,7 +1,7 @@
 {
   "id": "act-runner",
   "name": "GitHub Actions Local Runner",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs nektos/act for running GitHub Actions workflows locally inside devcontainers",
   "options": {
     "version": {
@@ -23,5 +23,7 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/docker-in-docker",
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/act-runner",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

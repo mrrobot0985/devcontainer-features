@@ -1,6 +1,6 @@
 # direnv Integration
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
 Installs [direnv](https://direnv.net) and hooks it into shell startup for automatic `.envrc` loading when changing directories inside the devcontainer.
 

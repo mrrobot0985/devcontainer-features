@@ -1,7 +1,7 @@
 {
   "id": "docker-compose-helper",
   "name": "Docker Compose Helper",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Validates docker-compose.yml files and optionally injects health checks and dependency ordering for reliable devcontainer service startup",
   "options": {
     "validate": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/docker-compose-helper",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

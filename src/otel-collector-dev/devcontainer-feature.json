@@ -1,7 +1,7 @@
 {
   "id": "otel-collector-dev",
   "name": "OpenTelemetry Collector Dev",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers",
   "options": {
     "exporter": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/otel-collector-dev",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

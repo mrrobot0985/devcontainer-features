@@ -1,7 +1,7 @@
 {
   "id": "nix-package-manager",
   "name": "Nix Package Manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs the Nix package manager with flakes support and optional home-manager integration for reproducible dev environments",
   "options": {
     "multiUser": {
@@ -27,5 +27,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/nix-package-manager",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

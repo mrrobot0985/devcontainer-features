@@ -1,7 +1,7 @@
 {
   "id": "claude-code-hooks",
   "name": "Claude Code Hooks",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement (self-contained, pinned to v0)",
   "options": {
     "installSessionHooks": {
@@ -37,7 +37,15 @@
     "stateRetentionLimit": {
       "type": "string",
       "default": "100",
-      "enum": ["10", "25", "50", "100", "250", "500", "1000"],
+      "enum": [
+        "10",
+        "25",
+        "50",
+        "100",
+        "250",
+        "500",
+        "1000"
+      ],
       "description": "Maximum number of entries to retain in per-tool/per-file state objects. Older entries are pruned automatically."
     }
   },
@@ -45,5 +53,7 @@
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/devcontainers/features/git",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-hooks",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

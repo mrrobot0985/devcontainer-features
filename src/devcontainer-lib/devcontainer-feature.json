@@ -1,7 +1,7 @@
 {
   "id": "devcontainer-lib",
   "name": "Devcontainer Shared Library",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs a shared shell utility library for use in devcontainer lifecycle scripts and custom automation. Provides common functions like retry, wait-for, logging, and architecture detection.",
   "options": {
     "installPath": {
@@ -12,5 +12,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/devcontainer-lib",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

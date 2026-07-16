@@ -1,6 +1,6 @@
 # Devcontainer CI Tools
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs the devcontainer CLI, docker-buildx, and `act` (local GitHub Actions
 runner) so template and feature authors can self-test their work inside the

@@ -1,7 +1,7 @@
 {
   "id": "bruno-api-testing",
   "name": "Bruno API Testing",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcontainers",
   "options": {
     "version": {
@@ -17,5 +17,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/node"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/bruno-api-testing",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

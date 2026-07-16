@@ -1,6 +1,6 @@
 # Syft SBOM Generator
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs [Syft](https://github.com/anchore/syft) and provides helpers for generating SBOMs (Software Bill of Materials) from the container filesystem in CycloneDX or SPDX format.
 

@@ -1,7 +1,7 @@
 {
   "id": "devcontainer-lock-audit",
   "name": "Devcontainer Lock Audit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "CI gate that enforces .devcontainer-lock.json presence and validates that pinned feature versions match the current devcontainer.json configuration",
   "options": {
     "failOnMissing": {
@@ -17,5 +17,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/devcontainer-lock-audit",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

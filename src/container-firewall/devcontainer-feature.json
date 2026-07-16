@@ -1,7 +1,7 @@
 {
   "id": "container-firewall",
   "name": "Container Firewall",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking",
   "options": {
     "services": {
@@ -66,5 +66,7 @@
   "postCreateCommand": "sudo /usr/local/bin/container-firewall-init",
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/container-firewall",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

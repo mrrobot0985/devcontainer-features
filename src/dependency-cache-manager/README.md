@@ -1,6 +1,6 @@
 # Dependency Cache Manager
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Configures package manager cache directories to use a named volume mount point,
 reducing container rebuild times by persisting downloaded dependencies across

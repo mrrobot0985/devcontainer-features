@@ -1,6 +1,6 @@
 # OpenTelemetry Collector Dev
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers.
 

@@ -1,7 +1,7 @@
 {
   "id": "mise",
   "name": "mise",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for managing language runtimes and dev tools",
   "options": {
     "miseVersion": {
@@ -27,5 +27,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/mise",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

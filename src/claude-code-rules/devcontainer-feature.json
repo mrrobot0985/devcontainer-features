@@ -1,7 +1,7 @@
 {
   "id": "claude-code-rules",
   "name": "Claude Code Rules",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/rules/",
   "options": {
     "enforceSafety": {
@@ -28,5 +28,7 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-rules",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

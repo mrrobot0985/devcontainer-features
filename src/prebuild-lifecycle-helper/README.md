@@ -1,6 +1,6 @@
 # Prebuild Lifecycle Helper
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
 Analyzes `devcontainer.json` lifecycle commands, detects dependency installations placed in non-prebuild hooks, and optionally rewrites configuration to leverage GitHub Codespaces prebuild caching.
 

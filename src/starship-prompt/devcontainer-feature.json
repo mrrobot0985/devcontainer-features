@@ -1,7 +1,7 @@
 {
   "id": "starship-prompt",
   "name": "Starship Prompt",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs the Starship cross-shell prompt and configures it for bash, zsh, and fish",
   "options": {
     "starshipVersion": {
@@ -18,10 +18,22 @@
       "type": "string",
       "default": "",
       "description": "Use a built-in preset (e.g. nerd-font-symbols, pastel-powerline, jetpack). Leave empty for default.",
-      "enum": ["", "nerd-font-symbols", "pastel-powerline", "jetpack", "plain-text-symbols", "no-nerd-font", "no-random-emojis", "bracketed-segments", "tokyo-night"]
+      "enum": [
+        "",
+        "nerd-font-symbols",
+        "pastel-powerline",
+        "jetpack",
+        "plain-text-symbols",
+        "no-nerd-font",
+        "no-random-emojis",
+        "bracketed-segments",
+        "tokyo-night"
+      ]
     }
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/starship-prompt",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

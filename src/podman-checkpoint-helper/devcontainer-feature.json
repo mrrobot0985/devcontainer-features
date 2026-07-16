@@ -1,7 +1,7 @@
 {
   "id": "podman-checkpoint-helper",
   "name": "Podman Checkpoint Helper",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs Podman with checkpoint/restore support (CRIU) for ephemeral AI agent container workflows and cross-node container migration",
   "options": {
     "installCriu": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/podman-checkpoint-helper",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

@@ -1,6 +1,6 @@
 # GitHub Actions Local Runner
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs `nektos/act` for running GitHub Actions workflows locally inside devcontainers.
 

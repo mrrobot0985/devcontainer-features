@@ -1,7 +1,7 @@
 {
   "id": "git-hooks-manager",
   "name": "Git Hooks Manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs and configures pre-commit hooks for linting, formatting, and conventional commits in devcontainer projects",
   "options": {
     "hooks": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/git-hooks-manager",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

@@ -1,6 +1,6 @@
 # Cosign Verify
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs [Cosign](https://github.com/sigstore/cosign) (Sigstore) and provides helpers for verifying container image signatures and attestations via keyless OIDC.
 

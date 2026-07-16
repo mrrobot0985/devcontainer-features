@@ -1,7 +1,7 @@
 {
   "id": "git-config-manager",
   "name": "Git Config Manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Standardizes git configuration for devcontainer users from feature options or host environment variables",
   "options": {
     "userName": {
@@ -38,10 +38,16 @@
       "type": "string",
       "default": "input",
       "description": "core.autocrlf setting (true, false, input)",
-      "enum": ["true", "false", "input"]
+      "enum": [
+        "true",
+        "false",
+        "input"
+      ]
     }
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/git-config-manager",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

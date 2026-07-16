@@ -1,6 +1,6 @@
 # Claude Code Backend
 
-![Version](https://img.shields.io/badge/version-0.1.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Configures Claude Code to use a custom API backend such as Ollama, LiteLLM, or any OpenAI-compatible endpoint.
 

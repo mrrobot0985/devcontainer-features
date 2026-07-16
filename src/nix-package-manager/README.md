@@ -1,6 +1,6 @@
 # Nix Package Manager
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs the Nix package manager with flakes support and optional home-manager integration for reproducible dev environments.
 

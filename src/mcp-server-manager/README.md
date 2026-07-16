@@ -1,6 +1,6 @@
 # MCP Server Manager
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside devcontainers.
 

@@ -1,6 +1,6 @@
 # MkDocs Material
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers.
 

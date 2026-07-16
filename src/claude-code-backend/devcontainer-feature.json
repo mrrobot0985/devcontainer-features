@@ -1,7 +1,7 @@
 {
   "id": "claude-code-backend",
   "name": "Claude Code Backend",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Configures Claude Code to use a custom API backend",
   "options": {
     "baseUrl": {
@@ -34,5 +34,7 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-backend",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

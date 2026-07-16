@@ -1,6 +1,6 @@
 # AI Agent Sandbox
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Tiered security isolation presets for AI coding agent devcontainers. Audits the
 container's runtime security posture and warns or fails when excessive

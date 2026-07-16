@@ -1,7 +1,7 @@
 {
   "id": "taskfile-dev",
   "name": "Taskfile Development",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs the Task (go-task) command runner with shell completions and optional alias. Auto-detects Taskfile.yml in the workspace.",
   "options": {
     "version": {
@@ -27,5 +27,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/taskfile-dev",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

@@ -1,6 +1,6 @@
 # Devcontainer Shared Library
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs a shared shell utility library for use in devcontainer lifecycle scripts and custom automation. Centralizes common helper functions so devcontainer features stay focused on their core purpose.
 

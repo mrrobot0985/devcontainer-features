@@ -1,6 +1,6 @@
 # Bruno API Testing
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcontainers.
 

@@ -1,6 +1,6 @@
 # Container Firewall
 
-![Version](https://img.shields.io/badge/version-0.4.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking.
 

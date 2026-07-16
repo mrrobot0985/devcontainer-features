@@ -1,6 +1,6 @@
 # Cloud CLI Persistence
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Persists cloud CLI authentication state across container rebuilds by validating host credential mounts and providing helper utilities for AWS, Azure, GCP, and GitHub CLI.
 

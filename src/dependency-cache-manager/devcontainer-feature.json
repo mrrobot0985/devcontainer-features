@@ -1,7 +1,7 @@
 {
   "id": "dependency-cache-manager",
   "name": "Dependency Cache Manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Auto-detects project types and configures package manager cache directories to use a named volume mount point, reducing rebuild times from minutes to seconds",
   "options": {
     "autoDetect": {
@@ -27,5 +27,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/dependency-cache-manager",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

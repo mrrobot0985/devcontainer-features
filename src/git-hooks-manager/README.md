@@ -1,6 +1,6 @@
 # Git Hooks Manager
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs and configures pre-commit hooks for linting, formatting, and conventional commits in devcontainer projects.
 

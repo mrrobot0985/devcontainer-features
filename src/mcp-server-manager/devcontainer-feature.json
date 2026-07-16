@@ -1,7 +1,7 @@
 {
   "id": "mcp-server-manager",
   "name": "MCP Server Manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside devcontainers",
   "options": {
     "servers": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/mcp-server-manager",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

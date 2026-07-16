@@ -1,7 +1,7 @@
 {
   "id": "claude-code-audit-log",
   "name": "Claude Code Audit Log",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs a simple audit-log script that appends structured JSON events to a workspace file for compliance and post-incident review",
   "options": {
     "logDir": {
@@ -12,5 +12,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-audit-log",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

@@ -1,6 +1,6 @@
 # Claude Code MCP Servers
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs and configures Model Context Protocol (MCP) servers for Claude Code so external tools are available out of the box.
 

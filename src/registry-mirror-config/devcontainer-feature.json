@@ -1,7 +1,7 @@
 {
   "id": "registry-mirror-config",
   "name": "Registry Mirror Config",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or network-constrained environments",
   "options": {
     "mirrors": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/docker-in-docker"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/registry-mirror-config",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

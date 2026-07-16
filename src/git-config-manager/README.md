@@ -1,6 +1,6 @@
 # Git Config Manager
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Standardizes git configuration for devcontainer users from feature options or host environment variables.
 

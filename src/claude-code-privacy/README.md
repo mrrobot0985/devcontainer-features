@@ -1,6 +1,6 @@
 # Claude Code Privacy
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Privacy-hardened defaults for [Claude Code](https://claude.ai/code).
 

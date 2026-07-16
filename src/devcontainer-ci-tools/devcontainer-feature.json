@@ -1,7 +1,7 @@
 {
   "id": "devcontainer-ci-tools",
   "name": "Devcontainer CI Tools",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs the devcontainer CLI, docker-buildx, and act (local GitHub Actions runner) for self-testing devcontainers inside devcontainers",
   "options": {
     "devcontainerCliVersion": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/devcontainer-ci-tools",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

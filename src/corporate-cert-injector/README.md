@@ -1,6 +1,6 @@
 # Corporate Certificate Injector
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Injects corporate TLS/SSL certificates into system and language-specific trust stores, enabling devcontainers to work behind TLS-inspecting proxies (Zscaler, Palo Alto, Blue Coat, etc.).
 

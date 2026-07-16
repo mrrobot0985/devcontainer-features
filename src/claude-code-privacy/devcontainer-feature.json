@@ -1,7 +1,7 @@
 {
   "id": "claude-code-privacy",
   "name": "Claude Code Privacy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Privacy-hardened defaults for Claude Code",
   "options": {
     "disableTelemetry": {
@@ -28,5 +28,7 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-privacy",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

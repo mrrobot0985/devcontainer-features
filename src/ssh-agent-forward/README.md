@@ -1,6 +1,6 @@
 # SSH Agent Forward
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Forwards the host SSH agent into the devcontainer, enabling Git operations via SSH without copying private keys or configuring deploy tokens.
 

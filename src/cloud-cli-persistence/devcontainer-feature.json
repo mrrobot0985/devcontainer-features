@@ -1,7 +1,7 @@
 {
   "id": "cloud-cli-persistence",
   "name": "Cloud CLI Persistence",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Persists cloud CLI authentication state across container rebuilds by validating host credential mounts and providing helper utilities for AWS, Azure, GCP, and GitHub CLI",
   "options": {
     "providers": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/cloud-cli-persistence",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

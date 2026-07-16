@@ -1,12 +1,16 @@
 {
   "id": "ai-agent-sandbox",
   "name": "AI Agent Sandbox",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected.",
   "options": {
     "preset": {
       "type": "string",
-      "enum": ["strict", "moderate", "permissive"],
+      "enum": [
+        "strict",
+        "moderate",
+        "permissive"
+      ],
       "default": "moderate",
       "description": "Security preset: strict (no network, no root, no docker.sock), moderate (safe defaults), or permissive (audit-only)"
     },
@@ -24,5 +28,7 @@
   "postCreateCommand": "/usr/local/bin/ai-agent-sandbox-check",
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/ai-agent-sandbox",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

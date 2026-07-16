@@ -1,7 +1,7 @@
 {
   "id": "host-isolation",
   "name": "Host Isolation Security Profile",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode, Docker socket binds, or excessive capabilities are detected.",
   "options": {
     "failOnWarning": {
@@ -12,5 +12,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/host-isolation",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

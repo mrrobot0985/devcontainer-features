@@ -1,6 +1,6 @@
 # Claude Code Plugins (claude-code-plugins)
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs Claude Code plugins from marketplaces at build time.
 

@@ -1,7 +1,7 @@
 {
   "id": "mkdocs-material",
   "name": "MkDocs Material",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers",
   "options": {
     "plugins": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/mkdocs-material",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

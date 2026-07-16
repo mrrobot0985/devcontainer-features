@@ -1,6 +1,6 @@
 # Taskfile Development
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs the [Task](https://taskfile.dev) command runner (go-task) with shell completions and optional alias. Task is a modern Make alternative that uses YAML instead of Makefiles.
 

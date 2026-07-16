@@ -1,6 +1,6 @@
 # mise
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs [mise](https://mise.jdx.dev) (modern dev tool manager, replaces asdf) and configures shell integration for managing language runtimes and dev tools.
 

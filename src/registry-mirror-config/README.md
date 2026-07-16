@@ -1,6 +1,6 @@
 # Registry Mirror Config
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or network-constrained environments.
 

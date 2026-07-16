@@ -1,7 +1,7 @@
 {
   "id": "claude-code-plugins",
   "name": "Claude Code Plugins",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs Claude Code plugins from marketplaces at build time",
   "options": {
     "enableRalphLoop": {
@@ -49,5 +49,7 @@
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/devcontainers/features/git",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-plugins",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

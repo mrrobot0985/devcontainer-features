@@ -1,7 +1,7 @@
 {
   "id": "prebuild-lifecycle-helper",
   "name": "Prebuild Lifecycle Helper",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Analyzes devcontainer.json lifecycle commands, detects dependency installations in non-prebuild hooks, and optionally rewrites configuration to leverage Codespaces prebuild caching",
   "options": {
     "failOnWarning": {
@@ -22,5 +22,7 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/prebuild-lifecycle-helper",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

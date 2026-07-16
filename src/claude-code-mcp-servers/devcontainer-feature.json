@@ -1,7 +1,7 @@
 {
   "id": "claude-code-mcp-servers",
   "name": "Claude Code MCP Servers",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Installs and configures Model Context Protocol (MCP) servers for Claude Code so external tools are available out of the box",
   "options": {
     "enableGithub": {
@@ -24,5 +24,7 @@
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/devcontainers/features/node",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
-  ]
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-mcp-servers",
+  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
 }

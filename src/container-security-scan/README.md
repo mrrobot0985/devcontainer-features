@@ -1,6 +1,6 @@
 # Container Security Scan
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
 Installs Trivy and provides a `container-security-scan` helper that runs a
 vulnerability scan on the container image or filesystem during
