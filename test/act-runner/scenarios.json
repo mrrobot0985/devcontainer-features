@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "act-runner": {}
+        }
+    },
+    "with-version": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "act-runner": {
+                "version": "0.2.88",
+                "runnerImage": "medium"
+            }
+        }
+    }
+}
