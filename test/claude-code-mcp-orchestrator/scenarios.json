@@ -1,0 +1,20 @@
+{
+    "auto-start": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-mcp-orchestrator": {
+                "configPath": "/tmp/test-mcp.json",
+                "autoStart": true
+            }
+        }
+    },
+    "manual": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-mcp-orchestrator": {
+                "configPath": "/tmp/test-mcp.json",
+                "autoStart": false
+            }
+        }
+    }
+}

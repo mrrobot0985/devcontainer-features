@@ -1,0 +1,22 @@
+{
+  "id": "claude-code-mcp-orchestrator",
+  "name": "Claude Code MCP Orchestrator",
+  "version": "0.1.0",
+  "description": "Installs and manages MCP server lifecycle from .mcp.json configuration. Starts servers on container launch and provides health-check utilities.",
+  "options": {
+    "configPath": {
+      "type": "string",
+      "default": "/workspace/.mcp.json",
+      "description": "Path to .mcp.json configuration file"
+    },
+    "autoStart": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically start MCP servers on postCreateCommand"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/node"
+  ]
+}
