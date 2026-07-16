@@ -1,0 +1,18 @@
+{
+    "warn-only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "non-root-enforcer": {
+                "failOnWarning": false
+            }
+        }
+    },
+    "fail-on-warning": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "non-root-enforcer": {
+                "failOnWarning": true
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "container-security-scan",
+  "name": "Container Security Scan",
+  "version": "0.1.0",
+  "description": "Installs Trivy and runs a vulnerability scan on the container image during postCreateCommand, with configurable severity threshold",
+  "options": {
+    "severity": {
+      "type": "string",
+      "default": "HIGH,CRITICAL",
+      "description": "Comma-separated severity levels to report (UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL)"
+    },
+    "exitCode": {
+      "type": "number",
+      "default": 0,
+      "description": "Exit code when vulnerabilities are found (0 = report only, 1 = fail)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

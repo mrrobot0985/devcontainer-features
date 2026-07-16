@@ -1,0 +1,16 @@
+{
+  "id": "non-root-enforcer",
+  "name": "Non-Root Enforcer",
+  "version": "0.1.0",
+  "description": "Audits devcontainer.json for root remoteUser and warns or fails when the container is configured to run as root, which breaks Claude Code and other AI-agent permissions",
+  "options": {
+    "failOnWarning": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fail container creation if remoteUser is root or missing"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
