@@ -1,0 +1,18 @@
+{
+    "warn-only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "host-isolation": {
+                "failOnWarning": false
+            }
+        }
+    },
+    "fail-on-warning": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "host-isolation": {
+                "failOnWarning": true
+            }
+        }
+    }
+}
