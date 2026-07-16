@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "podman-checkpoint-helper": {}
+        }
+    },
+    "with-criu": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "podman-checkpoint-helper": {
+                "installCriu": true,
+                "addAliases": true
+            }
+        }
+    }
+}
