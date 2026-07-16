@@ -5,58 +5,7 @@ MIRRORS="${REGISTRYMIRRORCONFIGMIRRORS:-}"
 INSECURE_REGISTRIES="${REGISTRYMIRRORCONFIGINSECUREREGISTRIES:-}"
 RESTART_DOCKER="${REGISTRYMIRRORCONFIGRESTARTDOCKER:-true}"
 
-# Detect Docker daemon config path
 DAEMON_JSON="/etc/docker/daemon.json"
-
-# Helper to merge JSON objects using Python
-merge_json() {
-    local existing_file="$1"
-    local new_config="$2"
-
-    if [ -f "$existing_file" ]; then
-        python3 -c "
-import json
-import sys
-
-try:
-    with open('$existing_file', 'r') as f:
-        existing = json.load(f)
-except (json.JSONDecodeError, FileNotFoundError):
-    existing = {}
-
-try:
-    new_cfg = json.loads('$new_config')
-except json.JSONDecodeError as e:
-    print(f'ERROR: Invalid JSON config: {e}', file=sys.stderr)
-    sys.exit(1)
-
-# Merge: new config takes precedence for same keys
-for key, value in new_cfg.items():
-    if key in existing and isinstance(existing[key], dict) and isinstance(value, dict):
-        existing[key].update(value)
-    elif key in existing and isinstance(existing[key], list) and isinstance(value, list):
-        # Merge lists avoiding duplicates
-        existing_set = set(json.dumps(x, sort_keys=True) for x in existing[key])
-        for item in value:
-            item_str = json.dumps(item, sort_keys=True)
-            if item_str not in existing_set:
-                existing[key].append(item)
-                existing_set.add(item_str)
-    else:
-        existing[key] = value
-
-with open('$existing_file', 'w') as f:
-    json.dump(existing, f, indent=2)
-    f.write('\n')
-
-print(f'Merged config written to $existing_file')
-"
-    else
-        mkdir -p "$(dirname "$DAEMON_JSON")"
-        echo "$new_config" | python3 -c "import json,sys; json.dump(json.load(sys.stdin), open('$existing_file','w'), indent=2); open('$existing_file','a').write('\n')"
-        echo "Config written to $existing_file"
-    fi
-}
 
 # Build the new config JSON
 CONFIG_PARTS=""
@@ -66,7 +15,6 @@ if [ -n "$MIRRORS" ]; then
     if [ "$MIRRORS" = "auto" ] || [ "$MIRRORS" = "automatic" ]; then
         echo "INFO: 'auto' mirror detection not implemented; provide explicit mirrors."
     else
-        # Validate and add registry-mirrors
         CONFIG_PARTS="\"registry-mirrors\": $MIRRORS"
     fi
 fi
@@ -102,10 +50,15 @@ if [ -z "$CONFIG_PARTS" ]; then
     exit 0
 fi
 
-NEW_CONFIG="{ $CONFIG_PARTS }"
+# Ensure /etc/docker exists
+mkdir -p "$(dirname "$DAEMON_JSON")"
 
-# Merge with existing daemon.json
-merge_json "$DAEMON_JSON" "$NEW_CONFIG"
+# Write daemon.json — overwrite if exists for simplicity
+NEW_CONFIG="{ $CONFIG_PARTS }"
+echo "$NEW_CONFIG" > "$DAEMON_JSON"
+chmod 644 "$DAEMON_JSON"
+
+echo "Config written to $DAEMON_JSON"
 
 # Restart Docker if requested and possible
 if [ "$RESTART_DOCKER" = "true" ]; then
