@@ -138,21 +138,23 @@ main() {
         fi
     fi
 
-    IFS=',' read -ra TOOL_LIST <<< "$tools_to_configure"
-    for tool in "${TOOL_LIST[@]}"; do
-        case "$tool" in
-            npm) setup_npm_cache ;;
-            yarn) setup_yarn_cache ;;
-            pnpm) setup_pnpm_cache ;;
-            pip) setup_pip_cache ;;
-            uv) setup_uv_cache ;;
-            cargo) setup_cargo_cache ;;
-            gradle) setup_gradle_cache ;;
-            maven) setup_maven_cache ;;
-            go) setup_go_cache ;;
-            *) echo "WARN [dependency-cache-manager]: Unknown tool '$tool'"; ;;
-        esac
-    done
+    if [ -n "$tools_to_configure" ]; then
+        IFS=',' read -ra TOOL_LIST <<< "$tools_to_configure"
+        for tool in "${TOOL_LIST[@]}"; do
+            case "$tool" in
+                npm) setup_npm_cache ;;
+                yarn) setup_yarn_cache ;;
+                pnpm) setup_pnpm_cache ;;
+                pip) setup_pip_cache ;;
+                uv) setup_uv_cache ;;
+                cargo) setup_cargo_cache ;;
+                gradle) setup_gradle_cache ;;
+                maven) setup_maven_cache ;;
+                go) setup_go_cache ;;
+                *) echo "WARN [dependency-cache-manager]: Unknown tool '$tool'"; ;;
+            esac
+        done
+    fi
 
     if [ "$PRINT_MOUNT" = "true" ]; then
         echo ""

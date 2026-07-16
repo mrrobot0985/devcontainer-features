@@ -107,9 +107,9 @@ check_capabilities() {
 probe_domain() {
     local domain="\$1"
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL --connect-timeout 3 --max-time 5 "https://\$domain" >/dev/null 2>&1
+        curl -fsSL --connect-timeout 3 --max-time 5 "https://\$domain" >/dev/null 2>&1 && return 0 || return 1
     elif command -v wget >/dev/null 2>&1; then
-        wget --timeout=5 -qO- "https://\$domain" >/dev/null 2>&1
+        wget --timeout=5 -qO- "https://\$domain" >/dev/null 2>&1 && return 0 || return 1
     else
         return 1
     fi
