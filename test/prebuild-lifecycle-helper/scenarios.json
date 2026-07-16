@@ -14,5 +14,23 @@
                 "failOnWarning": true
             }
         }
+    },
+    "detect-npm": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "prebuild-lifecycle-helper": {
+                "failOnWarning": false,
+                "detectLanguages": "node"
+            }
+        }
+    },
+    "fix-mode": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "prebuild-lifecycle-helper": {
+                "fixMode": true,
+                "detectLanguages": "node"
+            }
+        }
     }
 }
