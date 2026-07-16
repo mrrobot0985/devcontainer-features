@@ -18,6 +18,12 @@ if [ -z "$REMOTE_HOME" ]; then
     fi
 fi
 
+# Ensure curl is available
+if ! command -v curl >/dev/null 2>&1; then
+    echo "Installing curl..."
+    apt-get update && apt-get install -y curl ca-certificates 2>/dev/null || true
+fi
+
 # Determine architecture
 ARCH=$(uname -m)
 case "$ARCH" in
