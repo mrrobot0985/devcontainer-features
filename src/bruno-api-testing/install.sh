@@ -24,7 +24,19 @@ USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
 
 # Ensure Node.js/npm is available
 if ! command -v npm > /dev/null 2>&1; then
-    echo "WARNING: npm not found. Bruno CLI requires Node.js. Install node feature first."
+    echo "npm not found. Installing Node.js and npm..."
+    if command -v apt-get > /dev/null 2>&1; then
+        apt-get update && apt-get install -y nodejs npm
+    elif command -v dnf > /dev/null 2>&1; then
+        dnf install -y nodejs npm
+    elif command -v yum > /dev/null 2>&1; then
+        yum install -y nodejs npm
+    elif command -v apk > /dev/null 2>&1; then
+        apk add --no-cache nodejs npm
+    else
+        echo "ERROR: Cannot install npm: no supported package manager found."
+        exit 1
+    fi
 fi
 
 # Install Bruno CLI
