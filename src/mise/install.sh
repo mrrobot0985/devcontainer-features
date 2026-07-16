@@ -10,7 +10,15 @@ AUTO_ACTIVATE="${AUTOACTIVATE:-true}"
 TRUST_CONFIG="${TRUSTWORKSPACECONFIG:-true}"
 
 REMOTE_USER="${_REMOTE_USER:-vscode}"
-REMOTE_HOME="/home/$REMOTE_USER"
+# Determine actual home directory (root is /root, not /home/root)
+REMOTE_HOME=$(getent passwd "$REMOTE_USER" | cut -d: -f6 2>/dev/null || true)
+if [ -z "$REMOTE_HOME" ]; then
+    if [ "$REMOTE_USER" = "root" ]; then
+        REMOTE_HOME="/root"
+    else
+        REMOTE_HOME="/home/$REMOTE_USER"
+    fi
+fi
 
 # Ensure curl is available
 if ! command -v curl >/dev/null 2>&1; then
@@ -74,6 +82,7 @@ for shell in "${SHELL_LIST[@]}"; do
     case "$shell" in
         bash)
             RC_FILE="$REMOTE_HOME/.bashrc"
+            mkdir -p "$(dirname "$RC_FILE")"
             if [ "$AUTO_ACTIVATE" = "true" ]; then
                 if ! grep -q 'eval "\$(mise activate bash)"' "$RC_FILE" 2>/dev/null; then
                     echo 'eval "$(mise activate bash)"' >> "$RC_FILE"
@@ -83,6 +92,7 @@ for shell in "${SHELL_LIST[@]}"; do
             ;;
         zsh)
             RC_FILE="$REMOTE_HOME/.zshrc"
+            mkdir -p "$(dirname "$RC_FILE")"
             if [ "$AUTO_ACTIVATE" = "true" ]; then
                 if ! grep -q 'eval "\$(mise activate zsh)"' "$RC_FILE" 2>/dev/null; then
                     echo 'eval "$(mise activate zsh)"' >> "$RC_FILE"
