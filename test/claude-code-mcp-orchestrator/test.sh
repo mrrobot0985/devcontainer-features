@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+source dev-container-features-test-lib
+
+check "mcp-ctl exists" test -x /usr/local/bin/mcp-ctl
+
+reportResults
