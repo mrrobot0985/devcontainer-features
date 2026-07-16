@@ -53,6 +53,8 @@ jobs:
           - features: docker-compose-helper
           - features: nix-package-manager
           - features: podman-checkpoint-helper
+          - features: otel-collector-dev
+          - features: sops-secret-manager
     steps:
       - uses: actions/checkout@v4
 
