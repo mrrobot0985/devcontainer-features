@@ -1,6 +1,6 @@
 # x.ai CLI (Grok)
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
 
 Installs the x.ai CLI (Grok Build) for interacting with Grok models from the
 command line.

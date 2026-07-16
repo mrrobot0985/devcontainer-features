@@ -1,7 +1,7 @@
 {
   "id": "xai-cli",
   "name": "x.ai CLI (Grok)",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Installs the x.ai CLI (Grok Build) for interacting with Grok models from the command line",
   "options": {
     "version": {
