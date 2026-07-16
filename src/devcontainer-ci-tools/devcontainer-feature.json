@@ -1,0 +1,27 @@
+{
+  "id": "devcontainer-ci-tools",
+  "name": "Devcontainer CI Tools",
+  "version": "0.1.0",
+  "description": "Installs the devcontainer CLI, docker-buildx, and act (local GitHub Actions runner) for self-testing devcontainers inside devcontainers",
+  "options": {
+    "devcontainerCliVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of the devcontainer CLI to install (e.g., 0.73.0 or latest)"
+    },
+    "installAct": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install act (local GitHub Actions runner)"
+    },
+    "installBuildx": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install docker-buildx"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/docker-in-docker"
+  ]
+}
