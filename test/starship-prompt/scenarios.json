@@ -1,0 +1,10 @@
+{
+    "zsh-shell": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "starship-prompt": {
+                "shells": "bash,zsh"
+            }
+        }
+    }
+}
