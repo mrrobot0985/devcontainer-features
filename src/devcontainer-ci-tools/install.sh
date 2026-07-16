@@ -15,29 +15,50 @@ case "$ARCH" in
     arm64) ARCH="arm64" ;;
 esac
 
+install_nodejs() {
+    echo "=== Installing Node.js ==="
+    if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+        echo "Node.js already installed: $(node --version)"
+        return
+    fi
+
+    if command -v apt-get >/dev/null 2>&1; then
+        apt-get update
+        apt-get install -y --no-install-recommends curl ca-certificates
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt-get install -y --no-install-recommends nodejs
+        apt-get clean
+        rm -rf /var/lib/apt/lists/*
+    elif command -v apk >/dev/null 2>&1; then
+        apk add --no-cache nodejs npm curl ca-certificates
+    elif command -v yum >/dev/null 2>&1; then
+        yum install -y curl
+        curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+        yum install -y nodejs
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf install -y curl
+        curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+        dnf install -y nodejs
+    else
+        echo "WARN [devcontainer-ci-tools]: No supported package manager found for Node.js; skipping devcontainer CLI."
+        return 1
+    fi
+}
+
 install_devcontainer_cli() {
     echo "=== Installing devcontainer CLI ==="
+    if ! command -v npm >/dev/null 2>&1; then
+        if ! install_nodejs; then
+            echo "WARN [devcontainer-ci-tools]: Node.js not available; skipping devcontainer CLI."
+            return
+        fi
+    fi
+
     local version="$DEVCONTAINER_CLI_VERSION"
-    if [ "$version" = "latest" ]; then
-        version=""
-    fi
-
-    # Use the official install script which bundles its own Node.js runtime
-    local install_url="https://raw.githubusercontent.com/devcontainers/cli/main/scripts/install.sh"
-    echo "Downloading devcontainer CLI via official install script..."
-    local install_args=""
-    if [ -n "$version" ] && [ "$version" != "latest" ]; then
-        install_args="--version $version"
-    fi
-    if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "$install_url" | sh -s -- $install_args
+    if [ "$version" = "latest" ] || [ -z "$version" ]; then
+        npm install -g @devcontainers/cli
     else
-        wget -qO- "$install_url" | sh -s -- $install_args
-    fi
-
-    # The official script installs to ~/.devcontainer; link to /usr/local/bin
-    if [ -f "${HOME}/.devcontainer/devcontainer" ]; then
-        ln -sf "${HOME}/.devcontainer/devcontainer" /usr/local/bin/devcontainer
+        npm install -g "@devcontainers/cli@${version}"
     fi
 
     if command -v devcontainer >/dev/null 2>&1; then
@@ -50,7 +71,6 @@ install_devcontainer_cli() {
 install_buildx() {
     echo "=== Installing docker-buildx ==="
     if command -v docker >/dev/null 2>&1; then
-        # buildx is typically installed as a Docker CLI plugin
         local buildx_version
         buildx_version=$(curl -fsSL https://api.github.com/repos/docker/buildx/releases/latest | grep -oP '"tag_name": "\K[^"]+' || true)
         if [ -z "$buildx_version" ]; then
