@@ -21,8 +21,6 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
     fi
 fi
 
-USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
-
 # Install OpenTelemetry Collector
 if ! command -v otelcol >/dev/null 2>&1 && ! command -v otelcol-contrib >/dev/null 2>&1; then
     echo "Installing OpenTelemetry Collector..."
@@ -69,7 +67,6 @@ fi
 # Build receiver configuration
 IFS=',' read -ra RECV_LIST <<< "$RECEIVERS"
 RECV_CONFIG=""
-FIRST=true
 for RECV in "${RECV_LIST[@]}"; do
     RECV="$(echo "$RECV" | tr -d '[:space:]')"
     if [ -z "$RECV" ]; then
