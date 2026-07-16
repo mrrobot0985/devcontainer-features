@@ -9,11 +9,11 @@ cat > /workspaces/test-project/.envrc <<'EOF'
 export TEST_VAR=hello
 EOF
 
-# Re-run direnv allow as the user to simulate auto-allow behavior
+# Allow the .envrc as the container user
 su - vscode -c "cd /workspaces/test-project && direnv allow" 2>/dev/null || true
 
-# Verify the env var is loaded when cd'ing into the directory
-check "envrc allowed" bash -c "cd /workspaces/test-project && direnv export bash | grep -q 'TEST_VAR=hello'"
+# Verify direnv exports the variable (requires hook to be in shell, so source it)
+check "envrc exports variable" bash -c 'eval "$(direnv hook bash)"; cd /workspaces/test-project && direnv export bash | grep -q "TEST_VAR=hello"'
 
 rm -rf /workspaces/test-project
 
