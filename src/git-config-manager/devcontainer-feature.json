@@ -1,0 +1,47 @@
+{
+  "id": "git-config-manager",
+  "name": "Git Config Manager",
+  "version": "0.1.0",
+  "description": "Standardizes git configuration for devcontainer users from feature options or host environment variables",
+  "options": {
+    "userName": {
+      "type": "string",
+      "default": "",
+      "description": "Git user.name. Falls back to host env var GIT_USER_NAME if empty."
+    },
+    "userEmail": {
+      "type": "string",
+      "default": "",
+      "description": "Git user.email. Falls back to host env var GIT_USER_EMAIL if empty."
+    },
+    "gpgSigningKey": {
+      "type": "string",
+      "default": "",
+      "description": "GPG signing key for commit signing. Falls back to host env var GIT_SIGNING_KEY."
+    },
+    "commitGpgSign": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable GPG signing for commits"
+    },
+    "defaultBranch": {
+      "type": "string",
+      "default": "main",
+      "description": "Default branch name for new repositories"
+    },
+    "safeDirectories": {
+      "type": "string",
+      "default": "*",
+      "description": "Comma-separated list of paths to add to safe.directory. Use * for all."
+    },
+    "coreAutoCrlf": {
+      "type": "string",
+      "default": "input",
+      "description": "core.autocrlf setting (true, false, input)",
+      "enum": ["true", "false", "input"]
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

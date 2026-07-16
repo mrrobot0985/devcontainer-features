@@ -1,0 +1,12 @@
+{
+    "gpg-signing": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "git-config-manager": {
+                "commitGpgSign": true,
+                "gpgSigningKey": "TESTKEY123",
+                "defaultBranch": "trunk"
+            }
+        }
+    }
+}
