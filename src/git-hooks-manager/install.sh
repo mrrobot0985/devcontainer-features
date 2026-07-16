@@ -25,7 +25,19 @@ USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
 
 # Ensure Python/pip is available for pre-commit
 if ! command -v pip3 > /dev/null 2>&1 && ! command -v pip > /dev/null 2>&1; then
-    echo "WARNING: pip not found. pre-commit requires Python/pip."
+    echo "pip not found. Installing python3-pip..."
+    if command -v apt-get > /dev/null 2>&1; then
+        apt-get update && apt-get install -y python3-pip
+    elif command -v dnf > /dev/null 2>&1; then
+        dnf install -y python3-pip
+    elif command -v yum > /dev/null 2>&1; then
+        yum install -y python3-pip
+    elif command -v apk > /dev/null 2>&1; then
+        apk add --no-cache py3-pip
+    else
+        echo "ERROR: Cannot install pip: no supported package manager found."
+        exit 1
+    fi
 fi
 
 # Install pre-commit framework
