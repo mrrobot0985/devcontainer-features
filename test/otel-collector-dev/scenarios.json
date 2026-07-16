@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "otel-collector-dev": {}
+        }
+    },
+    "with-exporters": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "otel-collector-dev": {
+                "exporter": "jaeger",
+                "receivers": "otlp"
+            }
+        }
+    }
+}
