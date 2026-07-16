@@ -1,0 +1,22 @@
+{
+  "id": "kafka-dev",
+  "name": "Kafka Development Tools",
+  "version": "1.0.0",
+  "description": "Installs Kafka CLI tools for event streaming development in devcontainers",
+  "options": {
+    "installKcat": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install kcat (kafkacat) — generic command-line Kafka producer/consumer"
+    },
+    "installConfluentCli": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install Confluent CLI for Confluent Cloud and Platform management"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/kafka-dev"
+}

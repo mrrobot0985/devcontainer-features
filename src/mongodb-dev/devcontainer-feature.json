@@ -1,0 +1,22 @@
+{
+  "id": "mongodb-dev",
+  "name": "MongoDB Development Tools",
+  "version": "1.0.0",
+  "description": "Installs MongoDB shell and utilities for document database development in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "MongoDB major version to install (e.g., 7.0, 6.0) or 'latest'"
+    },
+    "installTools": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install mongodump, mongorestore, mongoimport, mongoexport"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/mongodb-dev"
+}

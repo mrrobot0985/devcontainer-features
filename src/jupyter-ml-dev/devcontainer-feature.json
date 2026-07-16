@@ -1,0 +1,29 @@
+{
+  "id": "jupyter-ml-dev",
+  "name": "Jupyter and ML Development Tools",
+  "version": "1.0.0",
+  "description": "Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interactive development in devcontainers",
+  "options": {
+    "installJupyterLab": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install JupyterLab (true) or Jupyter Notebook only (false)"
+    },
+    "packages": {
+      "type": "string",
+      "default": "core",
+      "enum": ["minimal", "core", "full"],
+      "description": "Package set: minimal (jupyter only), core (+ numpy, pandas, matplotlib), full (+ scikit-learn, scipy, seaborn)"
+    },
+    "installUv": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install uv for faster Python package management"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python",
+    "ghcr.io/devcontainers/features/node"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/jupyter-ml-dev"
+}

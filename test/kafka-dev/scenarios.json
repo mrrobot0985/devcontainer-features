@@ -1,0 +1,21 @@
+{
+    "test": [
+        {
+            "name": "default",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "kafka-dev": {}
+            }
+        },
+        {
+            "name": "with-confluent",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "kafka-dev": {
+                    "installKcat": true,
+                    "installConfluentCli": true
+                }
+            }
+        }
+    ]
+}

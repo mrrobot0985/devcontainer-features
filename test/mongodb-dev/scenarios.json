@@ -1,0 +1,21 @@
+{
+    "test": [
+        {
+            "name": "default",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "mongodb-dev": {}
+            }
+        },
+        {
+            "name": "with-version",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "mongodb-dev": {
+                    "version": "7.0",
+                    "installTools": true
+                }
+            }
+        }
+    ]
+}

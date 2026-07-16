@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (48)
+## Features (51)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -43,9 +43,12 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `git-config-manager` | Standardizes git configuration for devcontainer users from feature options or host environment va... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-config-manager/README.md) |
 | `git-hooks-manager` | Installs and configures pre-commit hooks for linting, formatting, and conventional commits in dev... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-hooks-manager/README.md) |
 | `host-isolation` | Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/host-isolation/README.md) |
+| `jupyter-ml-dev` | Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interact... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/jupyter-ml-dev/README.md) |
+| `kafka-dev` | Installs Kafka CLI tools for event streaming development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/kafka-dev/README.md) |
 | `mcp-server-manager` | Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mcp-server-manager/README.md) |
 | `mise` | Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for manag... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mise/README.md) |
 | `mkdocs-material` | Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mkdocs-material/README.md) |
+| `mongodb-dev` | Installs MongoDB shell and utilities for document database development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mongodb-dev/README.md) |
 | `multi-arch-tuning` | Detects container architecture and sets environment variables for Ollama, PyTorch, and uv to avoi... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/multi-arch-tuning/README.md) |
 | `nix-package-manager` | Installs the Nix package manager with flakes support and optional home-manager integration for re... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nix-package-manager/README.md) |
 | `non-root-enforcer` | Audits devcontainer.json for root remoteUser and warns or fails when the container is configured ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/non-root-enforcer/README.md) |
