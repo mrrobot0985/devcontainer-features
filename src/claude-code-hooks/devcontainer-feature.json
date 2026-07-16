@@ -1,7 +1,7 @@
 {
   "id": "claude-code-hooks",
   "name": "Claude Code Hooks",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Installs bash hooks for Claude Code lifecycle telemetry, state tracking, and policy enforcement (self-contained, pinned to v0)",
   "options": {
     "installSessionHooks": {
@@ -23,6 +23,21 @@
       "type": "boolean",
       "default": true,
       "description": "Also install the status line hook configuration"
+    },
+    "blockDangerousCommands": {
+      "type": "boolean",
+      "default": false,
+      "description": "Block dangerous Bash commands at the PreToolUse hook instead of only logging them"
+    },
+    "dangerousCommandDenylist": {
+      "type": "string",
+      "default": "",
+      "description": "Additional comma-separated regex patterns to treat as dangerous when blockDangerousCommands is enabled"
+    },
+    "stateRetentionLimit": {
+      "type": "number",
+      "default": 100,
+      "description": "Maximum number of entries to retain in per-tool/per-file state objects. Older entries are pruned automatically."
     }
   },
   "installsAfter": [
