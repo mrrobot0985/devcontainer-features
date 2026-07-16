@@ -37,6 +37,7 @@
     "stateRetentionLimit": {
       "type": "number",
       "default": 100,
+      "enum": [10, 25, 50, 100, 250, 500, 1000],
       "description": "Maximum number of entries to retain in per-tool/per-file state objects. Older entries are pruned automatically."
     }
   },

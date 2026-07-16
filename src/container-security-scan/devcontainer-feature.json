@@ -12,6 +12,7 @@
     "exitCode": {
       "type": "number",
       "default": 0,
+      "enum": [0, 1],
       "description": "Exit code when vulnerabilities are found (0 = report only, 1 = fail)"
     }
   },
