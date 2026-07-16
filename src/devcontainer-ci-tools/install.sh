@@ -19,18 +19,28 @@ install_devcontainer_cli() {
     echo "=== Installing devcontainer CLI ==="
     local version="$DEVCONTAINER_CLI_VERSION"
     if [ "$version" = "latest" ]; then
-        version=$(curl -fsSL https://api.github.com/repos/devcontainers/cli/releases/latest | grep -oP '"tag_name": "\K[^"]+' || true)
-        if [ -z "$version" ]; then
-            echo "WARN [devcontainer-ci-tools]: Could not fetch latest version; falling back to v0.73.0"
-            version="v0.73.0"
-        fi
+        version=""
     fi
 
-    local url="https://github.com/devcontainers/cli/releases/download/${version}/devcontainer-${ARCH}-linux.tar.gz"
-    echo "Downloading devcontainer CLI ${version} for ${ARCH}..."
-    curl -fsSL "$url" | tar -xzv -C /usr/local/bin devcontainer
-    chmod +x /usr/local/bin/devcontainer
-    echo "devcontainer CLI installed: $(devcontainer --version)"
+    # Use the official install script which bundles its own Node.js runtime
+    local install_url="https://raw.githubusercontent.com/devcontainers/cli/main/scripts/install.sh"
+    echo "Downloading devcontainer CLI via official install script..."
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$install_url" | sh -s -- ${version:+"$version"}
+    else
+        wget -qO- "$install_url" | sh -s -- ${version:+"$version"}
+    fi
+
+    # The official script installs to ~/.devcontainer; link to /usr/local/bin
+    if [ -f "${HOME}/.devcontainer/devcontainer" ]; then
+        ln -sf "${HOME}/.devcontainer/devcontainer" /usr/local/bin/devcontainer
+    fi
+
+    if command -v devcontainer >/dev/null 2>&1; then
+        echo "devcontainer CLI installed: $(devcontainer --version)"
+    else
+        echo "WARN [devcontainer-ci-tools]: devcontainer CLI not found in PATH after install."
+    fi
 }
 
 install_buildx() {
