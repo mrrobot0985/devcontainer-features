@@ -1,0 +1,21 @@
+{
+  "id": "bruno-api-testing",
+  "name": "Bruno API Testing",
+  "version": "0.1.0",
+  "description": "Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of @usebruno/cli to install, or 'latest'"
+    },
+    "globalInstall": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Bruno CLI globally via npm"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/node"
+  ]
+}

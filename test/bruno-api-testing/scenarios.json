@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "bruno-api-testing": {}
+        }
+    },
+    "with-version": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "bruno-api-testing": {
+                "version": "latest",
+                "globalInstall": true
+            }
+        }
+    }
+}
