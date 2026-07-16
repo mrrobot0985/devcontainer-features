@@ -1,0 +1,20 @@
+{
+    "strict": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "devcontainer-lock-audit": {
+                "failOnMissing": true,
+                "failOnStale": true
+            }
+        }
+    },
+    "permissive": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "devcontainer-lock-audit": {
+                "failOnMissing": false,
+                "failOnStale": false
+            }
+        }
+    }
+}

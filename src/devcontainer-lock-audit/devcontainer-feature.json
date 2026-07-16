@@ -1,0 +1,21 @@
+{
+  "id": "devcontainer-lock-audit",
+  "name": "Devcontainer Lock Audit",
+  "version": "0.1.0",
+  "description": "CI gate that enforces .devcontainer-lock.json presence and validates that pinned feature versions match the current devcontainer.json configuration",
+  "options": {
+    "failOnMissing": {
+      "type": "boolean",
+      "default": true,
+      "description": "Fail if .devcontainer-lock.json is missing"
+    },
+    "failOnStale": {
+      "type": "boolean",
+      "default": true,
+      "description": "Fail if lockfile is older than devcontainer.json"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

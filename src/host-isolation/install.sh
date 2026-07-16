@@ -4,7 +4,8 @@ set -e
 # host-isolation install script
 # Installs a validation script that audits devcontainer.json
 
-FAIL_ON_WARNING="__FAILONWARNING__"
+# Template variable replaced during feature build
+# FAIL_ON_WARNING="__FAILONWARNING__"
 
 cat > /usr/local/bin/host-isolation-check <<'EOF'
 #!/bin/bash
