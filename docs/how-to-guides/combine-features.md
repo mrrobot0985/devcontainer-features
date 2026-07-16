@@ -73,11 +73,11 @@ For a complete agentic development environment, combine:
 
 1. **claude-code first** — The official Anthropic feature must install before backend, plugins, hooks, or MCP servers because these features depend on the `claude` CLI.
 
-2. **common-utils before everything** — Most custom features depend on `common-utils` for user setup and basic tools.
+1. **common-utils before everything** — Most custom features depend on `common-utils` for user setup and basic tools.
 
-3. **node before plugins and MCP servers** — Both plugins and MCP servers use `npx`, which requires Node.js.
+1. **node before plugins and MCP servers** — Both plugins and MCP servers use `npx`, which requires Node.js.
 
-4. **docker-in-docker before nvidia-container-toolkit** — The toolkit reloads dockerd, which must exist first.
+1. **docker-in-docker before nvidia-container-toolkit** — The toolkit reloads dockerd, which must exist first.
 
 ## Troubleshooting Interactions
 
