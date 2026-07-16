@@ -7,7 +7,7 @@
     "mirrors": {
       "type": "string",
       "default": "",
-      "description": "JSON object of registry mirrors, e.g. '{\"https://registry-1.docker.io\":[{\"https://mirror.example.com\":true}]}' or 'auto' to detect from environment"
+      "description": "Comma-separated list of registry mirror URLs (e.g. 'https://mirror.example.com,https://mirror2.example.com')"
     },
     "insecureRegistries": {
       "type": "string",

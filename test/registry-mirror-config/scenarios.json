@@ -9,7 +9,7 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "registry-mirror-config": {
-                "mirrors": "[\"https://mirror.example.com\"]",
+                "mirrors": "https://mirror.example.com",
                 "restartDocker": false
             }
         }

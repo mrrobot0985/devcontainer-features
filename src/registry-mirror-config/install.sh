@@ -1,21 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MIRRORS="${REGISTRYMIRRORCONFIGMIRRORS:-}"
-INSECURE_REGISTRIES="${REGISTRYMIRRORCONFIGINSECUREREGISTRIES:-}"
-RESTART_DOCKER="${REGISTRYMIRRORCONFIGRESTARTDOCKER:-true}"
+MIRRORS="${MIRRORS:-}"
+INSECURE_REGISTRIES="${INSECUREREGISTRIES:-}"
+RESTART_DOCKER="${RESTARTDOCKER:-true}"
 
 DAEMON_JSON="/etc/docker/daemon.json"
 
 # Build the new config JSON
 CONFIG_PARTS=""
 
-# Handle mirrors
+# Handle mirrors (comma-separated URLs)
 if [ -n "$MIRRORS" ]; then
     if [ "$MIRRORS" = "auto" ] || [ "$MIRRORS" = "automatic" ]; then
         echo "INFO: 'auto' mirror detection not implemented; provide explicit mirrors."
     else
-        CONFIG_PARTS="\"registry-mirrors\": $MIRRORS"
+        IFS=',' read -ra MIRROR_LIST <<< "$MIRRORS"
+        MIRROR_ARRAY=""
+        FIRST=true
+        for MIRROR in "${MIRROR_LIST[@]}"; do
+            MIRROR="$(echo "$MIRROR" | tr -d '[:space:]')"
+            if [ -z "$MIRROR" ]; then
+                continue
+            fi
+            if [ "$FIRST" = true ]; then
+                FIRST=false
+            else
+                MIRROR_ARRAY="${MIRROR_ARRAY}, "
+            fi
+            MIRROR_ARRAY="${MIRROR_ARRAY}\"$MIRROR\""
+        done
+        if [ -n "$MIRROR_ARRAY" ]; then
+            CONFIG_PARTS="\"registry-mirrors\": [$MIRROR_ARRAY]"
+        fi
     fi
 fi
 

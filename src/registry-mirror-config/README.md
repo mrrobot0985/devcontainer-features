@@ -9,7 +9,7 @@ Configures Docker daemon registry mirrors to accelerate image pulls in corporate
 ```json
 "features": {
     "ghcr.io/mrrobot0985/devcontainer-features/registry-mirror-config:0": {
-        "mirrors": "[\"https://mirror.example.com\"]",
+        "mirrors": "https://mirror.example.com",
         "insecureRegistries": "registry.local:5000"
     }
 }
@@ -19,7 +19,7 @@ Configures Docker daemon registry mirrors to accelerate image pulls in corporate
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `mirrors` | string | `""` | JSON array of registry mirror URLs, or full `registry-mirrors` config object |
+| `mirrors` | string | `""` | Comma-separated list of registry mirror URLs |
 | `insecureRegistries` | string | `""` | Comma-separated list of insecure registries (no TLS) |
 | `restartDocker` | boolean | `true` | Attempt to restart Docker after updating config |
 
@@ -30,17 +30,17 @@ Configures Docker daemon registry mirrors to accelerate image pulls in corporate
 ```json
 "features": {
     "ghcr.io/mrrobot0985/devcontainer-features/registry-mirror-config:0": {
-        "mirrors": "[\"https://dockerhub-proxy.example.com\"]"
+        "mirrors": "https://dockerhub-proxy.example.com"
     }
 }
 ```
 
-### Harbor Pull-Through Cache
+### Multiple Mirrors
 
 ```json
 "features": {
     "ghcr.io/mrrobot0985/devcontainer-features/registry-mirror-config:0": {
-        "mirrors": "[{\"https://registry-1.docker.io\": [{\"https://harbor.example.com\": true}]}]"
+        "mirrors": "https://mirror1.example.com,https://mirror2.example.com"
     }
 }
 ```
@@ -57,7 +57,7 @@ Configures Docker daemon registry mirrors to accelerate image pulls in corporate
 
 ## Notes
 
-- Modifies `/etc/docker/daemon.json` and merges with existing configuration
+- Modifies `/etc/docker/daemon.json`
 - Docker restart requires privileged mode or docker-in-docker feature
 - For air-gapped environments, combine with `corporate-cert-injector` for TLS trust
 - See [Docker registry mirror documentation](https://docs.docker.com/docker-hub/mirror/)
