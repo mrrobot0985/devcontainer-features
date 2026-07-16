@@ -10,10 +10,9 @@ ALLOWED_DOMAINS="__ALLOWEDDOMAINS__"
 
 cat > /usr/local/bin/ai-agent-sandbox-check <<EOF
 #!/bin/bash
-set -e
-
 # ai-agent-sandbox-check — runtime security posture audit for AI agent containers
 # Run during postCreateCommand to validate isolation for the chosen preset.
+# Note: no set -e — we want all checks to run and report findings.
 
 PRESET="$PRESET"
 FAIL_ON_WARNING="$FAIL_ON_WARNING"
