@@ -20,8 +20,6 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
     fi
 fi
 
-USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
-
 # Install gitleaks
 if command -v gitleaks > /dev/null 2>&1; then
     echo "Gitleaks already installed."
