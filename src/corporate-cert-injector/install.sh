@@ -169,14 +169,16 @@ EOF
     chmod 644 /etc/profile.d/corporate-certs-go.sh
 }
 
-# Main
+# Always create profile scripts so environment variables are set even before certs are mounted
+inject_node
+inject_python
+inject_go
+
+# Main: only inject actual certs when they exist
 if collect_certs; then
     inject_system
     inject_java
-    inject_node
-    inject_python
     inject_git
-    inject_go
     echo ""
     echo "Corporate certificates injected successfully."
     echo "  Bundle location: $BUNDLE_FILE"
@@ -184,6 +186,7 @@ else
     echo ""
     echo "INFO: No corporate certificates found to inject."
     echo "      If you have corporate certs, mount them into $CERT_PATH"
+    echo "      Environment variables are pre-configured; certs will be picked up on next shell start."
 fi
 
 # Install helper script

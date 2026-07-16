@@ -37,12 +37,50 @@ if [ -z "$GPG_KEY" ]; then
     GPG_KEY="${GIT_SIGNING_KEY:-}"
 fi
 
-# Configure git as the remote user
+# Configure git system-wide so all users benefit, plus per-user for the remote user
+# System config
+if [ -n "$DEFAULT_BRANCH" ]; then
+    echo "Setting git init.defaultBranch: $DEFAULT_BRANCH"
+    git config --system init.defaultBranch "$DEFAULT_BRANCH" 2>/dev/null || true
+fi
+
+echo "Setting git core.autocrlf: $CORE_AUTOCRLF"
+git config --system core.autocrlf "$CORE_AUTOCRLF" 2>/dev/null || true
+
+# Configure safe directories system-wide
+if [ "$SAFE_DIRS" = "*" ]; then
+    echo "Adding all directories to git safe.directory"
+    git config --system --add safe.directory '*' 2>/dev/null || true
+else
+    IFS=',' read -ra DIRS <<< "$SAFE_DIRS"
+    for dir in "${DIRS[@]}"; do
+        dir=$(echo "$dir" | tr -d '[:space:]')
+        if [ -n "$dir" ]; then
+            echo "Adding safe.directory: $dir"
+            git config --system --add safe.directory "$dir" 2>/dev/null || true
+        fi
+    done
+fi
+
+# Configure GPG signing system-wide
+if [ "$COMMIT_GPG_SIGN" = "true" ]; then
+    echo "Enabling GPG commit signing"
+    git config --system commit.gpgsign true 2>/dev/null || true
+
+    if [ -n "$GPG_KEY" ]; then
+        echo "Setting GPG signing key: $GPG_KEY"
+        git config --system user.signingkey "$GPG_KEY" 2>/dev/null || true
+    fi
+else
+    echo "GPG commit signing disabled"
+    git config --system commit.gpgsign false 2>/dev/null || true
+fi
+
+# Also set per-user identity if provided
 run_as_user() {
     su - "$REMOTE_USER" -c "$1" 2>/dev/null || true
 }
 
-# Set user identity
 if [ -n "$USER_NAME" ]; then
     echo "Setting git user.name: $USER_NAME"
     run_as_user "git config --global user.name '$USER_NAME'"
@@ -51,50 +89,6 @@ fi
 if [ -n "$USER_EMAIL" ]; then
     echo "Setting git user.email: $USER_EMAIL"
     run_as_user "git config --global user.email '$USER_EMAIL'"
-fi
-
-# Set default branch
-if [ -n "$DEFAULT_BRANCH" ]; then
-    echo "Setting git init.defaultBranch: $DEFAULT_BRANCH"
-    run_as_user "git config --global init.defaultBranch '$DEFAULT_BRANCH'"
-fi
-
-# Set core.autocrlf
-echo "Setting git core.autocrlf: $CORE_AUTOCRLF"
-run_as_user "git config --global core.autocrlf '$CORE_AUTOCRLF'"
-
-# Configure safe directories
-if [ "$SAFE_DIRS" = "*" ]; then
-    echo "Adding all directories to git safe.directory"
-    run_as_user "git config --global --add safe.directory '*'"
-else
-    IFS=',' read -ra DIRS <<< "$SAFE_DIRS"
-    for dir in "${DIRS[@]}"; do
-        dir=$(echo "$dir" | tr -d '[:space:]')
-        if [ -n "$dir" ]; then
-            echo "Adding safe.directory: $dir"
-            run_as_user "git config --global --add safe.directory '$dir'"
-        fi
-    done
-fi
-
-# Configure GPG signing
-if [ "$COMMIT_GPG_SIGN" = "true" ]; then
-    echo "Enabling GPG commit signing"
-    run_as_user "git config --global commit.gpgsign true"
-
-    if [ -n "$GPG_KEY" ]; then
-        echo "Setting GPG signing key: $GPG_KEY"
-        run_as_user "git config --global user.signingkey '$GPG_KEY'"
-    fi
-else
-    echo "GPG commit signing disabled"
-    run_as_user "git config --global commit.gpgsign false"
-fi
-
-# Ensure .gitconfig ownership
-if [ -f "$REMOTE_HOME/.gitconfig" ]; then
-    chown "$REMOTE_USER:$REMOTE_USER" "$REMOTE_HOME/.gitconfig" 2>/dev/null || true
 fi
 
 # Install helper script
