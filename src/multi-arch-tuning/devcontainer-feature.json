@@ -1,0 +1,21 @@
+{
+  "id": "multi-arch-tuning",
+  "name": "Multi-Architecture Tuning",
+  "version": "0.1.0",
+  "description": "Detects container architecture and sets environment variables for Ollama, PyTorch, and uv to avoid model/toolchain mismatches on Apple Silicon or CPU-only hosts",
+  "options": {
+    "ollamaModel": {
+      "type": "string",
+      "default": "auto",
+      "description": "Ollama model tag to use. 'auto' selects arm64-optimized or default based on architecture."
+    },
+    "pytorchIndex": {
+      "type": "string",
+      "default": "auto",
+      "description": "PyTorch package index URL. 'auto' selects cpu or cuda based on architecture and GPU availability."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
