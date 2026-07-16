@@ -1,0 +1,27 @@
+{
+  "id": "dbt-transform",
+  "name": "dbt Data Transformation",
+  "version": "1.0.0",
+  "description": "Installs dbt-core for data transformation pipelines in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of dbt-core to install, or 'latest'"
+    },
+    "installDuckdbAdapter": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install dbt-duckdb adapter for DuckDB analytics"
+    },
+    "installPostgresAdapter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install dbt-postgres adapter for PostgreSQL databases"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/dbt-transform"
+}

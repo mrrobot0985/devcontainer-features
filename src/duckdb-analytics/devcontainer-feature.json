@@ -1,0 +1,22 @@
+{
+  "id": "duckdb-analytics",
+  "name": "DuckDB Analytics",
+  "version": "1.0.0",
+  "description": "Installs DuckDB CLI for analytical queries and data processing in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of DuckDB to install, or 'latest'"
+    },
+    "installExtensions": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install common DuckDB extensions (httpfs, json, parquet)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/duckdb-analytics"
+}

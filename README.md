@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (57)
+## Features (60)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -34,6 +34,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `container-security-scan` | Installs Trivy and runs a vulnerability scan on the container image during postCreateCommand, wit... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/container-security-scan/README.md) |
 | `corporate-cert-injector` | Injects corporate TLS/SSL certificates into system and language-specific trust stores, enabling d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/corporate-cert-injector/README.md) |
 | `cosign-verify` | Installs Cosign (Sigstore) and provides helpers for verifying container image signatures and atte... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/cosign-verify/README.md) |
+| `dbt-transform` | Installs dbt-core for data transformation pipelines in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/dbt-transform/README.md) |
 | `dependency-cache-manager` | Auto-detects project types and configures package manager cache directories to use a named volume... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/dependency-cache-manager/README.md) |
 | `devcontainer-ci-tools` | Installs the devcontainer CLI, docker-buildx, and act (local GitHub Actions runner) for self-test... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/devcontainer-ci-tools/README.md) |
 | `devcontainer-lib` | Installs a shared shell utility library for use in devcontainer lifecycle scripts and custom auto... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/devcontainer-lib/README.md) |
@@ -42,8 +43,10 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `docker-compose-helper` | Validates docker-compose.yml files and optionally injects health checks and dependency ordering f... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/docker-compose-helper/README.md) |
 | `docusaurus-docs` | Installs Docusaurus for building documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/docusaurus-docs/README.md) |
 | `dotfiles-sync` | Clones a dotfiles repository and applies it to the container user, supporting install scripts, sy... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/dotfiles-sync/README.md) |
+| `duckdb-analytics` | Installs DuckDB CLI for analytical queries and data processing in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/duckdb-analytics/README.md) |
 | `git-config-manager` | Standardizes git configuration for devcontainer users from feature options or host environment va... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-config-manager/README.md) |
 | `git-hooks-manager` | Installs and configures pre-commit hooks for linting, formatting, and conventional commits in dev... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-hooks-manager/README.md) |
+| `git-lfs` | Installs Git LFS for version controlling large files in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-lfs/README.md) |
 | `host-isolation` | Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/host-isolation/README.md) |
 | `jupyter-ml-dev` | Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interact... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/jupyter-ml-dev/README.md) |
 | `kafka-dev` | Installs Kafka CLI tools for event streaming development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/kafka-dev/README.md) |

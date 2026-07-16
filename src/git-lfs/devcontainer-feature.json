@@ -1,0 +1,17 @@
+{
+  "id": "git-lfs",
+  "name": "Git Large File Storage",
+  "version": "1.0.0",
+  "description": "Installs Git LFS for version controlling large files in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of git-lfs to install, or 'latest'"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/git"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/git-lfs"
+}

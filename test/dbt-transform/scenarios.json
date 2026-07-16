@@ -1,0 +1,23 @@
+{
+    "test": [
+        {
+            "name": "default",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "ghcr.io/devcontainers/features/python:1": {},
+                "dbt-transform": {}
+            }
+        },
+        {
+            "name": "with-adapters",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "ghcr.io/devcontainers/features/python:1": {},
+                "dbt-transform": {
+                    "installDuckdbAdapter": true,
+                    "installPostgresAdapter": true
+                }
+            }
+        }
+    ]
+}
