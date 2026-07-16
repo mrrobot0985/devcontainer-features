@@ -1,0 +1,26 @@
+{
+  "id": "git-hooks-manager",
+  "name": "Git Hooks Manager",
+  "version": "0.1.0",
+  "description": "Installs and configures pre-commit hooks for linting, formatting, and conventional commits in devcontainer projects",
+  "options": {
+    "hooks": {
+      "type": "string",
+      "default": "pre-commit",
+      "description": "Comma-separated list of hooks to install (pre-commit, commitlint, prettier, lint-staged)"
+    },
+    "autoInstall": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically install hooks into the workspace git repository on container startup"
+    },
+    "configPath": {
+      "type": "string",
+      "default": ".pre-commit-config.yaml",
+      "description": "Path to the pre-commit configuration file relative to workspace root"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
