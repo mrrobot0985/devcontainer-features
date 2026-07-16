@@ -32,5 +32,32 @@
                 "services": "github,pypi"
             }
         }
+    },
+    "fail-if-unprivileged": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "minimal",
+                "failIfUnprivileged": true
+            }
+        }
+    },
+    "unprivileged-noop": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "minimal",
+                "failIfUnprivileged": false
+            }
+        }
+    },
+    "dry-run": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "github",
+                "dryRun": true
+            }
+        }
     }
 }
