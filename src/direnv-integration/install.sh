@@ -2,7 +2,7 @@
 set -e
 
 # direnv-integration install script
-# Installs direnv and hooks it into shell startup
+# Installs direnv via apt-get and hooks it into shell startup
 
 REMOTE_USER="${_REMOTE_USER:-vscode}"
 REMOTE_HOME=$(getent passwd "$REMOTE_USER" | cut -d: -f6 2>/dev/null || true)
@@ -14,107 +14,29 @@ if [ -z "$REMOTE_HOME" ]; then
     fi
 fi
 
-VERSION="${VERSION:-latest}"
 SHELL_CHOICE="${SHELL:-auto}"
 AUTO_ALLOW="${AUTOALLOW:-true}"
 
 echo "direnv Integration"
 echo "  User:   $REMOTE_USER"
 echo "  Home:   $REMOTE_HOME"
-echo "  Version: $VERSION"
 echo "  Shell:  $SHELL_CHOICE"
 echo "  Auto-allow: $AUTO_ALLOW"
 
-# Try package manager first for 'latest'
-if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
-    if command -v apt-get >/dev/null 2>&1; then
-        echo "Installing direnv via apt-get..."
-        apt-get update >/dev/null 2>&1 || true
-        if apt-get install -y direnv >/dev/null 2>&1; then
-            echo "direnv installed via apt-get"
-            DIRECT_INSTALL="false"
-        else
-            echo "WARNING: apt-get install direnv failed; falling back to GitHub download"
-            DIRECT_INSTALL="true"
-        fi
-    else
-        DIRECT_INSTALL="true"
-    fi
+# Install direnv via package manager
+if command -v apt-get >/dev/null 2>&1; then
+    echo "Installing direnv via apt-get..."
+    apt-get update >/dev/null 2>&1 || true
+    apt-get install -y direnv >/dev/null 2>&1 || {
+        echo "ERROR: Failed to install direnv via apt-get"
+        exit 1
+    }
 else
-    DIRECT_INSTALL="true"
+    echo "ERROR: No supported package manager found (apt-get required)"
+    exit 1
 fi
 
-# Download from GitHub if needed
-if [ "$DIRECT_INSTALL" = "true" ]; then
-    # Detect architecture
-    ARCH=$(uname -m)
-    case "$ARCH" in
-        x86_64)
-            DIRENV_ARCH="amd64"
-            ;;
-        aarch64|arm64)
-            DIRENV_ARCH="arm64"
-            ;;
-        *)
-            echo "WARNING: Architecture $ARCH not explicitly supported; trying amd64"
-            DIRENV_ARCH="amd64"
-            ;;
-    esac
-
-    # Resolve version
-    if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
-        # Try GitHub API first
-        LATEST_TAG=$(curl -sL --retry 3 --max-time 10 \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/direnv/direnv/releases/latest" 2>/dev/null | \
-            grep '"tag_name":' | head -n 1 | sed 's/.*"v\{0,1\}\([^"]*\)".*/\1/' || true)
-
-        if [ -z "$LATEST_TAG" ]; then
-            # Fallback: hardcoded known-good version
-            LATEST_TAG="2.34.0"
-            echo "WARNING: Could not resolve latest direnv version; falling back to v$LATEST_TAG"
-        fi
-        VERSION="$LATEST_TAG"
-    fi
-
-    # Strip 'v' prefix if present
-    VERSION=$(echo "$VERSION" | sed 's/^v//')
-
-    echo "Installing direnv v${VERSION} for linux-${DIRENV_ARCH}..."
-
-    # Download direnv binary
-    DIRENV_URL="https://github.com/direnv/direnv/releases/download/v${VERSION}/direnv.linux-${DIRENV_ARCH}"
-    TMP_DIR=$(mktemp -d)
-    trap 'rm -rf "$TMP_DIR"' EXIT
-
-    HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" --retry 3 --max-time 60 -L "$DIRENV_URL")
-    if [ "$HTTP_STATUS" != "200" ]; then
-        echo "ERROR: GitHub returned HTTP $HTTP_STATUS for $DIRENV_URL"
-        echo "       The version or architecture may not exist."
-        exit 1
-    fi
-
-    if ! curl -fsSL --retry 3 --max-time 60 -o "$TMP_DIR/direnv" "$DIRENV_URL" 2>/dev/null; then
-        echo "ERROR: Failed to download direnv from $DIRENV_URL"
-        exit 1
-    fi
-
-    # Verify it's a valid binary
-    if [ ! -s "$TMP_DIR/direnv" ]; then
-        echo "ERROR: Downloaded file is empty"
-        exit 1
-    fi
-
-    if ! file "$TMP_DIR/direnv" | grep -q "ELF.*executable"; then
-        echo "ERROR: Downloaded file is not a valid ELF binary"
-        exit 1
-    fi
-
-    chmod +x "$TMP_DIR/direnv"
-    mv "$TMP_DIR/direnv" /usr/local/bin/direnv
-
-    echo "direnv binary installed to /usr/local/bin/direnv"
-fi
+echo "direnv installed via apt-get"
 
 # Verify installation
 if ! command -v direnv >/dev/null 2>&1; then
@@ -270,7 +192,7 @@ if [ "$AUTO_ALLOW" = "true" ]; then
 fi
 
 echo "direnv integration complete."
-echo "  Binary:   /usr/local/bin/direnv"
+echo "  Binary:   $(command -v direnv)"
 echo "  Version:  $(direnv version 2>/dev/null || echo 'unknown')"
 echo "  Shells:   $SHELLS_TO_HOOK"
 echo ""
