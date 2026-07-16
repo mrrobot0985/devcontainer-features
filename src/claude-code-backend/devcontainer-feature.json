@@ -35,6 +35,5 @@
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-backend",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-backend"
 }

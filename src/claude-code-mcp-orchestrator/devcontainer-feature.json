@@ -19,6 +19,5 @@
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/devcontainers/features/node"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-mcp-orchestrator",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-mcp-orchestrator"
 }

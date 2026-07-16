@@ -18,6 +18,5 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/devcontainer-lock-audit",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/devcontainer-lock-audit"
 }

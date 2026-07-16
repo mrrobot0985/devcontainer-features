@@ -23,6 +23,5 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/docker-in-docker"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/registry-mirror-config",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/registry-mirror-config"
 }

@@ -50,6 +50,5 @@
     "ghcr.io/devcontainers/features/git",
     "ghcr.io/anthropics/devcontainer-features/claude-code"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-plugins",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/claude-code-plugins"
 }

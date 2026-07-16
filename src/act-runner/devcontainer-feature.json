@@ -24,6 +24,5 @@
     "ghcr.io/devcontainers/features/docker-in-docker",
     "ghcr.io/devcontainers/features/common-utils"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/act-runner",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/act-runner"
 }

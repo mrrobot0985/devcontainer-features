@@ -13,6 +13,5 @@
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
   ],
-  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/1password-cli",
-  "licenseURI": "https://github.com/mrrobot0985/devcontainer-features/blob/main/LICENSE"
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/1password-cli"
 }
