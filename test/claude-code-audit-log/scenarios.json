@@ -1,0 +1,16 @@
+{
+    "basic": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-audit-log": {
+                "logDir": "/tmp/test-audit-logs"
+            }
+        }
+    },
+    "default-dir": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code-audit-log": {}
+        }
+    }
+}
