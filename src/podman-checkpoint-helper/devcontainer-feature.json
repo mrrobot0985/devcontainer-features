@@ -1,0 +1,26 @@
+{
+  "id": "podman-checkpoint-helper",
+  "name": "Podman Checkpoint Helper",
+  "version": "0.1.0",
+  "description": "Installs Podman with checkpoint/restore support (CRIU) for ephemeral AI agent container workflows and cross-node container migration",
+  "options": {
+    "installCriu": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install CRIU (Checkpoint/Restore In Userspace) required for Podman checkpoint/restore"
+    },
+    "configureStorage": {
+      "type": "boolean",
+      "default": true,
+      "description": "Configure Podman storage to use overlay filesystem for checkpoint compatibility"
+    },
+    "addAliases": {
+      "type": "boolean",
+      "default": true,
+      "description": "Add docker-compatible aliases (docker, docker-compose) that wrap Podman commands"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "registry-mirror-config",
+  "name": "Registry Mirror Config",
+  "version": "0.1.0",
+  "description": "Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or network-constrained environments",
+  "options": {
+    "mirrors": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of registry mirror URLs (e.g. 'https://mirror.example.com,https://mirror2.example.com')"
+    },
+    "insecureRegistries": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of insecure registries (no TLS verification)"
+    },
+    "restartDocker": {
+      "type": "boolean",
+      "default": true,
+      "description": "Attempt to restart Docker daemon after updating daemon.json (requires privileged mode)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/docker-in-docker"
+  ]
+}

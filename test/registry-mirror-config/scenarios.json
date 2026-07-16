@@ -1,0 +1,17 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "registry-mirror-config": {}
+        }
+    },
+    "with-mirrors": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "registry-mirror-config": {
+                "mirrors": "https://mirror.example.com",
+                "restartDocker": false
+            }
+        }
+    }
+}

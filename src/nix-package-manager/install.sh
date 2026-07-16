@@ -90,7 +90,8 @@ if [ -n "$PACKAGES" ]; then
     echo "Installing Nix packages: $PACKAGES"
     if command -v nix-env >/dev/null 2>&1; then
         # shellcheck disable=SC2086
-        nix-env -iA nixpkgs.{${PACKAGES// /,}} 2>/dev/null || echo "WARNING: Some packages may not exist in nixpkgs. Install manually with nix-env -iA nixpkgs.<package>"
+        # shellcheck disable=SC1083
+        nix-env -iA "nixpkgs.{${PACKAGES// /,}}" 2>/dev/null || echo "WARNING: Some packages may not exist in nixpkgs. Install manually with nix-env -iA nixpkgs.<package>"
     else
         echo "WARNING: nix-env not available; cannot install packages at build time."
         echo "         Packages '$PACKAGES' will need to be installed manually."
