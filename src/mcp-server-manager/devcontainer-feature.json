@@ -1,0 +1,26 @@
+{
+  "id": "mcp-server-manager",
+  "name": "MCP Server Manager",
+  "version": "0.1.0",
+  "description": "Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside devcontainers",
+  "options": {
+    "servers": {
+      "type": "string",
+      "default": "github",
+      "description": "Comma-separated list of MCP servers to install (github, playwright, context7, vercel, supabase, fetch, sequentialthinking, memory, sqlite)"
+    },
+    "configPath": {
+      "type": "string",
+      "default": "auto",
+      "description": "Path to write the MCP server configuration JSON, or 'auto' for ~/.mcp/mcp-servers.json"
+    },
+    "startServers": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate a startup script that launches configured MCP servers in the background"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

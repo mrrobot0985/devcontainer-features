@@ -1,0 +1,16 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "mcp-server-manager": {}
+        }
+    },
+    "multi-server": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "mcp-server-manager": {
+                "servers": "github,playwright,fetch"
+            }
+        }
+    }
+}
