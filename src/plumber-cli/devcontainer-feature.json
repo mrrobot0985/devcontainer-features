@@ -1,0 +1,17 @@
+{
+  "id": "plumber-cli",
+  "name": "Plumber Message Queue CLI",
+  "version": "1.0.0",
+  "description": "Installs Plumber CLI for reading and writing messages from Kafka, RabbitMQ, NATS, Redis, and cloud message queues in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of plumber to install, or 'latest'"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/plumber-cli"
+}

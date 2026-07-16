@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (60)
+## Features (63)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -52,6 +52,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `kafka-dev` | Installs Kafka CLI tools for event streaming development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/kafka-dev/README.md) |
 | `locust-testing` | Installs Locust for Python-based load and performance testing in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/locust-testing/README.md) |
 | `mcp-server-manager` | Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mcp-server-manager/README.md) |
+| `meilisearch-cli` | Installs Meilisearch CLI for search index and document management in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/meilisearch-cli/README.md) |
 | `mise` | Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for manag... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mise/README.md) |
 | `mkdocs-material` | Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mkdocs-material/README.md) |
 | `mongodb-dev` | Installs MongoDB shell and utilities for document database development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mongodb-dev/README.md) |
@@ -60,8 +61,10 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `nix-package-manager` | Installs the Nix package manager with flakes support and optional home-manager integration for re... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nix-package-manager/README.md) |
 | `non-root-enforcer` | Audits devcontainer.json for root remoteUser and warns or fails when the container is configured ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/non-root-enforcer/README.md) |
 | `nvidia-container-toolkit` | Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from a... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nvidia-container-toolkit/README.md) |
+| `ollama-cli` | Installs Ollama CLI for managing and running local AI models in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ollama-cli/README.md) |
 | `otel-collector-dev` | Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/otel-collector-dev/README.md) |
 | `playwright-testing` | Installs Playwright for browser automation and end-to-end testing in devcontainers with configura... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/playwright-testing/README.md) |
+| `plumber-cli` | Installs Plumber CLI for reading and writing messages from Kafka, RabbitMQ, NATS, Redis, and clou... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/plumber-cli/README.md) |
 | `podman-checkpoint-helper` | Installs Podman with checkpoint/restore support (CRIU) for ephemeral AI agent container workflows... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/podman-checkpoint-helper/README.md) |
 | `postgres-dev` | Installs PostgreSQL client tools for database development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/postgres-dev/README.md) |
 | `prebuild-lifecycle-helper` | Analyzes devcontainer.json lifecycle commands, detects dependency installations in non-prebuild h... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/prebuild-lifecycle-helper/README.md) |

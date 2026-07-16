@@ -1,0 +1,17 @@
+{
+  "id": "ollama-cli",
+  "name": "Ollama CLI",
+  "version": "1.0.0",
+  "description": "Installs Ollama CLI for managing and running local AI models in devcontainers",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of Ollama to install, or 'latest'"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+  "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/ollama-cli"
+}
