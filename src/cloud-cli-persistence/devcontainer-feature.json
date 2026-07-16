@@ -1,0 +1,26 @@
+{
+  "id": "cloud-cli-persistence",
+  "name": "Cloud CLI Persistence",
+  "version": "0.1.0",
+  "description": "Persists cloud CLI authentication state across container rebuilds by validating host credential mounts and providing helper utilities for AWS, Azure, GCP, and GitHub CLI",
+  "options": {
+    "providers": {
+      "type": "string",
+      "default": "aws,azure,gcp,github",
+      "description": "Comma-separated list of cloud providers to configure (aws, azure, gcp, github)"
+    },
+    "validateMounts": {
+      "type": "boolean",
+      "default": true,
+      "description": "Validate that host credential directories are mounted into the container at install time"
+    },
+    "printMountConfig": {
+      "type": "boolean",
+      "default": true,
+      "description": "Print the required devcontainer.json mounts configuration after setup"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
