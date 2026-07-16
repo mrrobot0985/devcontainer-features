@@ -17,7 +17,7 @@ fi
 
 # Auto-detect GPU availability
 GPU_AVAILABLE="false"
-if command -v nvidia-smi >/dev/null 2>>1 && nvidia-smi >/dev/null 2>>1; then
+if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then
     GPU_AVAILABLE="true"
 fi
 
