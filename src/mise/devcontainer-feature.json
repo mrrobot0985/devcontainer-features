@@ -1,0 +1,31 @@
+{
+  "id": "mise",
+  "name": "mise",
+  "version": "0.1.0",
+  "description": "Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for managing language runtimes and dev tools",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "mise version to install (e.g. 2025.6.0 or latest)"
+    },
+    "shells": {
+      "type": "string",
+      "default": "bash,zsh",
+      "description": "Comma-separated list of shells to configure (bash, zsh, fish)"
+    },
+    "autoActivate": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically activate mise when shell starts by adding to shell rc files"
+    },
+    "trustWorkspaceConfig": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically trust mise configuration in workspace (run mise trust after install)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
