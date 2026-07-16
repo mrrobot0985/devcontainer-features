@@ -1,0 +1,33 @@
+{
+  "id": "container-resource-limits",
+  "version": "1.0.0",
+  "name": "Container Resource Limits",
+  "description": "Enforces CPU and memory resource limits on the devcontainer via cgroup v2 configuration",
+  "documentationURL": "https://github.com/BrainXio/devcontainer-features/tree/main/features/src/container-resource-limits",
+  "licenseURL": "https://github.com/BrainXio/devcontainer-features/blob/main/LICENSE",
+  "options": {
+    "cpuLimit": {
+      "type": "string",
+      "default": "",
+      "description": "CPU limit (e.g., 2 for 2 cores, 0.5 for half a core). Empty means no limit."
+    },
+    "memoryLimit": {
+      "type": "string",
+      "default": "",
+      "description": "Memory limit (e.g., 4g, 512m). Empty means no limit."
+    },
+    "swapLimit": {
+      "type": "string",
+      "default": "",
+      "description": "Swap limit (e.g., 4g, 512m). Empty means no limit."
+    },
+    "pidsLimit": {
+      "type": "integer",
+      "default": 0,
+      "description": "Maximum number of PIDs allowed in the container. 0 means no limit."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
