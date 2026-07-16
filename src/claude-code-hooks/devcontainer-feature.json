@@ -35,9 +35,9 @@
       "description": "Additional comma-separated regex patterns to treat as dangerous when blockDangerousCommands is enabled"
     },
     "stateRetentionLimit": {
-      "type": "number",
-      "default": 100,
-      "enum": [10, 25, 50, 100, 250, 500, 1000],
+      "type": "string",
+      "default": "100",
+      "enum": ["10", "25", "50", "100", "250", "500", "1000"],
       "description": "Maximum number of entries to retain in per-tool/per-file state objects. Older entries are pruned automatically."
     }
   },

@@ -10,9 +10,9 @@
       "description": "Comma-separated severity levels to report (UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL)"
     },
     "exitCode": {
-      "type": "number",
-      "default": 0,
-      "enum": [0, 1],
+      "type": "string",
+      "default": "0",
+      "enum": ["0", "1"],
       "description": "Exit code when vulnerabilities are found (0 = report only, 1 = fail)"
     }
   },
