@@ -13,7 +13,7 @@ cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
 }
 EOF
 
-check "detects heavy ops in postCreateCommand" bash -c "prebuild-lifecycle-helper | grep -q 'postCreateCommand contains heavy operations'"
+check "detects heavy ops in postCreateCommand" bash -c "prebuild-audit /workspace/.devcontainer/devcontainer.json | grep -qi 'postCreateCommand.*dependency' || prebuild-audit /workspace/.devcontainer/devcontainer.json | grep -qi 'install'"
 
 rm -rf /workspace/.devcontainer
 

@@ -1,13 +1,28 @@
 {
   "id": "prebuild-lifecycle-helper",
   "name": "Prebuild Lifecycle Helper",
-  "version": "0.1.0",
-  "description": "Audits devcontainer.json lifecycle commands and warns when heavy operations are placed in postCreateCommand instead of updateContentCommand, which would prevent Codespaces prebuild optimization",
+  "version": "0.2.0",
+  "description": "Analyzes devcontainer.json lifecycle commands, detects dependency installations in non-prebuild hooks, and optionally rewrites configuration to leverage Codespaces prebuild caching",
   "options": {
     "failOnWarning": {
       "type": "boolean",
       "default": false,
-      "description": "Fail if heavy operations are detected in non-prebuild hooks"
+      "description": "Fail the build if dependency installations are detected in non-prebuild hooks"
+    },
+    "fixMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Automatically rewrite devcontainer.json to move dependency installations to updateContentCommand"
+    },
+    "detectLanguages": {
+      "type": "string",
+      "default": "auto",
+      "description": "Comma-separated list of languages to scan for (auto, node, python, rust, ruby, go, php, java, dotnet). 'auto' scans all known lockfiles."
+    },
+    "commandTimeout": {
+      "type": "string",
+      "default": "60s",
+      "description": "Timeout for each detected install command when running in fixMode"
     }
   },
   "installsAfter": [

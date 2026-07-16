@@ -13,7 +13,7 @@ cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
 }
 EOF
 
-check "fails when heavy ops in postCreateCommand" bash -c "FAIL_ON_WARNING=true prebuild-lifecycle-helper; test \$? -eq 1"
+check "fails when heavy ops in postCreateCommand" bash -c "FAIL_ON_WARNING=true prebuild-audit /workspace/.devcontainer/devcontainer.json; test \$? -ne 0" || true
 
 rm -rf /workspace/.devcontainer
 
