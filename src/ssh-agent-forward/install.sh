@@ -21,8 +21,6 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
 fi
 
 USER_HOME="$(getent passwd "$USERNAME" | cut -d: -f6)"
-USER_UID="$(id -u "$USERNAME")"
-USER_GID="$(id -g "$USERNAME")"
 
 # Determine the socket path inside the container
 if [ "$SOCKET_PATH" = "auto" ] || [ "$SOCKET_PATH" = "automatic" ]; then
