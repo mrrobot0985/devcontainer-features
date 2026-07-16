@@ -11,13 +11,6 @@ PRINT_CONFIG="${PRINTMOUNTCONFIG:-true}"
 # Normalize providers to lowercase
 PROVIDERS_LOWER=$(echo "$PROVIDERS" | tr '[:upper:]' '[:lower:]')
 
-# Credential mount points (host path -> container path)
-declare -A MOUNTS
-MOUNTS[aws]="~/.aws:/home/${_REMOTE_USER:-vscode}/.aws"
-MOUNTS[azure]="~/.azure:/home/${_REMOTE_USER:-vscode}/.azure"
-MOUNTS[gcp]="~/.config/gcloud:/home/${_REMOTE_USER:-vscode}/.config/gcloud"
-MOUNTS[github]="~/.config/gh:/home/${_REMOTE_USER:-vscode}/.config/gh"
-
 # Container credential paths for validation
 declare -A CRED_PATHS
 CRED_PATHS[aws]="/home/${_REMOTE_USER:-vscode}/.aws"
