@@ -47,7 +47,6 @@ if ! command -v npx > /dev/null 2>&1; then
     exit 1
 fi
 
-INSTALL_DIR=""
 if [ "$GLOBAL_INSTALL" = "true" ]; then
     echo "Installing Playwright globally..."
     if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
