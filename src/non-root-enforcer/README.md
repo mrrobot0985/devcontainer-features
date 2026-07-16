@@ -1,5 +1,7 @@
 # Non-Root Enforcer
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Audits `devcontainer.json` for `remoteUser: root` or missing `remoteUser`, and
 warns or fails because Claude Code and other AI agents require a non-root user
 to enforce permission dialogs.

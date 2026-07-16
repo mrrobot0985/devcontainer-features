@@ -1,5 +1,7 @@
 # Sudo Audit
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Audits the container image for passwordless `sudo` configuration and warns or
 fails when `NOPASSWD` directives are detected in `/etc/sudoers` or
 `/etc/sudoers.d/`.

@@ -1,5 +1,7 @@
 # Claude Code Audit Log
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Installs a lightweight `audit-log` script that appends structured JSON events to
 a workspace file. Designed for compliance and post-incident review when used
 with `claude-code-hooks`.

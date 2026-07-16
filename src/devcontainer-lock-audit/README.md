@@ -1,5 +1,7 @@
 # Devcontainer Lock Audit
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 CI gate that enforces `.devcontainer-lock.json` presence and validates that
 pinned feature versions match the current `devcontainer.json` configuration.
 

@@ -1,5 +1,7 @@
 # Starship Prompt
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Installs the [Starship](https://starship.rs) cross-shell prompt and configures it for bash, zsh, and/or fish.
 
 ## Features

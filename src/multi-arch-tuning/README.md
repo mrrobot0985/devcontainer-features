@@ -1,5 +1,7 @@
 # Multi-Architecture Tuning
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Detects container architecture and GPU availability, then sets environment
 variables so that Ollama model selection, PyTorch installation, and uv Python
 downloads match the host capabilities.

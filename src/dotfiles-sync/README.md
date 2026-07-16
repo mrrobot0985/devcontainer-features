@@ -1,5 +1,7 @@
 # Dotfiles Sync
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 Clones a dotfiles repository and applies it to the container user, supporting install scripts, symlinks, and direct copying.
 
 ## Problem Solved
