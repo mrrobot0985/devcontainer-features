@@ -11,7 +11,7 @@ Custom dev container features for Claude Code / Ollama environments.
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-## Features (51)
+## Features (54)
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
@@ -39,6 +39,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `devcontainer-lock-audit` | CI gate that enforces .devcontainer-lock.json presence and validates that pinned feature versions... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/devcontainer-lock-audit/README.md) |
 | `direnv-integration` | Installs direnv via apt-get and hooks it into shell startup for automatic .envrc loading when cha... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/direnv-integration/README.md) |
 | `docker-compose-helper` | Validates docker-compose.yml files and optionally injects health checks and dependency ordering f... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/docker-compose-helper/README.md) |
+| `docusaurus-docs` | Installs Docusaurus for building documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/docusaurus-docs/README.md) |
 | `dotfiles-sync` | Clones a dotfiles repository and applies it to the container user, supporting install scripts, sy... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/dotfiles-sync/README.md) |
 | `git-config-manager` | Standardizes git configuration for devcontainer users from feature options or host environment va... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-config-manager/README.md) |
 | `git-hooks-manager` | Installs and configures pre-commit hooks for linting, formatting, and conventional commits in dev... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/git-hooks-manager/README.md) |
@@ -50,6 +51,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `mkdocs-material` | Installs MkDocs with Material theme and popular plugins for documentation sites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mkdocs-material/README.md) |
 | `mongodb-dev` | Installs MongoDB shell and utilities for document database development in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/mongodb-dev/README.md) |
 | `multi-arch-tuning` | Detects container architecture and sets environment variables for Ollama, PyTorch, and uv to avoi... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/multi-arch-tuning/README.md) |
+| `newman-testing` | Installs Postman Newman CLI for running Postman API collections in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/newman-testing/README.md) |
 | `nix-package-manager` | Installs the Nix package manager with flakes support and optional home-manager integration for re... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nix-package-manager/README.md) |
 | `non-root-enforcer` | Audits devcontainer.json for root remoteUser and warns or fails when the container is configured ... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/non-root-enforcer/README.md) |
 | `nvidia-container-toolkit` | Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from a... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/nvidia-container-toolkit/README.md) |
@@ -66,6 +68,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `sudo-audit` | Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sudo-audit/README.md) |
 | `syft-sbom` | Installs Syft and provides helpers for generating SBOMs (CycloneDX/SPDX) from the container files... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/syft-sbom/README.md) |
 | `taskfile-dev` | Installs the Task (go-task) command runner with shell completions and optional alias. Auto-detect... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/taskfile-dev/README.md) |
+| `vitepress-docs` | Installs VitePress for building Vite-powered documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/vitepress-docs/README.md) |
 ## Documentation
 
 - [Tutorials](docs/tutorials/)

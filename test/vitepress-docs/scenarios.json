@@ -1,0 +1,22 @@
+{
+    "test": [
+        {
+            "name": "default",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "ghcr.io/devcontainers/features/node:1": {},
+                "vitepress-docs": {}
+            }
+        },
+        {
+            "name": "with-version",
+            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+            "features": {
+                "ghcr.io/devcontainers/features/node:1": {},
+                "vitepress-docs": {
+                    "version": "1.0"
+                }
+            }
+        }
+    ]
+}
