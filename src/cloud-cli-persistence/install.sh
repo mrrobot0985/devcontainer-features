@@ -4,9 +4,9 @@ set -e
 # cloud-cli-persistence install script
 # Configures cloud CLI credential persistence across container rebuilds
 
-PROVIDERS="__PROVIDERS__"
-VALIDATE="__VALIDATEMOUNTSS__"
-PRINT_CONFIG="__PRINTMOUNTCONFIG__"
+PROVIDERS="${PROVIDERS:-aws,azure,gcp,github}"
+VALIDATE="${VALIDATEMOUNTS:-true}"
+PRINT_CONFIG="${PRINTMOUNTCONFIG:-true}"
 
 # Normalize providers to lowercase
 PROVIDERS_LOWER=$(echo "$PROVIDERS" | tr '[:upper:]' '[:lower:]')

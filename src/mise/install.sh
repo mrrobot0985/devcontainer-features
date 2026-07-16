@@ -4,13 +4,18 @@ set -e
 # mise install script
 # Installs mise (modern dev tool manager) and configures shell integration
 
-VERSION="__MISEVERSION__"
-SHELLS="__SHELLS__"
-AUTO_ACTIVATE="__AUTOACTIVATE__"
-TRUST_CONFIG="__TRUSTWORKSPACECONFIG__"
+VERSION="${MISEVERSION:-latest}"
+SHELLS="${SHELLS:-bash,zsh}"
+AUTO_ACTIVATE="${AUTOACTIVATE:-true}"
+TRUST_CONFIG="${TRUSTWORKSPACECONFIG:-true}"
 
 REMOTE_USER="${_REMOTE_USER:-vscode}"
 REMOTE_HOME="/home/$REMOTE_USER"
+
+# Ensure curl is available
+if ! command -v curl >/dev/null 2>&1; then
+    apt-get update && apt-get install -y curl 2>/dev/null || true
+fi
 
 # Determine architecture
 ARCH=$(uname -m)
