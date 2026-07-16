@@ -58,7 +58,6 @@ Recommended accompanying `devcontainer.json` settings for strict mode:
 ```json
 {
   "remoteUser": "vscode",
-  "runArgs": ["--cap-drop=ALL"],
-  "securityOpt": ["no-new-privileges:true"]
+  "runArgs": ["--cap-drop=ALL", "--security-opt=no-new-privileges:true"]
 }
 ```

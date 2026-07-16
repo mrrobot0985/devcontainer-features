@@ -159,10 +159,12 @@ main() {
         echo "=== Required devcontainer.json mounts ==="
         echo "Add the following to your devcontainer.json 'mounts' array:"
         echo ""
-        echo '  "source=devcontainer-cache,target=/mnt/devcontainer-cache,type=volume"'
+        echo "  \"source=devcontainer-cache,target=${CACHE_PATH},type=volume\""
         echo ""
         echo "Or, for a scoped cache per project:"
-        echo '  "source=${localWorkspaceFolderBasename}-cache,target=/mnt/devcontainer-cache,type=volume"'
+        echo "  \"source=\${localWorkspaceFolderBasename}-cache,target=${CACHE_PATH},type=volume\""
+        echo ""
+        echo "INFO [dependency-cache-manager]: auto-detect runs at build time before the workspace is mounted. If project files are not present during build, use the 'tools' option to specify them explicitly."
         echo ""
     fi
 
