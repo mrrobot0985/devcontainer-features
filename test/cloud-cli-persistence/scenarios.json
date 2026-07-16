@@ -1,0 +1,11 @@
+{
+    "custom": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "cloud-cli-persistence": {
+                "providers": "aws,github",
+                "validateMounts": false
+            }
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "fish-shell": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "mise": {
+                "shells": "bash,fish"
+            }
+        }
+    }
+}
