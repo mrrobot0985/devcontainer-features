@@ -4,7 +4,7 @@ set -e
 # mise install script
 # Installs mise (modern dev tool manager) and configures shell integration
 
-VERSION="__VERSION__"
+VERSION="__MISEVERSION__"
 SHELLS="__SHELLS__"
 AUTO_ACTIVATE="__AUTOACTIVATE__"
 TRUST_CONFIG="__TRUSTWORKSPACECONFIG__"

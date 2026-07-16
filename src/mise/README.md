@@ -34,7 +34,7 @@ rust = "1.85"
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `version` | string | `"latest"` | mise version to install (e.g. `2025.6.0` or `latest`) |
+| `miseVersion` | string | `"latest"` | mise version to install (e.g. `2025.6.0` or `latest`) |
 | `shells` | string | `"bash,zsh"` | Comma-separated list of shells to configure |
 | `autoActivate` | boolean | `true` | Automatically activate mise when shell starts |
 | `trustWorkspaceConfig` | boolean | `true` | Automatically trust `.mise.toml` in workspace |

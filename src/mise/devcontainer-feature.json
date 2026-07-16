@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Installs mise (modern dev tool manager, replaces asdf) and configures shell integration for managing language runtimes and dev tools",
   "options": {
-    "version": {
+    "miseVersion": {
       "type": "string",
       "default": "latest",
       "description": "mise version to install (e.g. 2025.6.0 or latest)"
