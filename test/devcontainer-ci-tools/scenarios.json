@@ -1,0 +1,12 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "devcontainer-ci-tools": {
+                "devcontainerCliVersion": "latest",
+                "installAct": true,
+                "installBuildx": true
+            }
+        }
+    }
+}

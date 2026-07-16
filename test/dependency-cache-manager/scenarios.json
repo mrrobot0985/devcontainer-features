@@ -1,0 +1,27 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "20"
+            },
+            "dependency-cache-manager": {
+                "autoDetect": true,
+                "cachePath": "/mnt/devcontainer-cache"
+            }
+        }
+    },
+    "explicit-tools": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "20"
+            },
+            "dependency-cache-manager": {
+                "autoDetect": false,
+                "tools": "npm,pip",
+                "cachePath": "/tmp/custom-cache"
+            }
+        }
+    }
+}

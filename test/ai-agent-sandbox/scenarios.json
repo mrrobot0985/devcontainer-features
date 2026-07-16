@@ -1,0 +1,20 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ai-agent-sandbox": {
+                "preset": "moderate",
+                "failOnWarning": false
+            }
+        }
+    },
+    "permissive": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ai-agent-sandbox": {
+                "preset": "permissive",
+                "failOnWarning": false
+            }
+        }
+    }
+}
