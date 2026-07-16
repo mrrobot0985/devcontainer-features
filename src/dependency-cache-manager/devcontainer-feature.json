@@ -1,0 +1,31 @@
+{
+  "id": "dependency-cache-manager",
+  "name": "Dependency Cache Manager",
+  "version": "0.1.0",
+  "description": "Auto-detects project types and configures package manager cache directories to use a named volume mount point, reducing rebuild times from minutes to seconds",
+  "options": {
+    "autoDetect": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically detect project types and configure appropriate caches"
+    },
+    "tools": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of tools to configure (npm, yarn, pnpm, pip, cargo, gradle, maven, go, uv). Overrides auto-detect when set."
+    },
+    "cachePath": {
+      "type": "string",
+      "default": "/mnt/devcontainer-cache",
+      "description": "Base path for cache directories. Add a named volume mount targeting this path in devcontainer.json."
+    },
+    "printMountConfig": {
+      "type": "boolean",
+      "default": true,
+      "description": "Print the required devcontainer.json mounts configuration after setup"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

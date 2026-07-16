@@ -1,0 +1,28 @@
+{
+  "id": "ai-agent-sandbox",
+  "name": "AI Agent Sandbox",
+  "version": "0.1.0",
+  "description": "Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected.",
+  "options": {
+    "preset": {
+      "type": "string",
+      "enum": ["strict", "moderate", "permissive"],
+      "default": "moderate",
+      "description": "Security preset: strict (no network, no root, no docker.sock), moderate (safe defaults), or permissive (audit-only)"
+    },
+    "failOnWarning": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fail container creation if the audit detects violations for the chosen preset"
+    },
+    "allowedDomains": {
+      "type": "string",
+      "default": "github.com,registry.npmjs.org,pypi.org,crates.io",
+      "description": "Comma-separated list of allowed outbound domains for moderate preset"
+    }
+  },
+  "postCreateCommand": "/usr/local/bin/ai-agent-sandbox-check",
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

@@ -202,9 +202,13 @@ if [ "$VERIFY_ARTIFACTS" = "true" ]; then
     fi
 
     if [ "$_missing" -ne 0 ]; then
-        echo "ERROR: One or more expected plugins are missing from enabledPlugins."
-        echo "       Set verifyArtifacts=false to skip this check, or set skipOnFailure=false to fail the build on installation errors."
-        exit 1
+        if [ "$SKIP_ON_FAILURE" = "true" ]; then
+            echo "WARNING: One or more expected plugins are missing from enabledPlugins, but skipping because skipOnFailure=true."
+        else
+            echo "ERROR: One or more expected plugins are missing from enabledPlugins."
+            echo "       Set verifyArtifacts=false to skip this check, or set skipOnFailure=false to fail the build on installation errors."
+            exit 1
+        fi
     fi
 
     echo "All expected plugin artifacts verified"
