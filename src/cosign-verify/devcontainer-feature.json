@@ -1,0 +1,21 @@
+{
+  "id": "cosign-verify",
+  "name": "Cosign Verify",
+  "version": "0.1.0",
+  "description": "Installs Cosign (Sigstore) and provides helpers for verifying container image signatures and attestations via keyless OIDC",
+  "options": {
+    "cosignVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Cosign version to install (e.g. 2.4.0 or latest)"
+    },
+    "verifyOnInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Run a verification test on install to confirm Cosign is working"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

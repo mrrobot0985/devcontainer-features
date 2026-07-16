@@ -1,0 +1,10 @@
+{
+    "spdx-format": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "syft-sbom": {
+                "defaultFormat": "spdx-json"
+            }
+        }
+    }
+}
