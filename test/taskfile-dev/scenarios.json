@@ -1,0 +1,26 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "taskfile-dev": {}
+        }
+    },
+    "alias": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "taskfile-dev": {
+                "alias": true
+            }
+        }
+    },
+    "specific-version": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "taskfile-dev": {
+                "version": "3.39.0",
+                "alias": false,
+                "completions": false
+            }
+        }
+    }
+}

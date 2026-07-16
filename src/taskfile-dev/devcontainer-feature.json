@@ -1,0 +1,31 @@
+{
+  "id": "taskfile-dev",
+  "name": "Taskfile Development",
+  "version": "0.1.0",
+  "description": "Installs the Task (go-task) command runner with shell completions and optional alias. Auto-detects Taskfile.yml in the workspace.",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Task version to install, or 'latest' for auto-resolution from GitHub releases"
+    },
+    "alias": {
+      "type": "boolean",
+      "default": true,
+      "description": "Create a 't' alias for 'task' in shell rc files"
+    },
+    "completions": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install bash and zsh completions"
+    },
+    "detectTaskfile": {
+      "type": "boolean",
+      "default": true,
+      "description": "Print a hint if Taskfile.yml is found in the workspace"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
