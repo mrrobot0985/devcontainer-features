@@ -55,7 +55,6 @@ if [ "$GLOBAL_INSTALL" = "true" ]; then
     else
         npm install -g "@playwright/test@${VERSION}"
     fi
-    INSTALL_DIR="$(npm root -g)/@playwright/test"
 else
     echo "Installing Playwright in workspace..."
     WORKSPACE_DIR="${USER_HOME}/.playwright"
