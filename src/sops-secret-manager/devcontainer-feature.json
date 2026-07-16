@@ -1,0 +1,26 @@
+{
+  "id": "sops-secret-manager",
+  "name": "SOPS Secret Manager",
+  "version": "0.1.0",
+  "description": "Installs Mozilla SOPS with age key generation for encrypting secrets in devcontainer projects",
+  "options": {
+    "generateAgeKey": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate an age key pair for the devcontainer user"
+    },
+    "cloudKms": {
+      "type": "string",
+      "default": "",
+      "description": "Cloud KMS provider for SOPS: aws, gcp, azure, or empty for age-only"
+    },
+    "configureGitFilter": {
+      "type": "boolean",
+      "default": true,
+      "description": "Configure git filters for transparent SOPS encryption/decryption"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

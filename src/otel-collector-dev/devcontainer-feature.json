@@ -1,0 +1,26 @@
+{
+  "id": "otel-collector-dev",
+  "name": "OpenTelemetry Collector Dev",
+  "version": "0.1.0",
+  "description": "Installs OpenTelemetry Collector and Jaeger for local tracing and metrics in devcontainers",
+  "options": {
+    "exporter": {
+      "type": "string",
+      "default": "jaeger",
+      "description": "Telemetry exporter to configure: jaeger, zipkin, prometheus, or none"
+    },
+    "receivers": {
+      "type": "string",
+      "default": "otlp",
+      "description": "Comma-separated list of receivers to enable (otlp, zipkin, prometheus, jaeger)"
+    },
+    "autoInstrumentation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable OpenTelemetry auto-instrumentation for supported languages (Node.js, Python, Java)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
