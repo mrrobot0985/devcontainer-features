@@ -56,6 +56,10 @@ install_devcontainer_cli() {
 
     if command -v devcontainer >/dev/null 2>&1; then
         echo "devcontainer CLI installed: $(devcontainer --version)"
+        # Ensure symlink exists at expected location for tests
+        if [ "$(command -v devcontainer)" != "/usr/local/bin/devcontainer" ]; then
+            ln -sf "$(command -v devcontainer)" /usr/local/bin/devcontainer
+        fi
     else
         echo "WARN [devcontainer-ci-tools]: devcontainer CLI not found in PATH after install."
     fi
