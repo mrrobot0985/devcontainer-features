@@ -1,0 +1,10 @@
+{
+    "verify-on-install": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "cosign-verify": {
+                "verifyOnInstall": true
+            }
+        }
+    }
+}

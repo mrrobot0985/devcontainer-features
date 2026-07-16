@@ -1,0 +1,22 @@
+{
+  "id": "syft-sbom",
+  "name": "Syft SBOM Generator",
+  "version": "0.1.0",
+  "description": "Installs Syft and provides helpers for generating SBOMs (CycloneDX/SPDX) from the container filesystem",
+  "options": {
+    "syftVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Syft version to install (e.g. 1.18.0 or latest)"
+    },
+    "defaultFormat": {
+      "type": "string",
+      "default": "cyclonedx-json",
+      "description": "Default SBOM output format (cyclonedx-json, spdx-json, syft-json, text)",
+      "enum": ["cyclonedx-json", "spdx-json", "syft-json", "text"]
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
