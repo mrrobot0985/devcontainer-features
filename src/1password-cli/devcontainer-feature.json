@@ -1,0 +1,16 @@
+{
+  "id": "1password-cli",
+  "name": "1Password CLI",
+  "version": "0.1.0",
+  "description": "Installs the 1Password CLI and provides a get-secret helper for retrieving secrets from 1Password vaults in devcontainer workflows",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "1Password CLI version to install"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

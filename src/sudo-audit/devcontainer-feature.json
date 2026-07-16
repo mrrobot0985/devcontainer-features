@@ -1,0 +1,16 @@
+{
+  "id": "sudo-audit",
+  "name": "Sudo Audit",
+  "version": "0.1.0",
+  "description": "Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD directives are detected",
+  "options": {
+    "failOnWarning": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fail container creation if passwordless sudo is detected"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+    "warn-only": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "sudo-audit": {
+                "failOnWarning": false
+            }
+        }
+    },
+    "fail-on-warning": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "sudo-audit": {
+                "failOnWarning": true
+            }
+        }
+    }
+}

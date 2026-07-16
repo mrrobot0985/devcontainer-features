@@ -1,0 +1,16 @@
+{
+  "id": "prebuild-lifecycle-helper",
+  "name": "Prebuild Lifecycle Helper",
+  "version": "0.1.0",
+  "description": "Audits devcontainer.json lifecycle commands and warns when heavy operations are placed in postCreateCommand instead of updateContentCommand, which would prevent Codespaces prebuild optimization",
+  "options": {
+    "failOnWarning": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fail if heavy operations are detected in non-prebuild hooks"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
