@@ -1,0 +1,28 @@
+{
+  "id": "claude-code-mcp-servers",
+  "name": "Claude Code MCP Servers",
+  "version": "0.1.0",
+  "description": "Installs and configures Model Context Protocol (MCP) servers for Claude Code so external tools are available out of the box",
+  "options": {
+    "enableGithub": {
+      "type": "boolean",
+      "default": true,
+      "description": "Configure the GitHub MCP server for repository, issue, and PR access"
+    },
+    "enableFilesystem": {
+      "type": "boolean",
+      "default": false,
+      "description": "Configure the filesystem MCP server for structured file access"
+    },
+    "githubTokenEnvVar": {
+      "type": "string",
+      "default": "GITHUB_TOKEN",
+      "description": "Environment variable name that holds the GitHub personal access token"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/node",
+    "ghcr.io/anthropics/devcontainer-features/claude-code"
+  ]
+}

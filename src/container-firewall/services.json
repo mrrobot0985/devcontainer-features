@@ -33,6 +33,18 @@
   "docker": {
     "domains": ["registry-1.docker.io", "production.cloudflare.docker.com"]
   },
+  "huggingface": {
+    "domains": ["huggingface.co", "hf.co", "cdn.huggingface.co"]
+  },
+  "gitlab": {
+    "domains": ["gitlab.com", "registry.gitlab.com"]
+  },
+  "openrouter": {
+    "domains": ["openrouter.ai", "api.openrouter.ai"]
+  },
+  "google": {
+    "domains": ["generativelanguage.googleapis.com", "aiplatform.googleapis.com", "oauth2.googleapis.com"]
+  },
   "claude-code": {
     "extends": ["github", "npm", "anthropic", "vscode"]
   },

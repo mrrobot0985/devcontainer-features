@@ -1,7 +1,7 @@
 {
   "id": "nvidia-container-toolkit",
   "name": "NVIDIA Container Toolkit for Docker-in-Docker",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from an inner Docker daemon (Docker-in-Docker)",
   "options": {
     "enable": {

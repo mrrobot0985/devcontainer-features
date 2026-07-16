@@ -36,5 +36,19 @@
                 "skipOnFailure": true
             }
         }
+    },
+    "verify-artifacts": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "20"
+            },
+            "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+            "claude-code-plugins": {
+                "enableRalphLoop": true,
+                "skipOnFailure": true,
+                "verifyArtifacts": true
+            }
+        }
     }
 }

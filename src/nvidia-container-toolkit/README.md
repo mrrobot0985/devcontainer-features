@@ -1,6 +1,6 @@
 # NVIDIA Container Toolkit for Docker-in-Docker
 
-![Version](https://img.shields.io/badge/version-0.1.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.2.0-blue?style=flat-square)
 
 Installs and configures the NVIDIA Container Toolkit so GPU-accelerated containers can run from an inner Docker daemon (Docker-in-Docker).
 
@@ -53,6 +53,6 @@ With `defaultRuntime: true`, you can omit `--runtime=nvidia` when running inner 
 
 ## Notes
 
-- This feature currently supports **apt-based** distributions (Debian, Ubuntu). Contributions for other package managers are welcome.
+- This feature supports **apt-based** distributions (Debian, Ubuntu) as well as **yum/dnf-based** distributions (RHEL, CentOS, Fedora). Alpine Linux is not officially supported by NVIDIA and will be skipped gracefully.
 - If `dockerd` is not running at install time, the configuration is written to `/etc/docker/daemon.json` and will be picked up automatically when `dockerd` starts.
 - **Auto-skip:** The feature automatically skips installation when no NVIDIA GPU is detected (`/dev/nvidia0` missing and `nvidia-smi` unavailable), even when `enable` is `true`. This makes it safe to include in templates that may run on both GPU and non-GPU hosts.

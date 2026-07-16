@@ -1,0 +1,35 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:2.1.0": {
+                "version": "20"
+            },
+            "claude-code-mcp-servers": {}
+        }
+    },
+    "github_and_filesystem": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:2.1.0": {
+                "version": "20"
+            },
+            "claude-code-mcp-servers": {
+                "enableGithub": true,
+                "enableFilesystem": true
+            }
+        }
+    },
+    "disabled": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:2.1.0": {
+                "version": "20"
+            },
+            "claude-code-mcp-servers": {
+                "enableGithub": false,
+                "enableFilesystem": false
+            }
+        }
+    }
+}

@@ -22,7 +22,17 @@ fi
 DEFAULT_RUNTIME="${DEFAULTRUNTIME:-false}"
 RESTART_DOCKERD="${RESTARTDOCKERD:-true}"
 
-# Only apt-based systems are supported in v1
+# Detect the actual nvidia-container-runtime binary path
+if command -v nvidia-container-runtime >/dev/null 2>&1; then
+    RUNTIME_PATH=$(command -v nvidia-container-runtime)
+elif [ -x /usr/bin/nvidia-container-runtime ]; then
+    RUNTIME_PATH="/usr/bin/nvidia-container-runtime"
+elif [ -x /usr/local/bin/nvidia-container-runtime ]; then
+    RUNTIME_PATH="/usr/local/bin/nvidia-container-runtime"
+else
+    RUNTIME_PATH="/usr/bin/nvidia-container-runtime"
+fi
+
 install_nvidia_container_toolkit() {
     if command -v apt-get >/dev/null 2>&1; then
         apt-get update
@@ -41,8 +51,23 @@ install_nvidia_container_toolkit() {
         apt-get install -y --no-install-recommends nvidia-container-toolkit
         apt-get clean
         rm -rf /var/lib/apt/lists/*
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf install -y curl ca-certificates gnupg jq
+        curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo \
+            | tee /etc/yum.repos.d/nvidia-container-toolkit.repo >/dev/null
+        dnf install -y nvidia-container-toolkit
+    elif command -v yum >/dev/null 2>&1; then
+        yum install -y curl ca-certificates gnupg jq
+        curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo \
+            | tee /etc/yum.repos.d/nvidia-container-toolkit.repo >/dev/null
+        yum install -y nvidia-container-toolkit
+    elif command -v apk >/dev/null 2>&1; then
+        echo "WARNING: Alpine Linux is not officially supported by NVIDIA Container Toolkit."
+        echo "         The toolkit will not be installed on this distribution."
+        echo "         GPU containers must use the host Docker daemon directly."
+        exit 0
     else
-        echo "ERROR: nvidia-container-toolkit installation is only supported on apt-based systems in this version"
+        echo "ERROR: nvidia-container-toolkit installation is only supported on apt, yum, and dnf based systems"
         exit 1
     fi
 }
@@ -55,11 +80,28 @@ else
     echo "NVIDIA Container Toolkit already installed"
     # Ensure jq is available for daemon.json manipulation
     if ! command -v jq >/dev/null 2>&1; then
-        apt-get update
-        apt-get install -y --no-install-recommends jq
-        apt-get clean
-        rm -rf /var/lib/apt/lists/*
+        if command -v apt-get >/dev/null 2>&1; then
+            apt-get update
+            apt-get install -y --no-install-recommends jq
+            apt-get clean
+            rm -rf /var/lib/apt/lists/*
+        elif command -v dnf >/dev/null 2>&1; then
+            dnf install -y jq
+        elif command -v yum >/dev/null 2>&1; then
+            yum install -y jq
+        elif command -v apk >/dev/null 2>&1; then
+            apk add --no-cache jq
+        fi
     fi
+fi
+
+# Re-detect path after installation in case it moved
+if command -v nvidia-container-runtime >/dev/null 2>&1; then
+    RUNTIME_PATH=$(command -v nvidia-container-runtime)
+elif [ -x /usr/bin/nvidia-container-runtime ]; then
+    RUNTIME_PATH="/usr/bin/nvidia-container-runtime"
+elif [ -x /usr/local/bin/nvidia-container-runtime ]; then
+    RUNTIME_PATH="/usr/local/bin/nvidia-container-runtime"
 fi
 
 # Configure Docker daemon
@@ -71,38 +113,34 @@ if [ -f /etc/docker/daemon.json ]; then
     echo "Existing daemon.json found, merging NVIDIA runtime configuration..."
 
     if [ "$DEFAULT_RUNTIME" = "true" ]; then
-        jq '.runtimes.nvidia = { path: "/usr/bin/nvidia-container-runtime", runtimeArgs: [] } | ."default-runtime" = "nvidia"' \
+        jq --arg path "$RUNTIME_PATH" '.runtimes.nvidia = { path: $path, runtimeArgs: [] } | ."default-runtime" = "nvidia"' \
             /etc/docker/daemon.json > /etc/docker/daemon.json.tmp \
             && mv /etc/docker/daemon.json.tmp /etc/docker/daemon.json
     else
-        jq '.runtimes.nvidia = { path: "/usr/bin/nvidia-container-runtime", runtimeArgs: [] } | del(."default-runtime")' \
+        jq --arg path "$RUNTIME_PATH" '.runtimes.nvidia = { path: $path, runtimeArgs: [] } | del(."default-runtime")' \
             /etc/docker/daemon.json > /etc/docker/daemon.json.tmp \
             && mv /etc/docker/daemon.json.tmp /etc/docker/daemon.json
     fi
 else
     if [ "$DEFAULT_RUNTIME" = "true" ]; then
-        cat > /etc/docker/daemon.json << 'EOF'
-{
-  "runtimes": {
-    "nvidia": {
-      "path": "/usr/bin/nvidia-container-runtime",
-      "runtimeArgs": []
-    }
-  },
-  "default-runtime": "nvidia"
-}
-EOF
+        jq -n --arg path "$RUNTIME_PATH" '{
+          "runtimes": {
+            "nvidia": {
+              "path": $path,
+              "runtimeArgs": []
+            }
+          },
+          "default-runtime": "nvidia"
+        }' > /etc/docker/daemon.json
     else
-        cat > /etc/docker/daemon.json << 'EOF'
-{
-  "runtimes": {
-    "nvidia": {
-      "path": "/usr/bin/nvidia-container-runtime",
-      "runtimeArgs": []
-    }
-  }
-}
-EOF
+        jq -n --arg path "$RUNTIME_PATH" '{
+          "runtimes": {
+            "nvidia": {
+              "path": $path,
+              "runtimeArgs": []
+            }
+          }
+        }' > /etc/docker/daemon.json
     fi
 fi
 
