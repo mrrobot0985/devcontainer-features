@@ -22,10 +22,6 @@ if [ -z "$REMOTE_HOME" ]; then
     fi
 fi
 
-echo "Git Config Manager"
-echo "  User: $REMOTE_USER"
-echo "  Home: $REMOTE_HOME"
-
 # Fallback to host environment variables if options are empty
 if [ -z "$USER_NAME" ]; then
     USER_NAME="${GIT_USER_NAME:-}"
@@ -37,59 +33,64 @@ if [ -z "$GPG_KEY" ]; then
     GPG_KEY="${GIT_SIGNING_KEY:-}"
 fi
 
-# Configure git system-wide so all users benefit, plus per-user for the remote user
-# System config
-if [ -n "$DEFAULT_BRANCH" ]; then
-    echo "Setting git init.defaultBranch: $DEFAULT_BRANCH"
-    git config --system init.defaultBranch "$DEFAULT_BRANCH" 2>/dev/null || true
-fi
+echo "Git Config Manager"
+echo "  User: $REMOTE_USER"
+echo "  Home: $REMOTE_HOME"
 
-echo "Setting git core.autocrlf: $CORE_AUTOCRLF"
-git config --system core.autocrlf "$CORE_AUTOCRLF" 2>/dev/null || true
+# Build git config file content
+GIT_CONFIG_FILE="$REMOTE_HOME/.gitconfig"
+mkdir -p "$REMOTE_HOME"
 
-# Configure safe directories system-wide
-if [ "$SAFE_DIRS" = "*" ]; then
-    echo "Adding all directories to git safe.directory"
-    git config --system --add safe.directory '*' 2>/dev/null || true
-else
-    IFS=',' read -ra DIRS <<< "$SAFE_DIRS"
-    for dir in "${DIRS[@]}"; do
-        dir=$(echo "$dir" | tr -d '[:space:]')
-        if [ -n "$dir" ]; then
-            echo "Adding safe.directory: $dir"
-            git config --system --add safe.directory "$dir" 2>/dev/null || true
-        fi
-    done
-fi
+{
+    echo "[init]"
+    echo "    defaultBranch = $DEFAULT_BRANCH"
+    echo "[core]"
+    echo "    autocrlf = $CORE_AUTOCRLF"
 
-# Configure GPG signing system-wide
-if [ "$COMMIT_GPG_SIGN" = "true" ]; then
-    echo "Enabling GPG commit signing"
-    git config --system commit.gpgsign true 2>/dev/null || true
-
-    if [ -n "$GPG_KEY" ]; then
-        echo "Setting GPG signing key: $GPG_KEY"
-        git config --system user.signingkey "$GPG_KEY" 2>/dev/null || true
+    if [ "$SAFE_DIRS" = "*" ]; then
+        echo "[safe]"
+        echo "    directory = *"
+    else
+        echo "[safe]"
+        IFS=',' read -ra DIRS <<< "$SAFE_DIRS"
+        for dir in "${DIRS[@]}"; do
+            dir=$(echo "$dir" | tr -d '[:space:]')
+            if [ -n "$dir" ]; then
+                echo "    directory = $dir"
+            fi
+        done
     fi
-else
-    echo "GPG commit signing disabled"
-    git config --system commit.gpgsign false 2>/dev/null || true
-fi
 
-# Also set per-user identity if provided
-run_as_user() {
-    su - "$REMOTE_USER" -c "$1" 2>/dev/null || true
-}
+    if [ "$COMMIT_GPG_SIGN" = "true" ]; then
+        echo "[commit]"
+        echo "    gpgsign = true"
+        if [ -n "$GPG_KEY" ]; then
+            echo "[user]"
+            echo "    signingkey = $GPG_KEY"
+        fi
+    else
+        echo "[commit]"
+        echo "    gpgsign = false"
+    fi
 
-if [ -n "$USER_NAME" ]; then
-    echo "Setting git user.name: $USER_NAME"
-    run_as_user "git config --global user.name '$USER_NAME'"
-fi
+    if [ -n "$USER_NAME" ]; then
+        echo "[user]"
+        echo "    name = $USER_NAME"
+    fi
 
-if [ -n "$USER_EMAIL" ]; then
-    echo "Setting git user.email: $USER_EMAIL"
-    run_as_user "git config --global user.email '$USER_EMAIL'"
-fi
+    if [ -n "$USER_EMAIL" ]; then
+        # If [user] section already started above, don't repeat header
+        if [ -z "$USER_NAME" ]; then
+            echo "[user]"
+        fi
+        echo "    email = $USER_EMAIL"
+    fi
+} > "$GIT_CONFIG_FILE"
+
+chown "$REMOTE_USER:$REMOTE_USER" "$GIT_CONFIG_FILE" 2>/dev/null || true
+chmod 644 "$GIT_CONFIG_FILE" 2>/dev/null || true
+
+echo "Git configuration written to $GIT_CONFIG_FILE"
 
 # Install helper script
 cat > /usr/local/bin/git-config-status <<'EOF'
