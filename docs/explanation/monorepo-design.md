@@ -20,7 +20,7 @@ A plain SemVer tag like `v0.1.0` would be ambiguous: which feature does it relea
 ```
 claude-code-backend-v0.1.1
 container-firewall-v0.2.0
-nvidia-container-toolkit-v0.1.1
+container-firewall-v0.1.1
 ```
 
 Developers create and push these tags after bumping `version` in `devcontainer-feature.json`. `.github/workflows/release.yaml` triggers only on `*-v*` tags (or manual dispatch for backfill) and publishes to GHCR. Actions does not mint tags.

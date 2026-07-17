@@ -2,53 +2,21 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
-Configures package manager cache directories to use a named volume mount point,
-reducing container rebuild times by persisting downloaded dependencies across
-rebuilds.
-
-## Features
-
-- **Auto-detection**: Identifies project types by scanning for `package.json`,
-  `Cargo.toml`, `pyproject.toml`, `requirements.txt`, `go.mod`, `pom.xml`, and
-  Gradle build files.
-- **Tool coverage**: npm, yarn, pnpm, pip, uv, cargo, gradle, maven, go.
-- **Prints mount config**: Outputs the exact `mounts` entry needed in
-  `devcontainer.json`.
-
-## Usage
-
-Add to `devcontainer.json`:
-
-```json
-"features": {
-  "ghcr.io/mrrobot0985/devcontainer-features/dependency-cache-manager:0": {}
-}
-```
-
-Then add the named volume mount:
-
-```json
-"mounts": [
-  "source=devcontainer-cache,target=/mnt/devcontainer-cache,type=volume"
-]
-```
+Auto-detects project types and configures package manager cache directories to use a named volume mount point, reducing rebuild times from minutes to seconds
 
 ## Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `autoDetect` | boolean | `true` | Auto-detect project types |
-| `tools` | string | `""` | Comma-separated list of tools to configure |
-| `cachePath` | string | `/mnt/devcontainer-cache` | Base cache directory |
-| `printMountConfig` | boolean | `true` | Print required mount config |
+| Options Id | Description | Type | Default Value |
+| ----- | ----- | ----- | ----- |
+| `autoDetect` | Automatically detect project types and configure appropriate caches | boolean | true |
+| `tools` | Comma-separated list of tools to configure (npm, yarn, pnpm, pip, cargo, gradle, maven, go, uv). Overrides auto-detect when set. | string | "" |
+| `cachePath` | Base path for cache directories. Add a named volume mount targeting this path in devcontainer.json. | string | /mnt/devcontainer-cache |
+| `printMountConfig` | Print the required devcontainer.json mounts configuration after setup | boolean | true |
 
-## Example: Explicit tools
+## Example Usage
 
 ```json
 "features": {
-  "ghcr.io/mrrobot0985/devcontainer-features/dependency-cache-manager:0": {
-    "autoDetect": false,
-    "tools": "npm,cargo,uv"
-  }
+    "ghcr.io/mrrobot0985/devcontainer-features/dependency-cache-manager:1": {}
 }
 ```

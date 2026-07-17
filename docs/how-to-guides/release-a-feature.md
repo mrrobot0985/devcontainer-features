@@ -36,7 +36,7 @@ The tag prefix is always the feature `id` exactly as it appears in `devcontainer
 ```
 claude-code-backend-v0.1.1
 container-firewall-v0.2.0
-nvidia-container-toolkit-v0.1.1
+container-firewall-v0.1.1
 ```
 
 Plain SemVer tags like `v0.1.0` are not used, because they would collide across features.
