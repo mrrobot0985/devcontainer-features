@@ -17,3 +17,7 @@ Installs a simple audit-log script that appends structured JSON events to a work
     "ghcr.io/mrrobot0985/devcontainer-features/claude-code-audit-log:1": {}
 }
 ```
+
+## Alternatives
+
+Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.

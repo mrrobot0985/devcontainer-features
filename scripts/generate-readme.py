@@ -30,6 +30,8 @@ header = f"""# Dev Container Features
 
 Custom dev container features for Claude Code / Ollama environments.
 
+This tree ships **{count} differentiators** (policy, security, agent workflows, and unique stacks)—not bare CLI installers. Pure “install tool X” features live in official or community registries.
+
 ## Namespace
 
 ```text

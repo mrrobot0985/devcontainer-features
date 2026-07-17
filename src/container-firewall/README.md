@@ -93,3 +93,9 @@ Multi-provider evaluation:
 
 Research notes, minimum domain sets, OpenCode/Pi/Hermes guidance, and when to use
 `extraDomains` are documented in [PROVIDER-DOMAINS.md](./PROVIDER-DOMAINS.md).
+
+## Alternatives
+
+Related community feature: `ghcr.io/w3cj/devcontainer-features/firewall:0` (iptables whitelist sandbox, more AI-provider-flag oriented).
+
+**Our delta:** service tags, dry-run, monitor mode, and multi-agent composite tags (`claude-code`, `grok-build`, `codex`, `gemini`, `multi-ai`).

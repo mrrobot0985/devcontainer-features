@@ -19,3 +19,10 @@ Clones a dotfiles repository and applies it to the container user, supporting in
     "ghcr.io/mrrobot0985/devcontainer-features/dotfiles-sync:1": {}
 }
 ```
+
+## Alternatives
+
+- `helpers4/.../dotfiles-sync` — host config bind-sync (git/ssh/etc.)
+- `rio/.../chezmoi` — chezmoi-based management
+
+**Our model:** clone a dotfiles repo and apply it (install script, symlink, or copy). Prefer helpers4 or chezmoi when their model fits better.

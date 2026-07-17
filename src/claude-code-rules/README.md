@@ -20,3 +20,7 @@ Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/r
     "ghcr.io/mrrobot0985/devcontainer-features/claude-code-rules:1": {}
 }
 ```
+
+## Alternatives
+
+Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.

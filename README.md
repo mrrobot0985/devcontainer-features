@@ -5,6 +5,8 @@
 
 Custom dev container features for Claude Code / Ollama environments.
 
+This tree ships **40 differentiators** (policy, security, agent workflows, and unique stacks)—not bare CLI installers. Pure “install tool X” features live in official or community registries.
+
 ## Namespace
 
 ```text
@@ -28,7 +30,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `claude-code-rules` | Installs a curated, condensed set of Claude Code behavior rules into ~/.claude/rules/ | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/claude-code-rules/README.md) |
 | `claude-code-skills` | Installs skills into ~/.claude/skills/ with configurable sources | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/claude-code-skills/README.md) |
 | `cloud-cli-persistence` | Persists cloud CLI authentication state across container rebuilds by validating host credential m... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/cloud-cli-persistence/README.md) |
-| `container-firewall` | Configures an iptables/ipset whitelist firewall for the container with selectable service tags an... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/container-firewall/README.md) |
+| `container-firewall` | Configures an iptables/ipset whitelist firewall for the container with selectable service tags an... | ![Version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square) | [README](src/container-firewall/README.md) |
 | `container-resource-limits` | Enforces CPU and memory resource limits on the devcontainer via cgroup v2 configuration | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/container-resource-limits/README.md) |
 | `dbt-transform` | Installs dbt-core for data transformation pipelines in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square) | [README](src/dbt-transform/README.md) |
 | `dependency-cache-manager` | Auto-detects project types and configures package manager cache directories to use a named volume... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/dependency-cache-manager/README.md) |
@@ -55,6 +57,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `ssh-agent-forward` | Forwards the host SSH agent into the devcontainer for Git operations without copying private keys... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ssh-agent-forward/README.md) |
 | `sudo-audit` | Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sudo-audit/README.md) |
 | `vitepress-docs` | Installs VitePress for building Vite-powered documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/vitepress-docs/README.md) |
+
 ## Documentation
 
 - [Tutorials](docs/tutorials/)

@@ -24,3 +24,7 @@ Installs Claude Code plugins from marketplaces at build time
     "ghcr.io/mrrobot0985/devcontainer-features/claude-code-plugins:1": {}
 }
 ```
+
+## Alternatives
+
+Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.
