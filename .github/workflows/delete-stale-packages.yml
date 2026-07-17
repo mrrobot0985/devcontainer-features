@@ -1,0 +1,83 @@
+# One-shot: delete GHCR packages for features no longer in src/.
+# Remove this workflow after a successful run.
+name: Delete stale GHCR packages
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type delete-stale to confirm'
+        required: true
+
+jobs:
+  delete:
+    if: ${{ github.event.inputs.confirm == 'delete-stale' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Delete stale packages and tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          STALE_PACKAGES=(
+            nvidia-container-toolkit
+            claude-code-sandcastle
+            claude-code-skills-matt-pocock
+          )
+          STALE_TAGS=(
+            nvidia-container-toolkit-v0.1.0
+            nvidia-container-toolkit-v0.1.1
+            nvidia-container-toolkit-v1.0.0
+            claude-code-sandcastle-v0.1.0
+          )
+
+          owner="${{ github.repository_owner }}"
+
+          for feat in "${STALE_PACKAGES[@]}"; do
+            name="devcontainer-features/${feat}"
+            enc=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$name")
+            echo "=== package: $name ==="
+
+            # Prefer user namespace (packages published as user-owned)
+            if gh api "/users/${owner}/packages/container/${enc}" >/tmp/pkg.json 2>/dev/null; then
+              echo "Found under /users/${owner}"
+              # Delete all versions first (sometimes required), then package
+              mapfile -t vids < <(gh api --paginate "/users/${owner}/packages/container/${enc}/versions" --jq '.[].id')
+              for vid in "${vids[@]:-}"; do
+                echo "  delete version id=$vid"
+                gh api -X DELETE "/users/${owner}/packages/container/${enc}/versions/${vid}" || true
+              done
+              echo "  delete package"
+              gh api -X DELETE "/users/${owner}/packages/container/${enc}" || true
+            elif gh api "/user/packages/container/${enc}" >/tmp/pkg.json 2>/dev/null; then
+              echo "Found under /user"
+              mapfile -t vids < <(gh api --paginate "/user/packages/container/${enc}/versions" --jq '.[].id')
+              for vid in "${vids[@]:-}"; do
+                echo "  delete version id=$vid"
+                gh api -X DELETE "/user/packages/container/${enc}/versions/${vid}" || true
+              done
+              echo "  delete package"
+              gh api -X DELETE "/user/packages/container/${enc}" || true
+            else
+              echo "  package not found via API (may already be gone)"
+              cat /tmp/pkg.json 2>/dev/null || true
+            fi
+          done
+
+          echo "=== delete stale git tags ==="
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          # Use gh to delete remote tags (no local clone needed for tag refs)
+          for tag in "${STALE_TAGS[@]}"; do
+            if gh api "/repos/${{ github.repository }}/git/refs/tags/${tag}" >/dev/null 2>&1; then
+              echo "  delete tag $tag"
+              gh api -X DELETE "/repos/${{ github.repository }}/git/refs/tags/${tag}"
+            else
+              echo "  tag $tag already absent"
+            fi
+          done
+
+          echo "Done."
