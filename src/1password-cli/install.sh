@@ -4,36 +4,53 @@ set -e
 # 1password-cli install script
 # Installs the 1Password CLI and a get-secret helper
 
-VERSION="__VERSION__"
+VERSION="${VERSION:-latest}"
 ARCH="$(uname -m)"
 
 # Map architecture
-if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    ARCH_LABEL="arm64"
-else
-    ARCH_LABEL="amd64"
+case "$ARCH" in
+    aarch64|arm64) ARCH_LABEL="arm64" ;;
+    armv7l|arm) ARCH_LABEL="arm" ;;
+    i386|i686) ARCH_LABEL="386" ;;
+    *) ARCH_LABEL="amd64" ;;
+esac
+
+# Ensure download tools
+if ! command -v curl >/dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y -qq curl ca-certificates >/dev/null
+fi
+if ! command -v unzip >/dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y -qq unzip >/dev/null
 fi
 
-# Determine version
-if [ "$VERSION" = "latest" ]; then
-    VERSION=""
-else
-    VERSION="v${VERSION}"
+# Resolve "latest" to a concrete stable release (exclude betas)
+if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
+    echo "Resolving latest 1Password CLI version..."
+    VERSION=$(curl -fsSL "https://app-updates.agilebits.com/product_history/CLI2" \
+        | grep -oE 'pkg/v[0-9]+\.[0-9]+\.[0-9]+/' \
+        | grep -v beta \
+        | head -1 \
+        | sed 's|pkg/v||; s|/||')
+    if [ -z "$VERSION" ]; then
+        echo "WARNING: Could not resolve latest version; using fallback 2.35.0"
+        VERSION="2.35.0"
+    fi
 fi
+VERSION="${VERSION#v}"
 
-# Download and install 1Password CLI
-echo "Installing 1Password CLI (${VERSION:-latest} ${ARCH_LABEL})..."
+echo "Installing 1Password CLI (v${VERSION} ${ARCH_LABEL})..."
 
-OP_URL="https://cache.agilebits.com/dist/1P/op2/pkg/${VERSION:-latest}/op_linux_${ARCH_LABEL}_${VERSION:-latest}.zip"
-# Try with version in path, fallback to latest
-if ! curl -fsSL "$OP_URL" -o /tmp/op.zip 2>/dev/null; then
-    OP_URL="https://cache.agilebits.com/dist/1P/op2/pkg/latest/op_linux_${ARCH_LABEL}_latest.zip"
-    curl -fsSL "$OP_URL" -o /tmp/op.zip
+OP_URL="https://cache.agilebits.com/dist/1P/op2/pkg/v${VERSION}/op_linux_${ARCH_LABEL}_v${VERSION}.zip"
+curl -fsSL "$OP_URL" -o /tmp/op.zip
+
+unzip -o /tmp/op.zip -d /tmp/op-extract
+install -m 755 /tmp/op-extract/op /usr/local/bin/op
+rm -rf /tmp/op.zip /tmp/op-extract
+
+if ! command -v op >/dev/null 2>&1; then
+    echo "ERROR: 1Password CLI installation failed"
+    exit 1
 fi
-
-unzip -o /tmp/op.zip -d /usr/local/bin/ op 2>/dev/null || true
-chmod +x /usr/local/bin/op
-rm -f /tmp/op.zip
 
 # Install get-secret helper
 cat > /usr/local/bin/get-secret <<'EOF'
@@ -65,5 +82,5 @@ EOF
 
 chmod +x /usr/local/bin/get-secret
 
-echo "1Password CLI installed."
+echo "1Password CLI installed: $(op --version 2>/dev/null || echo "ok")"
 echo "  Run 'get-secret <vault> <item> <field>' to retrieve secrets."
