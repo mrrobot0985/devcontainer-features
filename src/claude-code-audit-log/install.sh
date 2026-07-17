@@ -11,12 +11,16 @@ if ! command -v jq >/dev/null 2>&1; then
     apt-get update -qq && apt-get install -y -qq jq >/dev/null
 fi
 
-# Create log directory owned by the remote user (install runs as root)
+# Create log directory. Install runs as root; tests and the remote user write
+# as a non-root account. Prefer chown to the remote user, and always make the
+# directory sticky world-writable so appends succeed even when _REMOTE_USER is
+# unset during install (feature test scenarios).
 mkdir -p "$LOG_DIR"
-REMOTE_USER="${_REMOTE_USER:-vscode}"
+REMOTE_USER="${_REMOTE_USER:-${USERNAME:-vscode}}"
 if id "$REMOTE_USER" >/dev/null 2>&1; then
     chown -R "$REMOTE_USER:$REMOTE_USER" "$LOG_DIR" 2>/dev/null || true
 fi
+chmod 1777 "$LOG_DIR" 2>/dev/null || true
 
 # Persist configured directory for the helper default
 mkdir -p /usr/local/etc
