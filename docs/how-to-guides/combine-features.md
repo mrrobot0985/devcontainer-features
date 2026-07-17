@@ -6,12 +6,12 @@ This guide explains how to use multiple devcontainer features together without c
 
 Templates for Claude, Grok, Codex, Pi, Hermes, Gemini, OpenCode, and multi-ai should share the same **agent-agnostic security floor**. Agent CLIs and product-specific suites sit *on top* of this floor; they do not replace it.
 
-| Layer | Role |
-| ----- | ---- |
-| `non-root-enforcer` | Audit: refuse or warn when `remoteUser` is root |
-| `ai-agent-sandbox` | Audit: tiered runtime posture check (`moderate` recommended) — see [ai-agent-sandbox](../../src/ai-agent-sandbox/README.md) and [#82](https://github.com/mrrobot0985/devcontainer-features/issues/82) |
-| `container-firewall` | Enforce: iptables/ipset whitelist via service tags — multi-agent tags in [#77](https://github.com/mrrobot0985/devcontainer-features/issues/77), publish in [#79](https://github.com/mrrobot0985/devcontainer-features/issues/79) |
-| Named volume for agent home | Persist auth/settings across rebuilds (path depends on the agent) |
+| Layer                       | Role                                                                                                                                                                                                                             |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `non-root-enforcer`         | Audit: refuse or warn when `remoteUser` is root                                                                                                                                                                                  |
+| `ai-agent-sandbox`          | Audit: tiered runtime posture check (`moderate` recommended) — see [ai-agent-sandbox](../../src/ai-agent-sandbox/README.md) and [#82](https://github.com/mrrobot0985/devcontainer-features/issues/82)                            |
+| `container-firewall`        | Enforce: iptables/ipset whitelist via service tags — multi-agent tags in [#77](https://github.com/mrrobot0985/devcontainer-features/issues/77), publish in [#79](https://github.com/mrrobot0985/devcontainer-features/issues/79) |
+| Named volume for agent home | Persist auth/settings across rebuilds (path depends on the agent)                                                                                                                                                                |
 
 Studio templates add Docker-in-Docker isolation, host-isolation audit, and optional resource/MCP layers.
 
@@ -51,24 +51,24 @@ Use for single-agent CLI templates (and as the base of multi-ai). Keep the floor
 
 **Firewall service tags (agent-specific):**
 
-| Primary agent | `services` value | Notes |
-| ------------- | ---------------- | ----- |
-| Claude Code | `claude-code` | Composite: github, npm, anthropic, vscode |
-| Grok Build | `grok-build` | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77)) |
-| OpenAI Codex | `codex` | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77)) |
-| Gemini CLI | `gemini` | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77)) |
-| Multi-AI / several agents | `multi-ai` | Union of first-class agent endpoints ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77)) |
+| Primary agent             | `services` value | Notes                                                                                                        |
+| ------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| Claude Code               | `claude-code`    | Composite: github, npm, anthropic, vscode                                                                    |
+| Grok Build                | `grok-build`     | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77))            |
+| OpenAI Codex              | `codex`          | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77))            |
+| Gemini CLI                | `gemini`         | Requires multi-agent tags ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77))            |
+| Multi-AI / several agents | `multi-ai`       | Union of first-class agent endpoints ([#77](https://github.com/mrrobot0985/devcontainer-features/issues/77)) |
 
 Until multi-agent tags are published ([#79](https://github.com/mrrobot0985/devcontainer-features/issues/79)), pin published tags only and extend with `extraDomains` if you must unblock a provider early.
 
 **Agent home volumes (examples):**
 
-| Agent | Typical mount target |
-| ----- | -------------------- |
+| Agent       | Typical mount target   |
+| ----------- | ---------------------- |
 | Claude Code | `/home/vscode/.claude` |
-| Grok Build | `/home/vscode/.grok` |
-| Codex | `/home/vscode/.codex` |
-| Gemini | `/home/vscode/.gemini` |
+| Grok Build  | `/home/vscode/.grok`   |
+| Codex       | `/home/vscode/.codex`  |
+| Gemini      | `/home/vscode/.gemini` |
 
 Add Node and `github-cli` only when the agent or MCP layer needs them.
 
@@ -117,17 +117,18 @@ Studio builds on agent-minimal for environments that need inner Docker and stron
 
 **Studio additions vs agent-minimal:**
 
-| Addition | Why |
-| -------- | --- |
-| `docker-in-docker` | Inner containers for agent tools / builds |
-| `host-isolation` | Audit unsafe `runArgs`, docker.sock binds, excessive caps |
-| `container-firewall` services include `docker` | Whitelist Docker Hub / registry domains for DinD pulls |
-| optional `container-resource-limits` | Cap CPU/memory for runaway agent workloads |
-| optional `mcp-server-manager` | Agent-agnostic MCP ([#80](https://github.com/mrrobot0985/devcontainer-features/issues/80)); do **not** use `claude-code-mcp-*` on non-Claude agents |
+| Addition                                       | Why                                                                                                                                                 |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docker-in-docker`                             | Inner containers for agent tools / builds                                                                                                           |
+| `host-isolation`                               | Audit unsafe `runArgs`, docker.sock binds, excessive caps                                                                                           |
+| `container-firewall` services include `docker` | Whitelist Docker Hub / registry domains for DinD pulls                                                                                              |
+| optional `container-resource-limits`           | Cap CPU/memory for runaway agent workloads                                                                                                          |
+| optional `mcp-server-manager`                  | Agent-agnostic MCP ([#80](https://github.com/mrrobot0985/devcontainer-features/issues/80)); do **not** use `claude-code-mcp-*` on non-Claude agents |
 
 ### Explicit do-nots
 
 1. **Do not** put Claude-only features on non-Claude agents:
+
    - `claude-code-backend`
    - `claude-code-privacy`
    - `claude-code-hooks`
@@ -163,11 +164,11 @@ Community `grok-build` installs the CLI and persists `~/.grok`. Pin a current ma
 
 **Alternatives note (Grok install):**
 
-| Option | When to use |
-| ------ | ----------- |
-| `ghcr.io/sliekens/devcontainer-features/grok-build:1` | **Default** — community installer with home persistence |
-| Template `bootstrap.sh` install | Fallback only if the community feature cannot be resolved |
-| Bare monorepo `xai-cli` feature | **Do not revive** unless it adds policy beyond install |
+| Option                                                | When to use                                               |
+| ----------------------------------------------------- | --------------------------------------------------------- |
+| `ghcr.io/sliekens/devcontainer-features/grok-build:1` | **Default** — community installer with home persistence   |
+| Template `bootstrap.sh` install                       | Fallback only if the community feature cannot be resolved |
+| Bare monorepo `xai-cli` feature                       | **Do not revive** unless it adds policy beyond install    |
 
 Compose Grok templates as: **agent-minimal or agent-studio floor** + community `grok-build` + `container-firewall` services `grok-build` (after [#77](https://github.com/mrrobot0985/devcontainer-features/issues/77) / [#79](https://github.com/mrrobot0985/devcontainer-features/issues/79)).
 
@@ -297,11 +298,11 @@ Docker-in-docker is expected in agent-studio. Keep the sandbox on `moderate` (or
 
 ## Related issues
 
-| Issue | Topic |
-| ----- | ----- |
-| [#77](https://github.com/mrrobot0985/devcontainer-features/issues/77) | Multi-agent `container-firewall` service tags |
-| [#78](https://github.com/mrrobot0985/devcontainer-features/issues/78) | This security floor guide |
-| [#79](https://github.com/mrrobot0985/devcontainer-features/issues/79) | Publish firewall with multi-agent tags |
-| [#80](https://github.com/mrrobot0985/devcontainer-features/issues/80) | `mcp-server-manager` for multi-ai / studios |
-| [#82](https://github.com/mrrobot0985/devcontainer-features/issues/82) | `ai-agent-sandbox` presets for the floor |
+| Issue                                                                 | Topic                                            |
+| --------------------------------------------------------------------- | ------------------------------------------------ |
+| [#77](https://github.com/mrrobot0985/devcontainer-features/issues/77) | Multi-agent `container-firewall` service tags    |
+| [#78](https://github.com/mrrobot0985/devcontainer-features/issues/78) | This security floor guide                        |
+| [#79](https://github.com/mrrobot0985/devcontainer-features/issues/79) | Publish firewall with multi-agent tags           |
+| [#80](https://github.com/mrrobot0985/devcontainer-features/issues/80) | `mcp-server-manager` for multi-ai / studios      |
+| [#82](https://github.com/mrrobot0985/devcontainer-features/issues/82) | `ai-agent-sandbox` presets for the floor         |
 | [#83](https://github.com/mrrobot0985/devcontainer-features/issues/83) | No bare `xai-cli`; prefer community `grok-build` |
