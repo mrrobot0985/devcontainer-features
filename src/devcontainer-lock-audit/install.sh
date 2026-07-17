@@ -4,9 +4,16 @@ set -e
 # devcontainer-lock-audit install script
 # Installs a validation script for .devcontainer-lock.json
 
-# Template variables replaced during feature build
-# FAIL_ON_MISSING="__FAILONMISSING__"
-# FAIL_ON_STALE="__FAILONSTALE__"
+FAIL_ON_MISSING="${FAILONMISSING:-true}"
+FAIL_ON_STALE="${FAILONSTALE:-true}"
+
+if ! command -v jq >/dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y -qq jq >/dev/null
+fi
+
+mkdir -p /usr/local/etc
+printf '%s\n' "$FAIL_ON_MISSING" > /usr/local/etc/devcontainer-lock-audit-fail-on-missing
+printf '%s\n' "$FAIL_ON_STALE" > /usr/local/etc/devcontainer-lock-audit-fail-on-stale
 
 cat > /usr/local/bin/devcontainer-lock-audit <<'EOF'
 #!/bin/bash
@@ -17,8 +24,22 @@ set -e
 
 LOCKFILE="${DEVCONTAINER_LOCKFILE:-/workspace/.devcontainer/devcontainer-lock.json}"
 CONFIG="${DEVCONTAINER_CONFIG:-/workspace/.devcontainer/devcontainer.json}"
-FAIL_ON_MISSING="${FAIL_ON_MISSING:-true}"
-FAIL_ON_STALE="${FAIL_ON_STALE:-true}"
+
+if [ -n "${FAIL_ON_MISSING:-}" ]; then
+    :
+elif [ -f /usr/local/etc/devcontainer-lock-audit-fail-on-missing ]; then
+    FAIL_ON_MISSING="$(cat /usr/local/etc/devcontainer-lock-audit-fail-on-missing)"
+else
+    FAIL_ON_MISSING="true"
+fi
+if [ -n "${FAIL_ON_STALE:-}" ]; then
+    :
+elif [ -f /usr/local/etc/devcontainer-lock-audit-fail-on-stale ]; then
+    FAIL_ON_STALE="$(cat /usr/local/etc/devcontainer-lock-audit-fail-on-stale)"
+else
+    FAIL_ON_STALE="true"
+fi
+
 ERRORS=0
 
 error() {
@@ -37,12 +58,10 @@ if [ ! -f "$LOCKFILE" ]; then
         warn "Lockfile not found: $LOCKFILE"
     fi
 else
-    # Validate JSON structure
     if ! jq -e 'has("features")' "$LOCKFILE" >/dev/null 2>&1; then
         error "Lockfile missing 'features' key: $LOCKFILE"
     fi
 
-    # Check staleness if config exists
     if [ -f "$CONFIG" ] && [ "$FAIL_ON_STALE" = "true" ]; then
         lock_mtime=$(stat -c %Y "$LOCKFILE" 2>/dev/null || stat -f %m "$LOCKFILE")
         config_mtime=$(stat -c %Y "$CONFIG" 2>/dev/null || stat -f %m "$CONFIG")
@@ -51,11 +70,10 @@ else
         fi
     fi
 
-    # Verify every feature in config has a lock entry
     if [ -f "$CONFIG" ] && command -v jq >/dev/null 2>&1; then
         config_features=$(jq -r '.features // {} | keys[]' "$CONFIG" 2>/dev/null || true)
         for feat in $config_features; do
-            if ! jq -e ".features | has(\"$feat\")" "$LOCKFILE" >/dev/null 2>&1; then
+            if ! jq -e --arg f "$feat" '.features | has($f)' "$LOCKFILE" >/dev/null 2>&1; then
                 error "Feature '$feat' in devcontainer.json but not in lockfile"
             fi
         done

@@ -11,9 +11,12 @@ if ! command -v jq >/dev/null 2>&1; then
     apt-get update -qq && apt-get install -y -qq jq >/dev/null
 fi
 
-# Create log directory if it does not exist
+# Create log directory owned by the remote user (install runs as root)
 mkdir -p "$LOG_DIR"
-chown "$(id -u):$(id -g)" "$LOG_DIR" 2>/dev/null || true
+REMOTE_USER="${_REMOTE_USER:-vscode}"
+if id "$REMOTE_USER" >/dev/null 2>&1; then
+    chown -R "$REMOTE_USER:$REMOTE_USER" "$LOG_DIR" 2>/dev/null || true
+fi
 
 # Persist configured directory for the helper default
 mkdir -p /usr/local/etc

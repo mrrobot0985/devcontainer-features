@@ -36,10 +36,20 @@ case "$(uname -m)" in
 esac
 
 if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
-    DOWNLOAD_URL="https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_${VERSION}_linux_${ARCH}.tar.gz"
-else
-    DOWNLOAD_URL="https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_${ARCH}.tar.gz"
+    echo "Resolving latest Gitleaks version..."
+    VERSION=$(curl -fsSL "https://api.github.com/repos/gitleaks/gitleaks/releases/latest" \
+        | grep -oE '"tag_name":\s*"v?[0-9]+\.[0-9]+\.[0-9]+' \
+        | head -1 \
+        | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+    if [ -z "$VERSION" ]; then
+        echo "WARNING: Could not resolve latest Gitleaks version, using fallback 8.21.2"
+        VERSION="8.21.2"
+    fi
+    echo "Latest Gitleaks version: $VERSION"
 fi
+VERSION="${VERSION#v}"
+
+DOWNLOAD_URL="https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_${ARCH}.tar.gz"
 
 # Download and extract
 curl -fsSL "$DOWNLOAD_URL" -o /tmp/gitleaks.tar.gz || {
