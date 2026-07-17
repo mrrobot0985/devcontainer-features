@@ -43,11 +43,11 @@ jobs:
           base_image="mcr.microsoft.com/devcontainers/base:ubuntu"
           echo "base_image=${base_image}" >> "$GITHUB_OUTPUT"
 
-          all_features="$(
+          mapfile -t all_arr < <(
             find src -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort
-          )"
+          )
+          selected_arr=()
 
-          select_features=""
           if [ "$EVENT_NAME" = "pull_request" ] && [ -n "${BASE_REF:-}" ]; then
             if git fetch --no-tags --depth=1 origin "$BASE_REF"; then
               mapfile -t changed_arr < <(
@@ -59,44 +59,41 @@ jobs:
               # Workflow/test harness changes affect all features — run full set.
               if git diff --name-only "origin/${BASE_REF}...HEAD" \
                   | grep -qE '^(\.github/workflows/test\.yaml|scripts/)'; then
-                select_features="$all_features"
+                selected_arr=("${all_arr[@]}")
                 echo "PR touches test harness/workflows — testing all features."
-              else
-                # Keep only ids that still exist under src/
-                if [ "${#changed_arr[@]}" -gt 0 ]; then
-                  select_features="$(
-                    comm -12 \
-                      <(printf '%s\n' "${changed_arr[@]}") \
-                      <(printf '%s\n' $all_features)
-                  )"
-                else
-                  select_features=""
-                fi
+              elif [ "${#changed_arr[@]}" -gt 0 ]; then
+                mapfile -t selected_arr < <(
+                  comm -12 \
+                    <(printf '%s\n' "${changed_arr[@]}") \
+                    <(printf '%s\n' "${all_arr[@]}")
+                )
                 echo "PR changed features:"
-                if [ -n "$select_features" ]; then
-                  printf '%s\n' $select_features
+                if [ "${#selected_arr[@]}" -gt 0 ]; then
+                  printf '%s\n' "${selected_arr[@]}"
                 else
                   echo "(none — feature test matrices will be skipped)"
                 fi
+              else
+                echo "PR changed no feature paths — feature test matrices will be skipped."
               fi
             else
               echo "WARN: could not fetch origin/${BASE_REF}; testing all features."
-              select_features="$all_features"
+              selected_arr=("${all_arr[@]}")
             fi
           else
-            select_features="$all_features"
+            selected_arr=("${all_arr[@]}")
             echo "Branch/dispatch (or missing base_ref) — testing all features."
           fi
 
           features_json="$(
-            if [ -n "$select_features" ]; then
-              printf '%s\n' $select_features
+            if [ "${#selected_arr[@]}" -gt 0 ]; then
+              printf '%s\n' "${selected_arr[@]}"
             fi | jq -R -s -c 'split("\n") | map(select(length > 0))'
           )"
 
           scenarios_json="$(
-            if [ -n "$select_features" ]; then
-              for id in $select_features; do
+            if [ "${#selected_arr[@]}" -gt 0 ]; then
+              for id in "${selected_arr[@]}"; do
                 if [ -f "test/${id}/scenarios.json" ]; then
                   printf '%s\n' "$id"
                 fi
