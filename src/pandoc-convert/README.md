@@ -1,6 +1,6 @@
 # Pandoc Document Converter
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square)
 
 Installs Pandoc universal document converter with optional LaTeX support for PDF generation.
 

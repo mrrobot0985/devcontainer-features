@@ -19,10 +19,15 @@ if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
     fi
 fi
 
-ARCH="$(uname -m)"
-if [ "$ARCH" = "aarch64" ]; then
-    ARCH="arm64"
-fi
+# Pandoc Linux release assets use amd64/arm64 (not uname -m values like x86_64).
+case "$(uname -m)" in
+    x86_64|amd64) ARCH="amd64" ;;
+    aarch64|arm64) ARCH="arm64" ;;
+    *)
+        echo "ERROR: Unsupported architecture: $(uname -m)"
+        exit 1
+        ;;
+esac
 
 get_latest_version() {
     curl -fsSL "https://api.github.com/repos/jgm/pandoc/releases/latest" 2>/dev/null | grep '"tag_name":' | head -n1 | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/' || echo ""
@@ -38,17 +43,25 @@ fi
 
 VERSION="${VERSION#v}"
 
+# Assets: pandoc-${VERSION}-linux-{amd64,arm64}.tar.gz
 PANDOC_URL="https://github.com/jgm/pandoc/releases/download/${VERSION}/pandoc-${VERSION}-linux-${ARCH}.tar.gz"
 
-echo "Installing Pandoc ${VERSION}..."
+echo "Installing Pandoc ${VERSION} (${ARCH}) from ${PANDOC_URL}..."
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-curl -fsSL "$PANDOC_URL" -o "${TEMP_DIR}/pandoc.tar.gz"
+if ! curl -fsSL "$PANDOC_URL" -o "${TEMP_DIR}/pandoc.tar.gz"; then
+    echo "ERROR: Failed to download Pandoc from ${PANDOC_URL}"
+    exit 1
+fi
 tar -xzf "${TEMP_DIR}/pandoc.tar.gz" -C "$TEMP_DIR" --strip-components=1
-mv "${TEMP_DIR}/bin/pandoc" /usr/local/bin/pandoc
-chmod +x /usr/local/bin/pandoc
+if [ ! -f "${TEMP_DIR}/bin/pandoc" ]; then
+    echo "ERROR: pandoc binary not found in release archive"
+    exit 1
+fi
+install -m 755 "${TEMP_DIR}/bin/pandoc" /usr/local/bin/pandoc
 rm -rf "$TEMP_DIR"
+trap - EXIT
 
 echo "Pandoc installed: $(pandoc --version | head -n1)"
 

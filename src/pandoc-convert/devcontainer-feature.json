@@ -1,6 +1,6 @@
 {
   "id": "pandoc-convert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Pandoc Document Converter",
   "description": "Installs Pandoc universal document converter with optional LaTeX support",
   "documentationURL": "https://github.com/BrainXio/devcontainer-features/tree/main/features/src/pandoc-convert",
