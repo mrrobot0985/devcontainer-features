@@ -22,5 +22,22 @@
                 "blockTelemetry": true
             }
         }
+    },
+    "agent_security_floor": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "remoteUser": "vscode",
+        "features": {
+            "non-root-enforcer": {
+                "failOnWarning": false
+            },
+            "ai-agent-sandbox": {
+                "preset": "moderate",
+                "failOnWarning": false
+            },
+            "container-firewall": {
+                "services": "multi-ai",
+                "dryRun": true
+            }
+        }
     }
 }

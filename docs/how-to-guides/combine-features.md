@@ -72,6 +72,12 @@ Until multi-agent tags are published ([#79](https://github.com/mrrobot0985/devco
 
 Add Node and `github-cli` only when the agent or MCP layer needs them.
 
+**CI coverage:** the agent-minimal floor is exercised in CI by the single global scenario `agent_security_floor` in [`test/_global/scenarios.json`](../../test/_global/scenarios.json) (`non-root-enforcer` + `ai-agent-sandbox` moderate with `failOnWarning: false` + `container-firewall` `services: multi-ai` with `dryRun: true` so the job does not require `CAP_NET_ADMIN`). Assertions live in [`test/_global/agent_security_floor.sh`](../../test/_global/agent_security_floor.sh). Run locally with:
+
+```bash
+devcontainer features test --global-scenarios-only .
+```
+
 ### agent-studio
 
 Studio builds on agent-minimal for environments that need inner Docker and stronger host-side audit:

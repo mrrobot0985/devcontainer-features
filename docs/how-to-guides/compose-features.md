@@ -4,7 +4,9 @@ Most real dev containers combine several features at once. This guide explains h
 
 ## A composed example
 
-The `test/_global/scenarios.json` file defines a `claude_stack` scenario that installs the official Claude Code feature together with several features from this repository:
+The `test/_global/scenarios.json` file defines integration scenarios that install several features together. `claude_stack` composes the official Claude Code feature with Claude suite helpers and the firewall. `agent_security_floor` composes the agent-minimal security floor (`non-root-enforcer`, `ai-agent-sandbox` moderate, `container-firewall` with `multi-ai` dry-run) and is the CI coverage for that floor (see [How to Combine Features](combine-features.md#agent-minimal)).
+
+`claude_stack` example:
 
 ```jsonc
 {
