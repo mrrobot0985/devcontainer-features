@@ -57,7 +57,6 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 | `ssh-agent-forward` | Forwards the host SSH agent into the devcontainer for Git operations without copying private keys... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ssh-agent-forward/README.md) |
 | `sudo-audit` | Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD d... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/sudo-audit/README.md) |
 | `vitepress-docs` | Installs VitePress for building Vite-powered documentation websites in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/vitepress-docs/README.md) |
-
 ## Documentation
 
 - [Tutorials](docs/tutorials/)
