@@ -105,10 +105,19 @@ check_capabilities() {
 
 probe_domain() {
     local domain="\$1"
+    # Connectivity only — ignore HTTP status. Sites like crates.io return 403
+    # to bare GET, which must not count as "unreachable" for the audit.
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL --connect-timeout 3 --max-time 5 "https://\$domain" >/dev/null 2>&1 && return 0 || return 1
+        # Omit -f so non-2xx still means the host was reached.
+        curl -sS --connect-timeout 3 --max-time 5 -o /dev/null "https://\$domain" 2>/dev/null && return 0 || return 1
     elif command -v wget >/dev/null 2>&1; then
-        wget --timeout=5 -qO- "https://\$domain" >/dev/null 2>&1 && return 0 || return 1
+        # wget: 0 = success, 8 = server error response (host reached)
+        wget --timeout=5 -q --spider "https://\$domain" 2>/dev/null
+        local rc=\$?
+        if [ "\$rc" -eq 0 ] || [ "\$rc" -eq 8 ]; then
+            return 0
+        fi
+        return 1
     else
         return 1
     fi

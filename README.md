@@ -15,7 +15,7 @@ ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 
 | Feature | Description | Version | README |
 | ------- | ----------- | ------- | ------ |
-| `ai-agent-sandbox` | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime pos... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/ai-agent-sandbox/README.md) |
+| `ai-agent-sandbox` | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime pos... | ![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square) | [README](src/ai-agent-sandbox/README.md) |
 | `astro-docs` | Installs Astro CLI for building fast content sites and documentation in devcontainers | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/astro-docs/README.md) |
 | `bruno-api-testing` | Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcont... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/bruno-api-testing/README.md) |
 | `claude-code-audit-log` | Installs a simple audit-log script that appends structured JSON events to a workspace file for co... | ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square) | [README](src/claude-code-audit-log/README.md) |

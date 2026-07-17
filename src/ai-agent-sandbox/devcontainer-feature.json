@@ -1,7 +1,7 @@
 {
   "id": "ai-agent-sandbox",
   "name": "AI Agent Sandbox",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected.",
   "options": {
     "preset": {

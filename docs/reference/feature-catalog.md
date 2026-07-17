@@ -7,7 +7,7 @@ Auto-generated from `devcontainer-feature.json` definitions.
 | Feature | Version | Description | Options |
 | ------- | ------- | ----------- | ------- |
 
-| `ai-agent-sandbox` | 1.0.0 | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected. | `preset` (string, default: moderate)<br>`failOnWarning` (boolean, default: false)<br>`allowedDomains` (string, default: github.com,registry.npmjs.org,pypi.org,crates.io) |
+| `ai-agent-sandbox` | 1.0.1 | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected. | `preset` (string, default: moderate)<br>`failOnWarning` (boolean, default: false)<br>`allowedDomains` (string, default: github.com,registry.npmjs.org,pypi.org,crates.io) |
 | `astro-docs` | 1.0.0 | Installs Astro CLI for building fast content sites and documentation in devcontainers | `version` (string, default: latest)<br>`installTypeScript` (boolean, default: true) |
 | `bruno-api-testing` | 1.0.0 | Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcontainers | `version` (string, default: latest)<br>`globalInstall` (boolean, default: true) |
 | `claude-code-audit-log` | 1.0.0 | Installs a simple audit-log script that appends structured JSON events to a workspace file for compliance and post-incident review | `logDir` (string, default: /workspace/.audit-logs) |
