@@ -1,0 +1,49 @@
+# GHCR lag gate — fail closed when template-consumed feature majors are unreadable.
+#
+# Runs:
+#   - on a schedule (detect silent GHCR lag)
+#   - before release publish (tag push / manual dispatch of this workflow)
+#   - on push to main / PR when the gate script or release workflow changes
+#
+# Does NOT publish or re-tag packages.
+
+name: "GHCR major lag gate"
+
+on:
+  schedule:
+    # Daily — catch lag between git tags and GHCR floating majors
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/check-ghcr-majors.sh"
+      - ".github/workflows/ghcr-lag-gate.yml"
+      - ".github/workflows/release.yaml"
+  pull_request:
+    paths:
+      - "scripts/check-ghcr-majors.sh"
+      - ".github/workflows/ghcr-lag-gate.yml"
+      - ".github/workflows/release.yaml"
+
+jobs:
+  ghcr-majors:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Resolve template-consumed and critical feature majors on GHCR"
+        env:
+          # Prefer docker manifest inspect; GITHUB_TOKEN helps private packages if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/check-ghcr-majors.sh
+          # TEMPLATES_SRC is unset in this repo alone; critical set still gates.
+          # When checked out inside the monorepo workspace, set TEMPLATES_SRC
+          # via workflow_dispatch inputs in a future monorepo caller if needed.
+          ./scripts/check-ghcr-majors.sh

@@ -5,6 +5,7 @@ This repository includes a small set of local helpers that keep the monorepo con
 | Script / Hook                         | Purpose                                                                                                                                                                                                |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `scripts/local-ci.sh`                 | Local pre-push gate. Runs shellcheck, README sync checks, workflow validation via `act`, dry-run release, and feature smoke tests. Not invoked by CI; it is a convenience helper.                      |
+| `scripts/check-ghcr-majors.sh`        | Fail-closed GHCR lag gate: resolves major tags (`:1`) for critical / template-consumed feature IDs via docker/crane/oras/gh. Used by release CI and `ghcr-lag-gate.yml`. Does not publish.             |
 | `scripts/generate-feature-readmes.py` | Generates or updates `src/<feature>/README.md` files from `devcontainer-feature.json` metadata. Run manually, or let the pre-commit hook run it.                                                       |
 | `.githooks/pre-commit`                | Git hook installed with `git config core.hooksPath .githooks`. Auto-generates missing feature READMEs and blocks commits where `devcontainer-feature.json` is staged without its matching `README.md`. |
 
@@ -31,6 +32,24 @@ Run the local gate before every push:
 
 - Full matrix tests via `act` can hit Docker-in-Docker edge cases. Use the Dev Container CLI directly for broad matrix validation.
 - The script needs an authenticated `gh` CLI to inject `GITHUB_TOKEN` into the dry-run release job.
+
+## `scripts/check-ghcr-majors.sh`
+
+Fail-closed check that consumer majors are pullable/resolvable on GHCR.
+
+```bash
+./scripts/check-ghcr-majors.sh
+./scripts/check-ghcr-majors.sh container-firewall non-root-enforcer
+FEATURE_IDS=ai-agent-sandbox,host-isolation ./scripts/check-ghcr-majors.sh
+```
+
+ID sources (union):
+
+1. Positional args / `FEATURE_IDS`
+1. Hardcoded critical set (template-known: `non-root-enforcer`, `ai-agent-sandbox`, `container-firewall`, Claude suite IDs, `host-isolation`, `mcp-server-manager`, …)
+1. Grep of `TEMPLATES_SRC` or `../../templates/src` when the monorepo checkout is present
+
+Resolution: `docker manifest inspect`, else `crane`, `oras`, or `gh` packages API.
 
 ## `scripts/generate-feature-readmes.py`
 

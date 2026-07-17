@@ -20,7 +20,27 @@ on:
         default: "backfill"
 
 jobs:
+  # Fail closed if template-consumed / critical majors are already unreadable on
+  # GHCR *before* we publish. Does not mass re-publish; only gates deploy.
+  ghcr-lag-gate:
+    if: ${{ github.event_name == 'workflow_dispatch' || (startsWith(github.ref, 'refs/tags/') && contains(github.ref, '-v')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "GHCR major lag gate (critical + templates if present)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/check-ghcr-majors.sh
+          ./scripts/check-ghcr-majors.sh
+
   deploy:
+    needs: [ghcr-lag-gate]
     if: ${{ github.event_name == 'workflow_dispatch' || (startsWith(github.ref, 'refs/tags/') && contains(github.ref, '-v')) }}
     runs-on: ubuntu-latest
     permissions:

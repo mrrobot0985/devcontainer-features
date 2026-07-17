@@ -38,6 +38,7 @@ The hook:
 | Script                                | Purpose                                                                                         |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `scripts/local-ci.sh`                 | Local pre-push gate. Convenience only; CI runs the same checks independently in GitHub Actions. |
+| `scripts/check-ghcr-majors.sh`        | Fail-closed GHCR lag gate for template-consumed / critical feature majors (`:1`).               |
 | `scripts/generate-feature-readmes.py` | Generates/updates feature READMEs from JSON metadata. Run manually or via the pre-commit hook.  |
 
 ## CI Gate
@@ -91,18 +92,31 @@ A single git tag namespace is shared across all features. Without a prefix, `v0.
 Before bumping a feature version:
 
 1. **Table first** — list `src/*` id → json `version` → GHCR tags → content changed since last tag? (`none` / `bump+tag` / `document unreleased`).
-2. **Bump only yes rows** — no bulk vanity re-tag of untouched `1.0.0`. Skip Freeze/Delete-candidate polish.
-3. **Tag** — `git tag -s <id>-vX.Y.Z -m "…"` then push the tag.
-4. **Pull verify** — `docker pull ghcr.io/mrrobot0985/devcontainer-features/<id>:<new>` and confirm major `:1` still resolves for consumers.
+1. **Bump only yes rows** — no bulk vanity re-tag of untouched `1.0.0`. Skip Freeze/Delete-candidate polish.
+1. **Tag** — `git tag -s <id>-vX.Y.Z -m "…"` then push the tag.
+1. **Pull verify** — `docker pull ghcr.io/mrrobot0985/devcontainer-features/<id>:<new>` and confirm major `:1` still resolves for consumers.
+1. **Lag gate** — release CI runs `scripts/check-ghcr-majors.sh` (critical template-consumed majors). Do not mass re-publish to “fix” the gate; fix visibility or the missing package.
+
+### Changelog / release notes policy (thin)
+
+**Decision:** no root encyclopedia CHANGELOG and no per-feature CHANGELOG files.
+
+| Required                                                                                             | Optional later                    | Avoid                                               |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------- |
+| One-line **user-facing note** in the PR body **and/or** the git **tag annotation** for `<id>-vX.Y.Z` | GitHub Release on the feature tag | 40 independent CHANGELOG files; historical backfill |
+
+Example tag message: `claude-code-hooks-v1.1.0: document denylist gaps and retention prune semantics`.
+
+Freeze/Delete candidates are excluded from polish pilots. Automation for Release notes is out of scope for the active board.
 
 ### Release path
 
 1. Update the `version` field in `src/<feature>/devcontainer-feature.json`.
 1. Keep the feature README in sync (`uv run python scripts/generate-feature-readmes.py` or the pre-commit hook).
-1. Land the change on `main` through a PR (CI must pass).
-1. Create and push a signed tag:\
-   `git tag -s <feature-name>-vX.Y.Z -m "release <feature> vX.Y.Z"`\
+1. Land the change on `main` through a PR (CI must pass). Include the one-line user-facing note.
+1. Create and push a signed tag with the same note:\
+   `git tag -s <feature-name>-vX.Y.Z -m "release <feature> vX.Y.Z: <one-line note>"`\
    `git push origin <feature-name>-vX.Y.Z`
-1. Pushing the tag triggers `release.yaml`, which publishes features under `./src` to GHCR.
+1. Pushing the tag triggers `release.yaml` (GHCR lag gate, then publish of `./src` to GHCR).
 
 For full detail, see [Releasing a Feature](../docs/how-to-guides/release-a-feature.md).
