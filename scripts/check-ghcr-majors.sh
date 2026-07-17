@@ -7,8 +7,8 @@
 # Feature ID sources (union, order-independent):
 #   1. Positional args and/or FEATURE_IDS (comma/space-separated)
 #   2. Critical hardcoded set (known template consumers)
-#   3. If TEMPLATES_SRC is set, or ../../templates/src exists relative to this
-#      script's repo root, grep ghcr.io/mrrobot0985/devcontainer-features/<id>
+#   3. If TEMPLATES_SRC is set, or sibling ../templates/src exists (umbrella
+#      collections/ layout), grep ghcr.io/mrrobot0985/devcontainer-features/<id>
 #
 # Resolution backends (first available):
 #   docker manifest inspect | crane manifest | oras manifest fetch | gh api
@@ -44,7 +44,7 @@ Usage: check-ghcr-majors.sh [feature-id ...]
 
 Env:
   FEATURE_IDS       Extra IDs (comma or space separated)
-  TEMPLATES_SRC     Path to templates/src (optional; auto-detects ../../templates/src)
+  TEMPLATES_SRC     Path to templates/src (optional; auto-detects ../templates/src)
   GHCR_NAMESPACE    Default: ghcr.io/mrrobot0985/devcontainer-features
   GHCR_MAJOR_TAG    Default: 1
   SKIP_CRITICAL=1   Do not include the hardcoded critical set (args/templates only)
@@ -114,7 +114,7 @@ if [[ -n "${TEMPLATES_ROOT:-}" && -d "$TEMPLATES_ROOT" ]]; then
   )
   echo "templates scan: ${TEMPLATES_ROOT} (+ discovered owned feature refs)"
 else
-  echo "templates scan: skipped (no TEMPLATES_SRC / ../../templates/src)"
+  echo "templates scan: skipped (no TEMPLATES_SRC / ../templates/src)"
 fi
 
 IDS=()

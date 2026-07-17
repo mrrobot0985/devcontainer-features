@@ -47,7 +47,7 @@ ID sources (union):
 
 1. Positional args / `FEATURE_IDS`
 1. Hardcoded critical set (template-known: `non-root-enforcer`, `ai-agent-sandbox`, `container-firewall`, Claude suite IDs, `host-isolation`, `mcp-server-manager`, …)
-1. Grep of `TEMPLATES_SRC` or `../../templates/src` when the monorepo checkout is present
+1. Grep of `TEMPLATES_SRC` or sibling `../templates/src` when the umbrella `collections/` checkout is present
 
 Resolution: `docker manifest inspect`, else `crane`, `oras`, or `gh` packages API.
 
