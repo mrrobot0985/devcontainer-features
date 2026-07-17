@@ -12,20 +12,35 @@ fi
 
 echo "Installing Plumber..."
 
-ARCH="amd64"
+# Ensure download tools
+export DEBIAN_FRONTEND=noninteractive
+if ! command -v curl > /dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y -qq curl ca-certificates >/dev/null
+fi
+
+# Releases publish a single Linux binary as "plumber-linux" (x86_64).
+# There is no plumber-linux-amd64 / plumber-linux-arm64 asset.
 case "$(uname -m)" in
-    aarch64|arm64) ARCH="arm64" ;;
-    x86_64) ARCH="amd64" ;;
+    x86_64|amd64) ;;
+    *)
+        echo "ERROR: Unsupported architecture: $(uname -m)"
+        echo "Plumber release assets only include plumber-linux (x86_64)."
+        exit 1
+        ;;
 esac
 
+# Normalize version: strip leading 'v' for tag construction
+VERSION="${VERSION#v}"
+ASSET="plumber-linux"
+
 if [ "$VERSION" = "latest" ] || [ "$VERSION" = "" ]; then
-    # Download latest release
-    DOWNLOAD_URL="https://github.com/streamdal/plumber/releases/latest/download/plumber-linux-${ARCH}"
+    DOWNLOAD_URL="https://github.com/streamdal/plumber/releases/latest/download/${ASSET}"
 else
-    DOWNLOAD_URL="https://github.com/streamdal/plumber/releases/download/v${VERSION}/plumber-linux-${ARCH}"
+    DOWNLOAD_URL="https://github.com/streamdal/plumber/releases/download/v${VERSION}/${ASSET}"
 fi
 
 # Download binary
+echo "Downloading ${DOWNLOAD_URL}..."
 curl -fsSL "$DOWNLOAD_URL" -o /usr/local/bin/plumber || {
     echo "ERROR: Failed to download Plumber from $DOWNLOAD_URL"
     exit 1

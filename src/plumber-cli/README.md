@@ -1,6 +1,6 @@
 # Plumber Message Queue CLI
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square)
 
 Installs Plumber CLI for reading and writing messages from Kafka, RabbitMQ, NATS, Redis, and cloud message queues in devcontainers.
 
