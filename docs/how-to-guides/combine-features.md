@@ -76,9 +76,9 @@ Add Node and `github-cli` only when the agent or MCP layer needs them.
 **Security ladder (compose order):**
 
 1. **Floor (agent-minimal)** — `non-root-enforcer` + `ai-agent-sandbox` + `container-firewall` (agent tag, prefer `dryRun`/`monitor` until policy is proven)
-2. **Studio (+ static CI)** — floor + `host-isolation` + firewall `docker` tag; global scenario `agent_studio_static` (no nested DinD in features CI)
-3. **Optional depth** — `sudo-audit`, `devcontainer-lock-audit` in project CI
-4. **DinD functional proof** — templates smoke / dogfood (`ollama-claude-cli-studio`, `grok-build-cli-studio`), not features global CI
+1. **Studio (+ static CI)** — floor + `host-isolation` + firewall `docker` tag; global scenario `agent_studio_static` (no nested DinD in features CI)
+1. **Optional depth** — `sudo-audit`, `devcontainer-lock-audit` in project CI
+1. **DinD functional proof** — templates smoke / dogfood (`ollama-claude-cli-studio`, `grok-build-cli-studio`), not features global CI
 
 Do **not** treat `container-resource-limits` as hard sandbox enforcement without redesign (soft-fail path).
 
