@@ -2,40 +2,18 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
-Installs a lightweight `audit-log` script that appends structured JSON events to
-a workspace file. Designed for compliance and post-incident review when used
-with `claude-code-hooks`.
-
-## Usage
-
-```json
-"features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-audit-log:0": {}
-}
-```
+Installs a simple audit-log script that appends structured JSON events to a workspace file for compliance and post-incident review
 
 ## Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `logDir` | string | `/workspace/.audit-logs` | Directory for log files |
+| Options Id | Description | Type | Default Value |
+| ----- | ----- | ----- | ----- |
+| `logDir` | Directory where audit log files are written | string | /workspace/.audit-logs |
 
-## Example
-
-```bash
-audit-log dangerous_command_blocked \
-  --tool="Bash" \
-  --command="rm -rf /" \
-  --session="$CLAUDE_SESSION_ID"
-```
-
-Produces:
+## Example Usage
 
 ```json
-{"timestamp":"2026-07-16T00:30:00Z","event":"dangerous_command_blocked","tool":"Bash","command":"rm -rf /","session":"abc123"}
+"features": {
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-audit-log:1": {}
+}
 ```
-
-## Notes
-
-- Log files persist across container rebuilds because they live in the workspace.
-- No rotation or export is performed; add external tooling if needed.

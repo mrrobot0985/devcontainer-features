@@ -6,11 +6,26 @@ set -e
 
 LOG_DIR="${LOGDIR:-/workspace/.audit-logs}"
 
-# Create log directory if it does not exist
-mkdir -p "$LOG_DIR"
-chown "$(id -u):$(id -g)" "$LOG_DIR" 2>/dev/null || true
+# jq is used by consumers and scenario tests for JSON checks
+if ! command -v jq >/dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y -qq jq >/dev/null
+fi
 
-# Install the audit-log script
+# Create log directory. Install runs as root; tests and the remote user write
+# as a non-root account. Prefer chown to the remote user, and always make the
+# directory sticky world-writable so appends succeed even when _REMOTE_USER is
+# unset during install (feature test scenarios).
+mkdir -p "$LOG_DIR"
+REMOTE_USER="${_REMOTE_USER:-${USERNAME:-vscode}}"
+if id "$REMOTE_USER" >/dev/null 2>&1; then
+    chown -R "$REMOTE_USER:$REMOTE_USER" "$LOG_DIR" 2>/dev/null || true
+fi
+chmod 1777 "$LOG_DIR" 2>/dev/null || true
+
+# Persist configured directory for the helper default
+mkdir -p /usr/local/etc
+printf '%s\n' "$LOG_DIR" > /usr/local/etc/claude-code-audit-log-dir
+
 cat > /usr/local/bin/audit-log <<'EOF'
 #!/bin/bash
 set -e
@@ -18,28 +33,29 @@ set -e
 # audit-log — append a structured JSON event to the workspace audit log
 # Usage: audit-log <event> [--key=value ...]
 
-LOG_DIR="${AUDIT_LOG_DIR:-/workspace/.audit-logs}"
+if [ -n "${AUDIT_LOG_DIR:-}" ]; then
+    LOG_DIR="$AUDIT_LOG_DIR"
+elif [ -f /usr/local/etc/claude-code-audit-log-dir ]; then
+    LOG_DIR="$(cat /usr/local/etc/claude-code-audit-log-dir)"
+else
+    LOG_DIR="/workspace/.audit-logs"
+fi
 LOG_FILE="$LOG_DIR/audit.log"
 
-# Ensure directory exists
 mkdir -p "$LOG_DIR"
 
-# Build JSON object
 _event="$1"
 shift
 
-# Start JSON
 json="{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\""
 json="$json,\"event\":\"$_event\""
 
-# Parse remaining arguments as key=value or --key=value
 for arg in "$@"; do
     case "$arg" in
         --*)
             key="${arg%%=*}"
             key="${key#--}"
             val="${arg#*=}"
-            # Escape backslashes, quotes, and control characters
             val="$(printf '%s' "$val" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')"
             json="$json,\"$key\":\"$val\""
             ;;
@@ -48,7 +64,6 @@ done
 
 json="$json}"
 
-# Atomic append
 printf '%s\n' "$json" >> "$LOG_FILE"
 EOF
 

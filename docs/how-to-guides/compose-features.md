@@ -56,7 +56,7 @@ Use `dependsOn` when a feature requires another feature to function correctly. T
 
 ```jsonc
 "features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/nvidia-container-toolkit:1": {
+    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:1": {
         "defaultRuntime": true
     }
 }

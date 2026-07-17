@@ -2,52 +2,19 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
-Installs and manages MCP server lifecycle from `.mcp.json` configuration.
-Provides `mcp-ctl` utility to start, stop, and check status of configured
-servers.
-
-## Usage
-
-```json
-"features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-mcp-orchestrator:0": {
-        "configPath": "/workspace/.mcp.json",
-        "autoStart": true
-    }
-}
-```
+Installs and manages MCP server lifecycle from .mcp.json configuration. Starts servers on container launch and provides health-check utilities.
 
 ## Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `configPath` | string | `/workspace/.mcp.json` | Path to `.mcp.json` |
-| `autoStart` | boolean | `true` | Start servers on `postCreateCommand` |
+| Options Id | Description | Type | Default Value |
+| ----- | ----- | ----- | ----- |
+| `configPath` | Path to .mcp.json configuration file | string | /workspace/.mcp.json |
+| `autoStart` | Automatically start MCP servers on postCreateCommand | boolean | true |
 
-## .mcp.json Format
+## Example Usage
 
 ```json
-{
-  "github": {
-    "command": "docker",
-    "args": ["run", "-i", "--rm", "ghcr.io/github/github-mcp-server"]
-  },
-  "fetch": {
-    "command": "uvx",
-    "args": ["mcp-server-fetch"]
-  }
+"features": {
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-mcp-orchestrator:1": {}
 }
 ```
-
-## Commands
-
-- `mcp-ctl start` — start all configured servers
-- `mcp-ctl stop` — stop all running servers
-- `mcp-ctl status` — show running server status
-- `mcp-ctl list` — list configured server names
-
-## Notes
-
-- Requires `jq` for JSON parsing.
-- PID files stored in `/tmp/mcp-pids/`.
-- Servers run via `nohup`; logs go to `/dev/null`.

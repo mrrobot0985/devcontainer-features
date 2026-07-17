@@ -35,12 +35,12 @@ Install hooks before plugins so that plugin installation events are captured by 
 
 ### GPU Environment (NVIDIA + Docker-in-Docker)
 
-For GPU-accelerated inner containers, combine `docker-in-docker` with `nvidia-container-toolkit`. The toolkit configures the inner dockerd to use the NVIDIA runtime:
+For GPU-accelerated inner containers, combine `docker-in-docker` with `container-firewall`. The toolkit configures the inner dockerd to use the NVIDIA runtime:
 
 ```json
 "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/mrrobot0985/devcontainer-features/nvidia-container-toolkit:0": {
+    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
         "defaultRuntime": false,
         "restartDockerd": true
     }
@@ -77,7 +77,7 @@ For a complete agentic development environment, combine:
 
 1. **node before plugins and MCP servers** — Both plugins and MCP servers use `npx`, which requires Node.js.
 
-1. **docker-in-docker before nvidia-container-toolkit** — The toolkit reloads dockerd, which must exist first.
+1. **docker-in-docker before container-firewall** — The toolkit reloads dockerd, which must exist first.
 
 ## Troubleshooting Interactions
 
@@ -111,4 +111,4 @@ The GitHub MCP server requires a `GITHUB_TOKEN` environment variable. Provide it
 
 ### NVIDIA toolkit fails on non-apt systems
 
-The NVIDIA Container Toolkit feature supports apt, yum, and dnf. On Alpine Linux, it skips gracefully with a warning. Ensure your base image uses a supported package manager.
+The container firewall feature supports apt, yum, and dnf. On Alpine Linux, it skips gracefully with a warning. Ensure your base image uses a supported package manager.

@@ -1,24 +1,44 @@
 # Release dev container features
 #
-# Triggered only when a prefixed tag of the form `<feature-name>-v<semver>` is
-# pushed. Publishes the feature whose source directory matches the tag prefix
-# to GitHub Container Registry using the devcontainers publish action.
+# Tags are created and pushed by developers (not by Actions). Pushing a
+# prefixed tag of the form `<feature-name>-v<semver>` starts this workflow,
+# which publishes features under ./src to GitHub Container Registry.
+#
+# workflow_dispatch is available for intentional backfill or recovery only.
+# It does not create git tags.
 
 name: "Release dev container features"
 on:
   push:
     tags:
       - '*-v*'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why is this manual publish running?"
+        required: false
+        default: "backfill"
 
 jobs:
   deploy:
-    if: ${{ startsWith(github.ref, 'refs/tags/') && contains(github.ref, '-v') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (startsWith(github.ref, 'refs/tags/') && contains(github.ref, '-v')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: "Publish context"
+        run: |
+          set -euo pipefail
+          echo "event=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "reason=${{ github.event.inputs.reason }}"
+          fi
+          echo "Features under src/:"
+          find src -mindepth 1 -maxdepth 1 -type d -printf '  %f\n' | sort
 
       - name: "Publish Features"
         uses: devcontainers/action@v1

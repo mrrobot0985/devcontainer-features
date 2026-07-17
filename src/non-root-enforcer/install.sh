@@ -4,6 +4,11 @@ set -e
 # non-root-enforcer install script
 # Installs a validation script that audits remoteUser in devcontainer.json
 
+FAIL_ON_WARNING="${FAILONWARNING:-false}"
+
+mkdir -p /usr/local/etc
+printf '%s\n' "$FAIL_ON_WARNING" > /usr/local/etc/non-root-enforcer-fail-on-warning
+
 cat > /usr/local/bin/non-root-enforcer <<'EOF'
 #!/bin/bash
 set -e
@@ -11,8 +16,16 @@ set -e
 # non-root-enforcer — audit devcontainer.json for root remoteUser
 # Claude Code and other AI agents reject --dangerously-skip-permissions when run as root.
 
-DEVCONTAINER_JSON="${DEVCONTAINER_CONFIG:-/workspace/.devcontainer/devcontainer.json}"
+DEVCONTAINER_JSON="${DEVCONTAINER_CONFIG:-/workspaces/.devcontainer/devcontainer.json}"
 WARNINGS=0
+
+if [ -n "${FAIL_ON_WARNING:-}" ]; then
+    :
+elif [ -f /usr/local/etc/non-root-enforcer-fail-on-warning ]; then
+    FAIL_ON_WARNING="$(cat /usr/local/etc/non-root-enforcer-fail-on-warning)"
+else
+    FAIL_ON_WARNING="false"
+fi
 
 warn() {
     echo "WARNING [non-root-enforcer]: $1"
@@ -45,7 +58,7 @@ fi
 
 if [ "$WARNINGS" -gt 0 ]; then
     echo "WARNING [non-root-enforcer]: $WARNINGS non-root configuration issue(s) detected."
-    if [ "${FAIL_ON_WARNING:-false}" = "true" ]; then
+    if [ "$FAIL_ON_WARNING" = "true" ]; then
         echo "ERROR [non-root-enforcer]: failOnWarning is enabled; aborting container creation."
         exit 1
     fi

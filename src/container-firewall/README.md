@@ -2,13 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 
-Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking.
-
-## Breaking changes in 0.4.0
-
-- The lifecycle hook moved from `postStartCommand` to `postCreateCommand`. A nonzero exit from the firewall init script now aborts container creation.
-- `failIfUnprivileged` defaults to `true`. If `iptables` is not functional (for example, when `NET_ADMIN` is missing), the devcontainer build fails by default.
-- To restore the previous warn-and-continue behavior, set `failIfUnprivileged: false`.
+Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking
 
 ## Options
 
@@ -24,60 +18,8 @@ Configures an iptables/ipset whitelist firewall for the container with selectabl
 
 ## Example Usage
 
-Default configuration:
-
 ```json
 "features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {}
+    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:1": {}
 }
 ```
-
-Composing multiple services:
-
-```json
-"features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
-        "services": "claude-code,pypi,docker"
-    }
-}
-```
-
-Dry-run a configuration before applying it:
-
-```json
-"features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
-        "services": "github",
-        "dryRun": true
-    }
-}
-```
-
-By default, the feature now fails container creation when `iptables` is not functional. To keep the previous warn-and-no-op behavior on unprivileged containers, set:
-
-```json
-"features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
-        "failIfUnprivileged": false
-    }
-}
-```
-
-## Available Service Tags
-
-| Tag | Domains | Description |
-|-----|---------|-------------|
-| `minimal` | (none) | Empty baseline; use with `extraDomains` |
-| `claude-code` | github, npm, anthropic, vscode | Composite tag for Claude Code workflow |
-| `github` | github.com, api.github.com | GitHub API and web (with dynamic IP range fetching) |
-| `npm` | registry.npmjs.org | Node.js package registry |
-| `pypi` | pypi.org, files.pythonhosted.org | Python package registry |
-| `apt` | deb.debian.org, archive.ubuntu.com, ... | Debian/Ubuntu package repositories |
-| `docker` | registry-1.docker.io, production.cloudflare.docker.com | Docker Hub image registry |
-| `vscode` | marketplace.visualstudio.com, ... | VS Code marketplace and updates |
-| `astral` | astral.sh | Astral tools (uv, ruff) |
-| `anthropic` | api.anthropic.com | Anthropic API |
-| `huggingface` | huggingface.co, hf.co, cdn.huggingface.co | Hugging Face model hub |
-| `gitlab` | gitlab.com, registry.gitlab.com | GitLab and Container Registry |
-| `openrouter` | openrouter.ai, api.openrouter.ai | OpenRouter unified AI API |
-| `google` | generativelanguage.googleapis.com, ... | Google AI Platform and Gemini APIs |

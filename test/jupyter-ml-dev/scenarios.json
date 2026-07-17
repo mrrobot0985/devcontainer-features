@@ -1,24 +1,20 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/python:1": {},
-                "jupyter-ml-dev": {}
-            }
-        },
-        {
-            "name": "full-packages",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/python:1": {},
-                "jupyter-ml-dev": {
-                    "packages": "full",
-                    "installJupyterLab": true,
-                    "installUv": true
-                }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/python:1": {},
+            "jupyter-ml-dev": {}
+        }
+    },
+    "full-packages": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/python:1": {},
+            "jupyter-ml-dev": {
+                "packages": "full",
+                "installJupyterLab": true,
+                "installUv": true
             }
         }
-    ]
+    }
 }

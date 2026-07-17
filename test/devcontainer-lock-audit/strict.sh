@@ -3,11 +3,10 @@ set -e
 
 source dev-container-features-test-lib
 
-check "script detects missing lockfile" bash -c "DEVCONTAINER_LOCKFILE=/dev/null DEVCONTAINER_CONFIG=/dev/null devcontainer-lock-audit; test \$? -eq 1"
+check "script detects missing lockfile" bash -c "DEVCONTAINER_LOCKFILE=/nonexistent/lock.json DEVCONTAINER_CONFIG=/nonexistent/devcontainer.json devcontainer-lock-audit; test \$? -eq 1"
 
-# Create a valid lockfile
-mkdir -p /workspace/.devcontainer
-cat > /workspace/.devcontainer/devcontainer-lock.json <<'EOF'
+MOCK_DIR="$(mktemp -d)"
+cat > "$MOCK_DIR/devcontainer-lock.json" <<'EOF'
 {
   "features": {
     "ghcr.io/devcontainers/features/node:2": {
@@ -17,7 +16,7 @@ cat > /workspace/.devcontainer/devcontainer-lock.json <<'EOF'
 }
 EOF
 
-cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
+cat > "$MOCK_DIR/devcontainer.json" <<'EOF'
 {
   "features": {
     "ghcr.io/devcontainers/features/node:2": {}
@@ -25,11 +24,12 @@ cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
 }
 EOF
 
-# Ensure lockfile is newer
-touch /workspace/.devcontainer/devcontainer-lock.json
+# Ensure lockfile is newer than config
+touch -d "1 minute ago" "$MOCK_DIR/devcontainer.json"
+touch "$MOCK_DIR/devcontainer-lock.json"
 
-check "valid lockfile passes" bash -c "devcontainer-lock-audit | grep -q 'validation passed'"
+check "valid lockfile passes" bash -c "DEVCONTAINER_LOCKFILE=$MOCK_DIR/devcontainer-lock.json DEVCONTAINER_CONFIG=$MOCK_DIR/devcontainer.json devcontainer-lock-audit | grep -q 'validation passed'"
 
-rm -rf /workspace/.devcontainer
+rm -rf "$MOCK_DIR"
 
 reportResults

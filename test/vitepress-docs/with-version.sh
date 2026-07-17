@@ -14,9 +14,16 @@ fi
 # Verify helper script
 if [ -x /usr/local/bin/devcontainer-vitepress ]; then
     echo "Helper script is executable"
-    devcontainer-vitepress status || true
 else
     echo "ERROR: Helper script not found or not executable"
+    exit 1
+fi
+
+# Status must exit promptly (must not start the VitePress dev server).
+STATUS_OUT="$(devcontainer-vitepress status 2>&1 || true)"
+echo "$STATUS_OUT"
+if ! echo "$STATUS_OUT" | grep -qiE 'vitepress[[:space:]]+1\.0'; then
+    echo "ERROR: expected vitepress 1.0.x in status output"
     exit 1
 fi
 

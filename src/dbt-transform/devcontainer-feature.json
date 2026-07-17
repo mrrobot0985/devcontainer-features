@@ -1,7 +1,7 @@
 {
   "id": "dbt-transform",
   "name": "dbt Data Transformation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Installs dbt-core for data transformation pipelines in devcontainers",
   "options": {
     "version": {

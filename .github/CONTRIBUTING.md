@@ -72,7 +72,7 @@ The following GitHub Actions workflows run on every push to `main` and every pul
 
 ## Releasing
 
-This is a monorepo containing multiple dev container features. To prevent git tag collisions, each feature gets its own prefixed tag.
+This is a monorepo containing multiple dev container features. To prevent git tag collisions, each feature gets its own prefixed tag. Version bumps and tags are done in normal development git work. Actions only publishes when a real tag is pushed—there is no auto-release and no workflow that creates tags.
 
 ### Tag Format
 
@@ -86,25 +86,14 @@ Use `<feature-name>-v<semver>` for every release. For example:
 
 A single git tag namespace is shared across all features. Without a prefix, `v0.2.0` is ambiguous — it could apply to any feature. Prefixed tags keep release histories independent and readable.
 
-### Automated release path
-
-Normal releases do not require manual tagging:
-
-1. `auto-release.yml` runs weekly and on demand. It compares each feature's source directory against its latest prefixed tag and bumps the patch version in `devcontainer-feature.json` when changes are detected.
-1. When a bump is needed, it opens a pull request titled `chore: bump feature versions`.
-1. After that PR merges to `main`, `tag-release.yml` creates any missing prefixed tags from the current JSON versions.
-1. Pushing a prefixed tag triggers `release.yaml`, which publishes the feature to GHCR.
-
-### Manual release (emergency only)
-
-Only use this path when the automated flow is unavailable:
+### Release path
 
 1. Update the `version` field in `src/<feature>/devcontainer-feature.json`.
-1. Commit the change with a conventional commit message:\
-   `feat(<feature>): bump version to X.Y.Z`
+1. Keep the feature README in sync (`uv run python scripts/generate-feature-readmes.py` or the pre-commit hook).
+1. Land the change on `main` through a PR (CI must pass).
 1. Create and push a signed tag:\
-   `git tag -s <feature-name>-vX.Y.Z -m "release <feature> vX.Y.Z"`
-1. Push the tag to trigger the release workflow:\
+   `git tag -s <feature-name>-vX.Y.Z -m "release <feature> vX.Y.Z"`\
    `git push origin <feature-name>-vX.Y.Z`
+1. Pushing the tag triggers `release.yaml`, which publishes features under `./src` to GHCR.
 
-The release workflow triggers on any `*-v*` tag and publishes the feature whose JSON version changed.
+For full detail, see [Releasing a Feature](../docs/how-to-guides/release-a-feature.md).

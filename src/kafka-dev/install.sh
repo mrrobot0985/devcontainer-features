@@ -52,14 +52,31 @@ if [ "$INSTALL_CONFLUENT" = "true" ]; then
             x86_64) ARCH="amd64" ;;
         esac
 
-        CONFLUENT_URL="https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/latest/confluent_latest_linux_${ARCH}.tar.gz"
+        # Official packages.confluent.io URLs (S3 "latest" layout changed over time)
+        CONFLUENT_URL="https://packages.confluent.io/confluent-cli/archives/latest/confluent_linux_${ARCH}.tar.gz"
         curl -fsSL "$CONFLUENT_URL" -o /tmp/confluent.tar.gz
-        tar -xzf /tmp/confluent.tar.gz -C /tmp
-        if [ -d /tmp/confluent ]; then
-            cp /tmp/confluent/bin/confluent /usr/local/bin/confluent
-            chmod +x /usr/local/bin/confluent
+        mkdir -p /tmp/confluent-extract
+        tar -xzf /tmp/confluent.tar.gz -C /tmp/confluent-extract
+
+        # Archive layout has varied: confluent/confluent or confluent/bin/confluent
+        CONFLUENT_BIN=""
+        if [ -f /tmp/confluent-extract/confluent/confluent ]; then
+            CONFLUENT_BIN="/tmp/confluent-extract/confluent/confluent"
+        elif [ -f /tmp/confluent-extract/confluent/bin/confluent ]; then
+            CONFLUENT_BIN="/tmp/confluent-extract/confluent/bin/confluent"
+        else
+            CONFLUENT_BIN="$(find /tmp/confluent-extract -type f -name confluent -perm -u+x 2>/dev/null | head -n1 || true)"
         fi
-        rm -rf /tmp/confluent.tar.gz /tmp/confluent
+
+        if [ -z "$CONFLUENT_BIN" ] || [ ! -f "$CONFLUENT_BIN" ]; then
+            echo "ERROR: Confluent CLI binary not found in archive"
+            rm -rf /tmp/confluent.tar.gz /tmp/confluent-extract
+            exit 1
+        fi
+
+        cp "$CONFLUENT_BIN" /usr/local/bin/confluent
+        chmod +x /usr/local/bin/confluent
+        rm -rf /tmp/confluent.tar.gz /tmp/confluent-extract
 
         echo "Confluent CLI installed."
     else

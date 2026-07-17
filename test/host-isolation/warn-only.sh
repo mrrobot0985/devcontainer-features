@@ -3,18 +3,18 @@ set -e
 
 source dev-container-features-test-lib
 
-check "script runs without devcontainer.json" bash -c "host-isolation-check | grep -q 'skipping audit'"
+check "script runs without devcontainer.json" bash -c "DEVCONTAINER_JSON=/dev/null host-isolation-check | grep -q 'skipping audit'"
 
-# Create a mock devcontainer.json with an unsafe config
-mkdir -p /workspaces/.devcontainer
-cat > /workspaces/.devcontainer/devcontainer.json <<'EOF'
+# Mock config in a writable temp dir (test user may not own /workspaces)
+MOCK_DIR="$(mktemp -d)"
+cat > "$MOCK_DIR/devcontainer.json" <<'EOF'
 {
   "runArgs": ["--privileged"]
 }
 EOF
 
-check "detects privileged" bash -c "host-isolation-check | grep -q 'WARNING.*privileged'"
+check "detects privileged" bash -c "DEVCONTAINER_JSON=$MOCK_DIR/devcontainer.json host-isolation-check | grep -q 'WARNING.*privileged'"
 
-rm -rf /workspaces/.devcontainer
+rm -rf "$MOCK_DIR"
 
 reportResults

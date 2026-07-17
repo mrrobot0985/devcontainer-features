@@ -1,22 +1,18 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/node:1": {},
-                "astro-docs": {}
-            }
-        },
-        {
-            "name": "with-typescript",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/node:1": {},
-                "astro-docs": {
-                    "installTypeScript": true
-                }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "astro-docs": {}
+        }
+    },
+    "with-typescript": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "astro-docs": {
+                "installTypeScript": true
             }
         }
-    ]
+    }
 }

@@ -5,7 +5,7 @@ source dev-container-features-test-lib
 
 check "mcp-ctl exists" test -x /usr/local/bin/mcp-ctl
 
-# Create a mock .mcp.json with a simple sleep server
+# Config path is set via feature option configPath=/tmp/test-mcp.json
 cat > /tmp/test-mcp.json <<'EOF'
 {
   "test-server": {

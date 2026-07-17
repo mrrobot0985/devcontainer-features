@@ -2,20 +2,9 @@
 
 This repository is a monorepo: many features share one git repository and one CI setup. To avoid tag collisions, each feature is released with a prefixed git tag of the form `<feature-name>-v<semver>`.
 
-## Automated release path (preferred)
+Version bumps and tags are part of normal development git work. GitHub Actions only publishes to the registry when a real tag is pushed. There is no auto-release bot and no workflow that creates tags.
 
-The normal release flow is fully automated:
-
-1. **Detect changes** — `.github/workflows/auto-release.yml` runs weekly and on demand. It compares every feature source directory against its latest prefixed tag. If the directory changed, it bumps the patch version in `src/<feature>/devcontainer-feature.json`.
-1. **Open a pull request** — the workflow creates a PR titled `chore: bump feature versions`.
-1. **Merge the PR** — once CI passes and the PR merges to `main`, `.github/workflows/tag-release.yml` reads each feature's current version and creates the prefixed tag if it does not already exist.
-1. **Publish** — pushing the tag triggers `.github/workflows/release.yaml`, which publishes the feature to GitHub Container Registry using the devcontainers publish action.
-
-You do not need to edit versions or create tags manually unless you are following the emergency path.
-
-## Manual release (emergency only)
-
-Use this path when you must ship a specific feature immediately and cannot wait for the weekly automation.
+## Release path
 
 1. **Update the version** in `src/<feature>/devcontainer-feature.json`. Follow SemVer:
 
@@ -23,21 +12,22 @@ Use this path when you must ship a specific feature immediately and cannot wait 
    - Bump the minor version for new functionality.
    - Bump the patch version for fixes.
 
-1. **Commit with a conventional commit message**:
+1. **Keep the feature README in sync** (pre-commit hook or):
 
    ```bash
-   git add src/my-feature/devcontainer-feature.json
-   git commit -m "feat(my-feature): bump version to 1.2.3"
+   uv run python scripts/generate-feature-readmes.py
    ```
 
-1. **Create and push a signed tag**:
+1. **Land the change on `main`** through a PR. CI must pass (`test.yaml`, `validate.yml`, `lint-workflows.yml`, conventional commits).
+
+1. **Create and push a signed tag** from the release commit:
 
    ```bash
    git tag -s my-feature-v1.2.3 -m "release my-feature v1.2.3"
    git push origin my-feature-v1.2.3
    ```
 
-   Pushing the tag starts `.github/workflows/release.yaml`.
+   Pushing the tag starts `.github/workflows/release.yaml`, which publishes features under `./src` to GitHub Container Registry. Versions already present on GHCR are skipped by the publisher.
 
 ## Prefixed tags
 
@@ -46,10 +36,20 @@ The tag prefix is always the feature `id` exactly as it appears in `devcontainer
 ```
 claude-code-backend-v0.1.1
 container-firewall-v0.2.0
-nvidia-container-toolkit-v0.1.1
+container-firewall-v0.1.1
 ```
 
 Plain SemVer tags like `v0.1.0` are not used, because they would collide across features.
+
+## Manual publish (backfill only)
+
+If you need to republish without a new tag (recovery or bulk backfill), run **Release dev container features** via `workflow_dispatch` from the Actions tab or:
+
+```bash
+gh workflow run release.yaml --ref main -f reason=backfill
+```
+
+This does not create tags. Prefer a normal tagged release when shipping a new version.
 
 ## Package visibility
 

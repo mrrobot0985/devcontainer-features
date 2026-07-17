@@ -5,8 +5,8 @@ set -e
 # Detects container architecture and sets environment variables.
 
 ARCH="$(uname -m)"
-OLLAMA_MODEL="__OLLAMAMODEL__"
-PYTORCH_INDEX="__PYTORCHINDEX__"
+OLLAMA_MODEL="${OLLAMAMODEL:-auto}"
+PYTORCH_INDEX="${PYTORCHINDEX:-auto}"
 
 # Architecture mapping
 if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
