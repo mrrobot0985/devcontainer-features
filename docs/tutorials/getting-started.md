@@ -16,7 +16,7 @@ All published features live under the namespace:
 ghcr.io/mrrobot0985/devcontainer-features/<id>:<version>
 ```
 
-The `:0` suffix resolves the latest release within major version `0`. For example, `claude-code-backend:0` is the easiest way to stay current while avoiding breaking changes.
+The `:1` suffix resolves the latest release within major version `1` (the current line used by templates). For example, `claude-code-backend:1` stays on the 1.x major without jumping to a future 2.x.
 
 ## Step 2: Add the feature to `devcontainer.json`
 
@@ -26,8 +26,8 @@ Open `.devcontainer/devcontainer.json` and add the feature to the `features` obj
 {
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
-        "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1": {
             "baseUrl": "http://host.docker.internal:11434",
             "authToken": "ollama",
             "models": "sonnet:qwen2.5"

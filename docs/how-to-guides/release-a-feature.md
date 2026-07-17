@@ -66,7 +66,7 @@ Packages are private by default. Open each package's GHCR settings page and set 
 After the release workflow finishes, pull the published image:
 
 ```bash
-docker pull ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0
+docker pull ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1
 ```
 
 Or reference it from a `devcontainer.json` and rebuild a container to confirm it resolves and installs.

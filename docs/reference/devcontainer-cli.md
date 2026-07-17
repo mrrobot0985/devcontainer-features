@@ -87,7 +87,7 @@ rm -f .devcontainer/devcontainer-lock.json
 
 ## Important: lockfiles pin feature versions
 
-If `.devcontainer/devcontainer-lock.json` exists, it overrides `:latest`/`:0` and pins each feature to a specific digest. Delete the lockfile to force resolution of the newest published version.
+If `.devcontainer/devcontainer-lock.json` exists, it overrides major floats such as `:1` / `:0` and tags like `:latest`, pinning each feature to a specific digest. Delete the lockfile to force resolution of the newest published version.
 
 ```bash
 rm -f .devcontainer/devcontainer-lock.json

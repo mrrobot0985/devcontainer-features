@@ -16,19 +16,19 @@ The `test/_global/scenarios.json` file defines integration scenarios that instal
             "version": "20"
         },
         "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-privacy:0": {},
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-privacy:1": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1": {
             "baseUrl": "http://ollama:11434",
             "models": "sonnet:qwen2.5"
         },
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-hooks:0": {},
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-skills:0": {
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-hooks:1": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-skills:1": {
             "skipOnFailure": true
         },
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-plugins:0": {
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-plugins:1": {
             "skipOnFailure": true
         },
-        "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0": {
+        "ghcr.io/mrrobot0985/devcontainer-features/container-firewall:1": {
             "blockTelemetry": true
         }
     }
@@ -64,7 +64,7 @@ Use `dependsOn` when a feature requires another feature to function correctly. T
 }
 ```
 
-In practice, features that wrap another tool (for example, the NVIDIA feature paired with Docker-in-Docker) should also document the companion feature in their example usage.
+In practice, features that wrap another tool should document any companion feature (for example Docker-in-Docker next to a firewall `docker` service tag) in their example usage.
 
 ### 3. `overrideFeatureInstallOrder`
 
@@ -75,8 +75,8 @@ For total control, add `overrideFeatureInstallOrder` to `devcontainer.json`. The
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {},
-        "ghcr.io/anthropics/devcontainer-features/claude-code:0": {},
-        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {}
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+        "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1": {}
     },
     "overrideFeatureInstallOrder": [
         "ghcr.io/devcontainers/features/common-utils",
