@@ -5,16 +5,16 @@ source dev-container-features-test-lib
 
 check "non-root-enforcer exists" test -x /usr/local/bin/non-root-enforcer
 
-# Create a mock devcontainer.json with root user
-mkdir -p /workspace/.devcontainer
-cat > /workspace/.devcontainer/devcontainer.json <<'EOF'
+# Mock config in a writable temp dir (test user may not own /workspace or /workspaces)
+MOCK_DIR="$(mktemp -d)"
+cat > "$MOCK_DIR/devcontainer.json" <<'EOF'
 {
   "remoteUser": "root"
 }
 EOF
 
-check "detects root remoteUser" bash -c "non-root-enforcer | grep -q 'root'"
+check "detects root remoteUser" bash -c "DEVCONTAINER_CONFIG=$MOCK_DIR/devcontainer.json non-root-enforcer | grep -q 'root'"
 
-rm -rf /workspace/.devcontainer
+rm -rf "$MOCK_DIR"
 
 reportResults
