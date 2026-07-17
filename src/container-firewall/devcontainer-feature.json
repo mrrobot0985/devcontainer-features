@@ -1,7 +1,7 @@
 {
   "id": "container-firewall",
   "name": "Container Firewall",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Configures an iptables/ipset whitelist firewall for the container with selectable service tags and optional telemetry blocking",
   "options": {
     "services": {
@@ -9,6 +9,10 @@
       "proposals": [
         "minimal",
         "claude-code",
+        "grok-build",
+        "codex",
+        "gemini",
+        "multi-ai",
         "github",
         "npm",
         "pypi",
@@ -17,13 +21,15 @@
         "vscode",
         "astral",
         "anthropic",
+        "xai",
+        "openai",
         "huggingface",
         "gitlab",
         "openrouter",
         "google"
       ],
       "default": "claude-code",
-      "description": "Comma-separated service tags to whitelist. Use 'minimal' for an empty baseline. Composite tags like 'claude-code' expand to multiple services."
+      "description": "Comma-separated service tags to whitelist. Use 'minimal' for an empty baseline. Composite tags (claude-code, grok-build, codex, gemini, multi-ai) expand to multiple services."
     },
     "extraDomains": {
       "type": "string",

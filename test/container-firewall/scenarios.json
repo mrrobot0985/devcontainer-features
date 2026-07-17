@@ -33,6 +33,42 @@
             }
         }
     },
+    "multi-agent": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "multi-ai",
+                "dryRun": true
+            }
+        }
+    },
+    "grok-build": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "grok-build",
+                "dryRun": true
+            }
+        }
+    },
+    "codex": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "codex",
+                "dryRun": true
+            }
+        }
+    },
+    "gemini": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-firewall": {
+                "services": "gemini",
+                "dryRun": true
+            }
+        }
+    },
     "fail-if-unprivileged": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {

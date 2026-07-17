@@ -15,6 +15,12 @@
   "anthropic": {
     "domains": ["api.anthropic.com"]
   },
+  "xai": {
+    "domains": ["api.x.ai"]
+  },
+  "openai": {
+    "domains": ["api.openai.com"]
+  },
   "vscode": {
     "domains": [
       "marketplace.visualstudio.com",
@@ -43,10 +49,30 @@
     "domains": ["openrouter.ai", "api.openrouter.ai"]
   },
   "google": {
-    "domains": ["generativelanguage.googleapis.com", "aiplatform.googleapis.com", "oauth2.googleapis.com"]
+    "domains": [
+      "generativelanguage.googleapis.com",
+      "aiplatform.googleapis.com",
+      "oauth2.googleapis.com",
+      "cloudaicompanion.googleapis.com",
+      "cloudcode-pa.googleapis.com",
+      "serviceusage.googleapis.com",
+      "cloudresourcemanager.googleapis.com"
+    ]
   },
   "claude-code": {
     "extends": ["github", "npm", "anthropic", "vscode"]
+  },
+  "grok-build": {
+    "extends": ["xai", "github", "npm"]
+  },
+  "codex": {
+    "extends": ["openai", "github", "npm"]
+  },
+  "gemini": {
+    "extends": ["google", "github", "npm"]
+  },
+  "multi-ai": {
+    "extends": ["claude-code", "xai", "openai", "google", "openrouter"]
   },
   "minimal": {
     "domains": []
