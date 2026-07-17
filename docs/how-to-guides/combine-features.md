@@ -71,7 +71,18 @@ Prefer major pin `:1` (current shipped line). Use `extraDomains` only when a pro
 
 Add Node and `github-cli` only when the agent or MCP layer needs them.
 
-**CI coverage:** the agent-minimal floor is exercised in CI by the single global scenario `agent_security_floor` in [`test/_global/scenarios.json`](../../test/_global/scenarios.json) (`non-root-enforcer` + `ai-agent-sandbox` moderate with `failOnWarning: false` + `container-firewall` `services: multi-ai` with `dryRun: true` so the job does not require `CAP_NET_ADMIN`). Assertions live in [`test/_global/agent_security_floor.sh`](../../test/_global/agent_security_floor.sh). Run locally with:
+**CI coverage:** the agent-minimal floor is exercised in CI by the global scenario `agent_security_floor` in [`test/_global/scenarios.json`](../../test/_global/scenarios.json) (`non-root-enforcer` + `ai-agent-sandbox` moderate with `failOnWarning: false` + `container-firewall` `services: multi-ai` with `dryRun: true` so the job does not require `CAP_NET_ADMIN`). Assertions live in [`test/_global/agent_security_floor.sh`](../../test/_global/agent_security_floor.sh).
+
+**Security ladder (compose order):**
+
+1. **Floor (agent-minimal)** — `non-root-enforcer` + `ai-agent-sandbox` + `container-firewall` (agent tag, prefer `dryRun`/`monitor` until policy is proven)
+2. **Studio (+ static CI)** — floor + `host-isolation` + firewall `docker` tag; global scenario `agent_studio_static` (no nested DinD in features CI)
+3. **Optional depth** — `sudo-audit`, `devcontainer-lock-audit` in project CI
+4. **DinD functional proof** — templates smoke / dogfood (`ollama-claude-cli-studio`, `grok-build-cli-studio`), not features global CI
+
+Do **not** treat `container-resource-limits` as hard sandbox enforcement without redesign (soft-fail path).
+
+Run local global scenarios with:
 
 ```bash
 devcontainer features test --global-scenarios-only .

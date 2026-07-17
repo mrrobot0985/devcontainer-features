@@ -86,6 +86,15 @@ Use `<feature-name>-v<semver>` for every release. For example:
 
 A single git tag namespace is shared across all features. Without a prefix, `v0.2.0` is ambiguous — it could apply to any feature. Prefixed tags keep release histories independent and readable.
 
+### Selective publish checklist (honesty)
+
+Before bumping a feature version:
+
+1. **Table first** — list `src/*` id → json `version` → GHCR tags → content changed since last tag? (`none` / `bump+tag` / `document unreleased`).
+2. **Bump only yes rows** — no bulk vanity re-tag of untouched `1.0.0`. Skip Freeze/Delete-candidate polish.
+3. **Tag** — `git tag -s <id>-vX.Y.Z -m "…"` then push the tag.
+4. **Pull verify** — `docker pull ghcr.io/mrrobot0985/devcontainer-features/<id>:<new>` and confirm major `:1` still resolves for consumers.
+
 ### Release path
 
 1. Update the `version` field in `src/<feature>/devcontainer-feature.json`.

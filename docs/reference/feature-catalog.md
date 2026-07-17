@@ -8,7 +8,6 @@ Auto-generated from `devcontainer-feature.json` definitions.
 | ------- | ------- | ----------- | ------- |
 
 | `ai-agent-sandbox` | 1.0.1 | Tiered security isolation presets for AI coding agent devcontainers. Audits container runtime posture and warns or fails when excessive privileges are detected. | `preset` (string, default: moderate)<br>`failOnWarning` (boolean, default: false)<br>`allowedDomains` (string, default: github.com,registry.npmjs.org,pypi.org,crates.io) |
-| `astro-docs` | 1.0.0 | Installs Astro CLI for building fast content sites and documentation in devcontainers | `version` (string, default: latest)<br>`installTypeScript` (boolean, default: true) |
 | `bruno-api-testing` | 1.0.0 | Installs Bruno CLI for local-first, Git-friendly API testing and collection management in devcontainers | `version` (string, default: latest)<br>`globalInstall` (boolean, default: true) |
 | `claude-code-audit-log` | 1.0.0 | Installs a simple audit-log script that appends structured JSON events to a workspace file for compliance and post-incident review | `logDir` (string, default: /workspace/.audit-logs) |
 | `claude-code-backend` | 1.0.0 | Configures Claude Code to use a custom API backend | `baseUrl` (string, default: "")<br>`authToken` (string, default: ollama)<br>`models` (string, default: "")<br>`logLevel` (string, default: error) |
@@ -28,9 +27,8 @@ Auto-generated from `devcontainer-feature.json` definitions.
 | `devcontainer-lib` | 1.0.0 | Installs a shared shell utility library for use in devcontainer lifecycle scripts and custom automation. Provides common functions like retry, wait-for, logging, and architecture detection. | `installPath` (string, default: /usr/local/share/devcontainer-lib) |
 | `devcontainer-lock-audit` | 1.0.0 | CI gate that enforces .devcontainer-lock.json presence and validates that pinned feature versions match the current devcontainer.json configuration | `failOnMissing` (boolean, default: true)<br>`failOnStale` (boolean, default: true) |
 | `docker-compose-helper` | 1.0.0 | Validates docker-compose.yml files and optionally injects health checks and dependency ordering for reliable devcontainer service startup | `validate` (boolean, default: true)<br>`healthChecks` (boolean, default: true)<br>`dependsOnOrdering` (boolean, default: true) |
-| `docusaurus-docs` | 1.0.0 | Installs Docusaurus for building documentation websites in devcontainers | `version` (string, default: latest)<br>`initTemplate` (string, default: classic) |
 | `dotfiles-sync` | 1.0.0 | Clones a dotfiles repository and applies it to the container user, supporting install scripts, symlinks, and direct copying | `repository` (string, default: "")<br>`installCommand` (string, default: "")<br>`syncMethod` (string, default: auto) |
-| `git-config-manager` | 1.0.0 | Standardizes git configuration for devcontainer users from feature options or host environment variables | `userName` (string, default: "")<br>`userEmail` (string, default: "")<br>`gpgSigningKey` (string, default: "")<br>`commitGpgSign` (boolean, default: false)<br>`defaultBranch` (string, default: main)<br>`safeDirectories` (string, default: \*)<br>`coreAutoCrlf` (string, default: input) |
+| `git-config-manager` | 1.0.0 | Standardizes git configuration for devcontainer users from feature options or host environment variables | `userName` (string, default: "")<br>`userEmail` (string, default: "")<br>`gpgSigningKey` (string, default: "")<br>`commitGpgSign` (boolean, default: false)<br>`defaultBranch` (string, default: main)<br>`safeDirectories` (string, default: *)<br>`coreAutoCrlf` (string, default: input) |
 | `host-isolation` | 1.0.0 | Audits devcontainer.json for unsafe runArgs, mounts, and capabilities. Warns when privileged mode, Docker socket binds, or excessive capabilities are detected. | `failOnWarning` (boolean, default: false) |
 | `jupyter-ml-dev` | 1.0.0 | Installs Jupyter Lab, core Python data science libraries, and machine learning tools for interactive development in devcontainers | `installJupyterLab` (boolean, default: true)<br>`packages` (string, default: core)<br>`installUv` (boolean, default: false) |
 | `kafka-dev` | 1.0.0 | Installs Kafka CLI tools for event streaming development in devcontainers | `installKcat` (boolean, default: true)<br>`installConfluentCli` (boolean, default: false) |
@@ -46,7 +44,6 @@ Auto-generated from `devcontainer-feature.json` definitions.
 | `registry-mirror-config` | 1.0.0 | Configures Docker daemon registry mirrors to accelerate image pulls in corporate, air-gapped, or network-constrained environments | `mirrors` (string, default: "")<br>`insecureRegistries` (string, default: "")<br>`restartDocker` (boolean, default: true) |
 | `ssh-agent-forward` | 1.0.0 | Forwards the host SSH agent into the devcontainer for Git operations without copying private keys or configuring deploy tokens | `socketPath` (string, default: auto)<br>`forwardToUser` (boolean, default: true) |
 | `sudo-audit` | 1.0.0 | Audits the container image for passwordless sudo configuration and warns or fails when NOPASSWD directives are detected | `failOnWarning` (boolean, default: false) |
-| `vitepress-docs` | 1.0.0 | Installs VitePress for building Vite-powered documentation websites in devcontainers | `version` (string, default: latest) |
 
 ## Namespace
 

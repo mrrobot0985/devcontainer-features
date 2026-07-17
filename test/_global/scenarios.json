@@ -39,5 +39,25 @@
                 "dryRun": true
             }
         }
+    },
+    "agent_studio_static": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "remoteUser": "vscode",
+        "features": {
+            "non-root-enforcer": {
+                "failOnWarning": false
+            },
+            "ai-agent-sandbox": {
+                "preset": "moderate",
+                "failOnWarning": false
+            },
+            "host-isolation": {
+                "failOnWarning": false
+            },
+            "container-firewall": {
+                "services": "multi-ai,docker",
+                "dryRun": true
+            }
+        }
     }
 }

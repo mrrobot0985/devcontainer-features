@@ -42,6 +42,13 @@ jobs:
         run: |
           shellcheck --severity=warning scripts/local-ci.sh .githooks/pre-commit
           shellcheck --severity=warning src/*/install.sh src/*/uninstall.sh
+          # Claude hooks policy scripts (not only installers)
+          while IFS= read -r -d '' script; do
+            shellcheck --severity=warning "$script"
+          done < <(find src/claude-code-hooks/hooks -type f -name '*.sh' -print0 2>/dev/null)
+          while IFS= read -r -d '' script; do
+            shellcheck --severity=warning "$script"
+          done < <(find src -maxdepth 2 -type f -name 'merge-settings.sh' -print0 2>/dev/null)
           shellcheck --severity=warning test/*/*.sh
           shellcheck --severity=warning test/_global/*.sh
 

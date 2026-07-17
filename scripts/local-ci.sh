@@ -79,16 +79,21 @@ pass "prerequisites (act, docker)"
 
 # --- Shellcheck all install.sh and uninstall.sh ---
 echo ""
-echo "--- Running shellcheck on install.sh and uninstall.sh files ---"
-for script in src/*/install.sh src/*/uninstall.sh; do
-    if [ -f "$script" ]; then
-        if shellcheck "$script"; then
-            pass "shellcheck $(basename "$script")"
-        else
-            fail "shellcheck $(basename "$script")"
-        fi
+echo "--- Running shellcheck on install.sh, uninstall.sh, hooks, and helpers ---"
+while IFS= read -r -d '' script; do
+    if shellcheck --severity=warning "$script"; then
+        pass "shellcheck ${script}"
+    else
+        fail "shellcheck ${script}"
     fi
-done
+done < <(find src -maxdepth 2 -type f \( -name 'install.sh' -o -name 'uninstall.sh' -o -name 'merge-settings.sh' \) -print0 2>/dev/null)
+while IFS= read -r -d '' script; do
+    if shellcheck --severity=warning "$script"; then
+        pass "shellcheck ${script}"
+    else
+        fail "shellcheck ${script}"
+    fi
+done < <(find src/claude-code-hooks/hooks -type f -name '*.sh' -print0 2>/dev/null)
 
 # --- Sync per-feature READMEs with devcontainer-feature.json ---
 echo ""
