@@ -1,20 +1,16 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "duckdb-analytics": {}
-            }
-        },
-        {
-            "name": "with-extensions",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "duckdb-analytics": {
-                    "installExtensions": true
-                }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "duckdb-analytics": {}
+        }
+    },
+    "with-extensions": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "duckdb-analytics": {
+                "installExtensions": true
             }
         }
-    ]
+    }
 }

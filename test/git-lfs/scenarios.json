@@ -1,11 +1,8 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "git-lfs": {}
-            }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "git-lfs": {}
         }
-    ]
+    }
 }

@@ -22,8 +22,8 @@
       "description": "Swap limit (e.g., 4g, 512m). Empty means no limit."
     },
     "pidsLimit": {
-      "type": "integer",
-      "default": 0,
+      "type": "string",
+      "default": "0",
       "description": "Maximum number of PIDs allowed in the container. 0 means no limit."
     }
   },

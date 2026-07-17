@@ -1,22 +1,18 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/node:1": {},
-                "newman-testing": {}
-            }
-        },
-        {
-            "name": "with-reporters",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "ghcr.io/devcontainers/features/node:1": {},
-                "newman-testing": {
-                    "installReporters": true
-                }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "newman-testing": {}
+        }
+    },
+    "with-reporters": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "newman-testing": {
+                "installReporters": true
             }
         }
-    ]
+    }
 }

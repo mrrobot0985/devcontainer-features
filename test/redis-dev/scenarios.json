@@ -1,21 +1,17 @@
 {
-    "test": [
-        {
-            "name": "default",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "redis-dev": {}
-            }
-        },
-        {
-            "name": "with-benchmark",
-            "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-            "features": {
-                "redis-dev": {
-                    "installRedisBenchmark": true,
-                    "installRedisCheckers": true
-                }
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "redis-dev": {}
+        }
+    },
+    "with-benchmark": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "redis-dev": {
+                "installRedisBenchmark": true,
+                "installRedisCheckers": true
             }
         }
-    ]
+    }
 }

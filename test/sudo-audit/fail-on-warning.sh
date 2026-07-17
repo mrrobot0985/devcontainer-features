@@ -5,9 +5,9 @@ source dev-container-features-test-lib
 
 check "sudo-audit exists" test -x /usr/local/bin/sudo-audit
 
-# Simulate passwordless sudo and verify failure
-echo "vscode ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-test
+echo "vscode ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/99-test >/dev/null
+sudo chmod 440 /etc/sudoers.d/99-test
 check "fails when passwordless sudo detected" bash -c "FAIL_ON_WARNING=true sudo-audit; test \$? -eq 1"
-rm -f /etc/sudoers.d/99-test
+sudo rm -f /etc/sudoers.d/99-test
 
 reportResults
