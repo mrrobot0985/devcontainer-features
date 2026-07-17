@@ -18,3 +18,7 @@ Installs and manages MCP server lifecycle from .mcp.json configuration. Starts s
     "ghcr.io/mrrobot0985/devcontainer-features/claude-code-mcp-orchestrator:1": {}
 }
 ```
+
+## Alternatives
+
+Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.

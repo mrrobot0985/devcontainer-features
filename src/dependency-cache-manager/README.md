@@ -20,3 +20,9 @@ Auto-detects project types and configures package manager cache directories to u
     "ghcr.io/mrrobot0985/devcontainer-features/dependency-cache-manager:1": {}
 }
 ```
+
+## Alternatives
+
+Community cache features usually target a **single** package manager (pnpm, renv, deno, etc.).
+
+**Our delta:** multi-manager auto-detect (npm, yarn, pnpm, pip, cargo, gradle, maven, go, uv) against one named volume.

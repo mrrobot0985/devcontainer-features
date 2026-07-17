@@ -19,3 +19,9 @@ Persists cloud CLI authentication state across container rebuilds by validating 
     "ghcr.io/mrrobot0985/devcontainer-features/cloud-cli-persistence:1": {}
 }
 ```
+
+## Alternatives
+
+Community options are typically **per-CLI** (e.g. joshuanianji aws/gcloud/gh, stuartleeks azure-cli, Azure `azd-persistence`).
+
+**Our delta:** multi-CLI mount validation and helpers for AWS, Azure, GCP, and GitHub in one feature.
