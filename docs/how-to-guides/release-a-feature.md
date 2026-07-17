@@ -2,7 +2,7 @@
 
 This repository is a monorepo: many features share one git repository and one CI setup. To avoid tag collisions, each feature is released with a prefixed git tag of the form `<feature-name>-v<semver>`.
 
-Version bumps and tags are part of normal development git work. GitHub Actions only publishes to the registry when a real tag is pushed. There is no auto-release bot and no workflow that creates tags.
+Version bumps and tags are part of normal development git work. GitHub Actions only publishes to the registry when a real tag is pushed. There is no auto-release bot and no workflow that creates tags. The release workflow uses `permissions.contents: read`, so Actions cannot mint `*-v*` (or any) tags; developer-pushed tags remain the source of truth.
 
 ## Release path
 

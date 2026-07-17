@@ -1,0 +1,18 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-resource-limits": {}
+        }
+    },
+    "with-limits": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "container-resource-limits": {
+                "cpuLimit": "0.5",
+                "memoryLimit": "512m",
+                "pidsLimit": "100"
+            }
+        }
+    }
+}
