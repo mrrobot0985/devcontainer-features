@@ -24,6 +24,17 @@ Installs skills into ~/.claude/skills/ with configurable sources
 }
 ```
 
+## `skipOnFailure` defaults
+
+| Context | Recommended `skipOnFailure` | Why |
+| ------- | --------------------------- | --- |
+| **Feature default** (JSON schema) | **`false`** | Fail closed online: a broken git clone / missing skill source fails the image build so you notice. |
+| **Offline / flaky CI** (scenario tests, matrix without network) | **`true`** | Clone of third-party skill repos must not red the build when GitHub is unreachable. |
+| **Studio / template dogfood** (`ollama-claude-cli-studio`) | **`true`** (explicit) | Aligns with plugins: optional network install must not block studio create. |
+
+Default in `devcontainer-feature.json` is **`false`**. Set `"skipOnFailure": true` in
+`devcontainer.json` when network is optional.
+
 ## Alternatives
 
 Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.

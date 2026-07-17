@@ -25,6 +25,18 @@ Installs Claude Code plugins from marketplaces at build time
 }
 ```
 
+## `skipOnFailure` defaults
+
+| Context | Recommended `skipOnFailure` | Why |
+| ------- | --------------------------- | --- |
+| **Feature default** (JSON schema) | **`false`** | Fail closed online: marketplace / plugin install errors fail the build. |
+| **Offline / flaky CI** | **`true`** | Plugin marketplaces require network; CI scenarios set `skipOnFailure: true`. |
+| **Studio / template dogfood** (`ollama-claude-cli-studio`) | **`true`** (explicit) | Same as skills: Ralph Loop / marketplace installs must not block studio create. |
+
+Default in `devcontainer-feature.json` is **`false`**. Pair with `verifyArtifacts: true`
+only when you need post-install proof that enabled plugins landed (still fail closed on
+missing artifacts even if install steps were skipped carefully — see feature tests).
+
 ## Alternatives
 
 Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.

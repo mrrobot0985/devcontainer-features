@@ -18,6 +18,16 @@ Installs a simple audit-log script that appends structured JSON events to a work
 }
 ```
 
+## Composition (manual only)
+
+This feature **installs** an audit-log helper script and directory layout. It does
+**not** auto-wire Claude Code hooks, settings, or other suite features.
+
+Compose it yourself in `devcontainer.json` next to the rest of the suite when you
+need compliance-style JSON event files — for example the studio template includes
+it explicitly alongside hooks/rules/skills. There is no mandatory auto-wire from
+`claude-code-hooks` or other features into the audit log path.
+
 ## Alternatives
 
 Community Claude Code features typically **install the CLI only**. This suite **configures policy** (hooks, rules, skills, privacy, backend, plugins, MCP, audit-log) on top of an existing Claude Code install.
