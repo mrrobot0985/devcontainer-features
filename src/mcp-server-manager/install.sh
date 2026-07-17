@@ -115,7 +115,12 @@ done
 MCP_CONFIG="${MCP_CONFIG}}}"
 
 # Validate JSON before writing so templates never consume a broken config
-if command -v python3 >/dev/null 2>&1; then
+if command -v node >/dev/null 2>&1; then
+    if ! printf '%s' "$MCP_CONFIG" | node -e "JSON.parse(require('fs').readFileSync(0,'utf8'))"; then
+        echo "ERROR: Generated MCP config is not valid JSON"
+        exit 1
+    fi
+elif command -v python3 >/dev/null 2>&1; then
     if ! printf '%s' "$MCP_CONFIG" | python3 -c "import json,sys; json.load(sys.stdin)"; then
         echo "ERROR: Generated MCP config is not valid JSON"
         exit 1
@@ -177,7 +182,7 @@ echo "Starting MCP servers from $CONFIG_PATH..."
 
 # Parse configured server names. Most AI clients spawn MCP servers themselves;
 # this helper is informational for multi-agent templates.
-SERVERS=$(python3 -c "import json; print(' '.join(json.load(open('$CONFIG_PATH'))['mcpServers'].keys()))" 2>/dev/null || echo "")
+SERVERS=$(node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); process.stdout.write(Object.keys(c.mcpServers||{}).join(' '))" "$CONFIG_PATH" 2>/dev/null || echo "")
 
 if [ -z "$SERVERS" ]; then
     echo "No MCP servers configured."
@@ -212,21 +217,27 @@ echo "MCP Server Status"
 echo "================="
 echo "Config: $CONFIG_PATH"
 echo ""
-python3 -c "
-import json
-try:
-    config = json.load(open('$CONFIG_PATH'))
-    servers = config.get('mcpServers', {})
-    if not servers:
-        print('No servers configured.')
-    else:
-        for name, cfg in servers.items():
-            cmd = cfg.get('command', 'N/A')
-            args = ' '.join(cfg.get('args', []))
-            print(f'  {name}: {cmd} {args}')
-except Exception as e:
-    print(f'Error reading config: {e}')
-"
+node -e "
+const fs = require('fs');
+try {
+  const config = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+  const servers = config.mcpServers || {};
+  const names = Object.keys(servers);
+  if (!names.length) {
+    console.log('No servers configured.');
+  } else {
+    for (const name of names) {
+      const cfg = servers[name] || {};
+      const cmd = cfg.command || 'N/A';
+      const args = (cfg.args || []).join(' ');
+      console.log('  ' + name + ': ' + cmd + ' ' + args);
+    }
+  }
+} catch (e) {
+  console.log('Error reading config: ' + e.message);
+  process.exit(1);
+}
+" "__CONFIG_PATH__"
 STATUS_EOF
 
 sed -i "s|__CONFIG_PATH__|${CONFIG_PATH}|g" /usr/local/bin/devcontainer-mcp-status

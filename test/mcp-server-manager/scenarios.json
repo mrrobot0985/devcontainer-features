@@ -2,12 +2,14 @@
     "default": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
             "mcp-server-manager": {}
         }
     },
     "multi-server": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
             "mcp-server-manager": {
                 "servers": "github,playwright,fetch"
             }
@@ -16,6 +18,7 @@
     "unknown-server-skipped": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
             "mcp-server-manager": {
                 "servers": "github,not-a-real-server,memory"
             }

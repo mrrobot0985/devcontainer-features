@@ -8,7 +8,6 @@ check "cli is executable" test -x /usr/local/bin/devcontainer-mcp-status
 check "start cli exists" command -v devcontainer-mcp-start
 check "example mcp.json installed" test -f /usr/local/share/mcp-server-manager/mcp.json.example
 
-# Default config path for remote user
 CONFIG=""
 for candidate in \
     "${HOME}/.mcp/mcp-servers.json" \
@@ -21,8 +20,8 @@ for candidate in \
 done
 
 check "config file exists" test -n "$CONFIG" -a -f "$CONFIG"
-check "config is valid json" python3 -c "import json; json.load(open('$CONFIG'))"
-check "default github server present" python3 -c "import json; assert 'github' in json.load(open('$CONFIG'))['mcpServers']"
-check "github uses published package" python3 -c "import json; args=json.load(open('$CONFIG'))['mcpServers']['github']['args']; assert '@modelcontextprotocol/server-github' in args"
+check "config is valid json" node -e "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))" "$CONFIG"
+check "default github server present" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); if(!c.mcpServers||!c.mcpServers.github) process.exit(1)" "$CONFIG"
+check "github uses published package" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); const a=(c.mcpServers.github.args)||[]; if(!a.some(x=>String(x).includes('@modelcontextprotocol/server-github'))) process.exit(1)" "$CONFIG"
 
 reportResults

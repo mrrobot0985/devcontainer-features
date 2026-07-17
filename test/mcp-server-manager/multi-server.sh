@@ -17,10 +17,10 @@ for candidate in \
 done
 
 check "config file exists" test -n "$CONFIG" -a -f "$CONFIG"
-check "config is valid json" python3 -c "import json; json.load(open('$CONFIG'))"
-check "github configured" python3 -c "import json; assert 'github' in json.load(open('$CONFIG'))['mcpServers']"
-check "playwright configured" python3 -c "import json; assert 'playwright' in json.load(open('$CONFIG'))['mcpServers']"
-check "fetch configured" python3 -c "import json; assert 'fetch' in json.load(open('$CONFIG'))['mcpServers']"
-check "playwright uses @playwright/mcp" python3 -c "import json; args=json.load(open('$CONFIG'))['mcpServers']['playwright']['args']; assert '@playwright/mcp' in args"
+check "config is valid json" node -e "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))" "$CONFIG"
+check "github configured" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); if(!c.mcpServers.github) process.exit(1)" "$CONFIG"
+check "playwright configured" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); if(!c.mcpServers.playwright) process.exit(1)" "$CONFIG"
+check "fetch configured" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); if(!c.mcpServers.fetch) process.exit(1)" "$CONFIG"
+check "playwright uses @playwright/mcp" node -e "const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')); const a=(c.mcpServers.playwright.args)||[]; if(!a.some(x=>String(x).includes('@playwright/mcp'))) process.exit(1)" "$CONFIG"
 
 reportResults
