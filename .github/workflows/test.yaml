@@ -126,9 +126,10 @@ jobs:
       matrix:
         features: ${{ fromJSON(needs.setup.outputs.features) }}
         exclude:
-          # Network-heavy defaults; covered by scenario tests when present.
+          # Network-heavy or token-dependent defaults; covered by scenarios.
           - features: claude-code-skills
           - features: claude-code-plugins
+          - features: claude-code-mcp-servers
           - features: devcontainer-ci-tools
           - features: docker-compose-helper
           - features: podman-checkpoint-helper
