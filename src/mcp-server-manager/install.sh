@@ -2,9 +2,11 @@
 set -euo pipefail
 
 USERNAME="${_REMOTE_USER:-automatic}"
-SERVERS="${MCPSERVERMANAGERSERVERS:-github}"
-CONFIG_PATH="${MCPSERVERMANAGERCONFIGPATH:-auto}"
-START_SERVERS="${MCPSERVERMANAGERSTARTSERVERS:-true}"
+# Option env vars are the option id uppercased (servers -> SERVERS). Accept legacy
+# MCPSERVERMANAGER* names if present for older docs/callers.
+SERVERS="${SERVERS:-${MCPSERVERMANAGERSERVERS:-github}}"
+CONFIG_PATH="${CONFIGPATH:-${MCPSERVERMANAGERCONFIGPATH:-auto}}"
+START_SERVERS="${STARTSERVERS:-${MCPSERVERMANAGERSTARTSERVERS:-true}}"
 
 # Detect username
 if [ "$USERNAME" = "auto" ] || [ "$USERNAME" = "automatic" ]; then
