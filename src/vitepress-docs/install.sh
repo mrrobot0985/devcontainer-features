@@ -84,7 +84,22 @@ case "$COMMAND" in
         ;;
     status)
         echo "VitePress Documentation Site status"
-        npx vitepress --version 2>/dev/null || true
+        # Never run `vitepress --version` / bare `vitepress`: without a
+        # subcommand the CLI defaults to the long-running `dev` server.
+        VP_VER=""
+        if command -v npm >/dev/null 2>&1; then
+            VP_VER="$(npm list -g vitepress --depth=0 2>/dev/null | sed -n 's/.*vitepress@//p' | head -n1 | tr -d '[:space:]' || true)"
+        fi
+        if [ -z "$VP_VER" ] && command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+            VP_VER="$(node -e "try{const p=require('path');const r=require('child_process').execSync('npm root -g',{encoding:'utf8'}).trim();console.log(require(p.join(r,'vitepress/package.json')).version)}catch(e){}" 2>/dev/null || true)"
+        fi
+        if [ -n "$VP_VER" ]; then
+            echo "vitepress ${VP_VER}"
+        elif command -v vitepress >/dev/null 2>&1; then
+            echo "vitepress: installed (version unknown)"
+        else
+            echo "vitepress: not found on PATH"
+        fi
         echo ""
         echo "Usage:"
         echo "  devcontainer-vitepress init    # Initialize new site"
