@@ -4,9 +4,9 @@ This repository holds multiple independent dev container features in a single co
 
 ## Why one repository for many features
 
-All eight features extend Claude Code and container tooling in related ways. Keeping them together gives several practical advantages:
+Features extend Claude Code and container tooling in related ways. Keeping them together gives several practical advantages:
 
-- **Shared CI and scripts.** One set of workflows runs shellcheck, schema validation, README generation, and release automation for every feature.
+- **Shared CI and scripts.** One set of workflows runs shellcheck, schema validation, README generation, and publish-on-tag for every feature.
 - **Shared patterns.** Helper scripts like `merge-settings.sh` and the `.githooks/pre-commit` hook live in one place and are reused across features.
 - **Atomic cross-cutting changes.** A change that affects how several features write to `~/.claude/settings.json` can be made and reviewed in a single pull request.
 - **Simpler maintenance.** There is one local CI gate, one set of issue templates, and one contribution guide.
@@ -23,7 +23,7 @@ container-firewall-v0.2.0
 nvidia-container-toolkit-v0.1.1
 ```
 
-This convention is enforced by `.github/workflows/tag-release.yml`, which creates tags from each `devcontainer-feature.json` version, and by `.github/workflows/release.yaml`, which triggers only on `*-v*` tags.
+Developers create and push these tags after bumping `version` in `devcontainer-feature.json`. `.github/workflows/release.yaml` triggers only on `*-v*` tags (or manual dispatch for backfill) and publishes to GHCR. Actions does not mint tags.
 
 A consumer still references a feature by its major version, not the git tag:
 
@@ -72,9 +72,9 @@ Each `src/<feature>/` directory is an independent package. The shared tooling at
 
 ## Automation relies on the monorepo structure
 
-- `auto-release.yml` walks `src/*/` and compares each directory against its latest prefixed tag.
-- `tag-release.yml` derives the expected prefixed tag from each `src/<feature>/devcontainer-feature.json`.
-- `release.yaml` publishes only the feature whose tag prefix matches a source directory.
+- `test.yaml` discovers features by scanning `src/*/`.
+- `validate.yml` validates every `devcontainer-feature.json` under `src/`.
+- `release.yaml` publishes the collection under `./src` when a developer pushes a prefixed tag.
 - `generate-feature-readmes.py` discovers features by scanning `src/`.
 
 This would be harder to coordinate across separate repositories.
@@ -82,7 +82,7 @@ This would be harder to coordinate across separate repositories.
 ## Trade-offs
 
 - **Tighter coupling.** A change to shared scripts or workflows affects all features, so updates must be safe for every feature.
-- **Single release cadence.** Weekly auto-release bumps patch versions for any changed feature. If you need a single feature released sooner, use the manual emergency path.
-- **Larger CI matrix.** The test workflow builds every feature, which takes longer than testing a single-feature repo.
+- **Explicit release ritual.** Each release needs a version bump and a prefixed tag push. There is no scheduled auto-bump; that keeps tags intentional and avoids bot-created release noise.
+- **Larger CI matrix.** The test workflow builds every feature discovered under `src/`, which takes longer than testing a single-feature repo.
 
 For this collection, the benefits of shared tooling and cross-cutting consistency outweigh the costs.
