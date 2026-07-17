@@ -39,9 +39,9 @@ docker images --format "{{.Repository}}:{{.Tag}}" | grep "vsc-" | xargs -r docke
 
 ## Lockfile pins feature versions
 
-Symptom: you reference `claude-code-backend:0` but an older published version installs.
+Symptom: you reference `claude-code-backend:1` (or `:0`) but an older published digest installs.
 
-Cause: `.devcontainer/devcontainer-lock.json` records the exact digest of each feature at the time it was first resolved and overrides `:0` or `:latest`.
+Cause: `.devcontainer/devcontainer-lock.json` records the exact digest of each feature at the time it was first resolved and overrides major floats such as `:1` or `:0`, and tags like `:latest`.
 
 Fix:
 
@@ -70,7 +70,7 @@ Checks:
 
    ```jsonc
    "features": {
-       "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {
+       "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1": {
            "baseUrl": "http://192.168.1.42:11434"
        }
    }

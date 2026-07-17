@@ -35,11 +35,11 @@ A consumer still references a feature by its major version, not the git tag:
 
 ```jsonc
 "features": {
-    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0": {}
+    "ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1": {}
 }
 ```
 
-The `:0` suffix resolves the latest published release whose major version is `0`. The prefixed git tag is an internal release handle.
+The `:1` suffix resolves the latest published release whose **major** version is `1`. Prefer the current major line used by templates (`:1` as of 2026-07). Historical `:0` tags may still exist on GHCR for older consumers. The prefixed git tag is an internal release handle.
 
 ## Namespace design
 
@@ -52,8 +52,8 @@ ghcr.io/mrrobot0985/devcontainer-features/<feature-id>:<version>
 For example:
 
 ```
-ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:0.1.1
-ghcr.io/mrrobot0985/devcontainer-features/container-firewall:0.2.0
+ghcr.io/mrrobot0985/devcontainer-features/claude-code-backend:1.0.0
+ghcr.io/mrrobot0985/devcontainer-features/container-firewall:1.1.0
 ```
 
 This layout is consistent with the official dev container features convention. Each feature gets its own package page and version history, while the monorepo groups them under one organization namespace.
