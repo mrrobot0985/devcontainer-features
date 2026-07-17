@@ -12,5 +12,13 @@
                 "servers": "github,playwright,fetch"
             }
         }
+    },
+    "unknown-server-skipped": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "mcp-server-manager": {
+                "servers": "github,not-a-real-server,memory"
+            }
+        }
     }
 }

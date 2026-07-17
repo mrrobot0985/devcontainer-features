@@ -1,27 +1,28 @@
 {
   "id": "mcp-server-manager",
   "name": "MCP Server Manager",
-  "version": "1.0.0",
-  "description": "Installs and configures Model Context Protocol (MCP) servers for AI-assisted development inside devcontainers",
+  "version": "1.0.1",
+  "description": "Agent-agnostic Model Context Protocol (MCP) server config for multi-ai and non-Claude agent studios. Writes a shared mcpServers JSON clients can consume.",
   "options": {
     "servers": {
       "type": "string",
       "default": "github",
-      "description": "Comma-separated list of MCP servers to install (github, playwright, context7, vercel, supabase, fetch, sequentialthinking, memory, sqlite)"
+      "description": "Comma-separated list of MCP servers to configure (github, playwright, context7, supabase, fetch, sequentialthinking, memory, sqlite)"
     },
     "configPath": {
       "type": "string",
       "default": "auto",
-      "description": "Path to write the MCP server configuration JSON, or 'auto' for ~/.mcp/mcp-servers.json"
+      "description": "Path to write the MCP server configuration JSON, or 'auto' for ~/.mcp/mcp-servers.json. Use a workspace path (e.g. /workspaces/<name>/.mcp.json) for shared multi-agent config."
     },
     "startServers": {
       "type": "boolean",
       "default": true,
-      "description": "Generate a startup script that launches configured MCP servers in the background"
+      "description": "Generate a startup script that lists configured MCP servers (clients typically spawn servers themselves)"
     }
   },
   "installsAfter": [
-    "ghcr.io/devcontainers/features/common-utils"
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/node"
   ],
   "documentationURL": "https://github.com/mrrobot0985/devcontainer-features/tree/main/src/mcp-server-manager"
 }
