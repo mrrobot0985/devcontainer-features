@@ -1,7 +1,7 @@
 {
   "id": "grok-build",
   "name": "Grok Build",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Installs xAI Grok Build CLI",
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
