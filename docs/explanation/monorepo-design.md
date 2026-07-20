@@ -17,7 +17,7 @@ The trade-off is that git tags, GitHub releases, and container packages must be 
 
 This monorepo invests in **differentiators**: Claude Code policy suite, network firewall with service tags, agent sandbox / host isolation audits, and related agent workflows. Pure “install CLI X” features are not a good fit when a mature official or community feature already exists.
 
-**Policy example — Grok Build:** do not reintroduce bare install-only `xai-cli`. Prefer community `ghcr.io/sliekens/devcontainer-features/grok-build:1`; use a template bootstrap script only as a fallback. See the [agent security floor guide](../how-to-guides/combine-features.md#grok-build-install-policy-no-bare-xai-cli) and [#83](https://github.com/mrrobot0985/devcontainer-features/issues/83).
+**Policy example — Grok Build:** do not reintroduce bare install-only `xai-cli`. Use our `ghcr.io/mrrobot0985/devcontainer-features/grok-build:1`; use a template bootstrap script only as a fallback. See the [agent security floor guide](../how-to-guides/combine-features.md#grok-build-install-policy-no-bare-xai-cli) and [#83](https://github.com/mrrobot0985/devcontainer-features/issues/83).
 
 ## Prefixed tags prevent collisions
 

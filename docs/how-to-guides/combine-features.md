@@ -170,23 +170,23 @@ Monorepo decision ([#83](https://github.com/mrrobot0985/devcontainer-features/is
 
 ```json
 "features": {
-    "ghcr.io/sliekens/devcontainer-features/grok-build:1": {}
+    "ghcr.io/mrrobot0985/devcontainer-features/grok-build:1": {}
 }
 ```
 
-Community `grok-build` installs the CLI and persists `~/.grok`. Pin a current major (or exact) version appropriate for your template.
+Our `grok-build` feature installs the CLI and persists `~/.grok` via bind mount. Pin a current major (or exact) version appropriate for your template.
 
-**Fallback:** a template bootstrap script that installs Grok Build only when the community feature is unavailable (air-gapped / registry pin issues). Bootstrap is not a substitute for the security floor.
+**Fallback:** a template bootstrap script that installs Grok Build only when our feature is unavailable (air-gapped / registry pin issues). Bootstrap is not a substitute for the security floor.
 
 **Alternatives note (Grok install):**
 
-| Option                                                | When to use                                               |
-| ----------------------------------------------------- | --------------------------------------------------------- |
-| `ghcr.io/sliekens/devcontainer-features/grok-build:1` | **Default** — community installer with home persistence   |
-| Template `bootstrap.sh` install                       | Fallback only if the community feature cannot be resolved |
-| Bare monorepo `xai-cli` feature                       | **Do not revive** unless it adds policy beyond install    |
+| Option                                              | When to use                                             |
+| ---------------------------------------------------- | ------------------------------------------------------- |
+| `ghcr.io/mrrobot0985/devcontainer-features/grok-build:1` | **Default** — our installer with home persistence |
+| Template `bootstrap.sh` install                     | Fallback only if our feature cannot be resolved         |
+| Bare monorepo `xai-cli` feature                     | **Do not revive** unless it adds policy beyond install |
 
-Compose Grok templates as: **agent-minimal or agent-studio floor** + community `grok-build` + `container-firewall` with `"services": "grok-build"` (and `,docker` when DinD is present).
+Compose Grok templates as: **agent-minimal or agent-studio floor** + our `grok-build` + `container-firewall` with `"services": "grok-build"` (and `,docker` when DinD is present).
 
 ## Common Combinations
 
