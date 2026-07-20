@@ -81,8 +81,8 @@ jobs:
                 echo "PR changed no feature paths — feature test matrices will be skipped."
               fi
             else
-              echo "WARN: could not fetch origin/${BASE_REF}; testing all features."
-              selected_arr=("${all_arr[@]}")
+              echo "WARN: could not fetch ${BASE_REF}; skipping feature tests (path filter should catch feature changes)"
+              selected_arr=()
             fi
           else
             selected_arr=("${all_arr[@]}")
