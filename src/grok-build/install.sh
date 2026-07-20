@@ -48,16 +48,9 @@ else
     echo "Installing Grok Build CLI..."
 
     # Download and install grok-build (xai-cli)
-    # The official installation method uses curl to get the install script
-    TEMP_DIR=$(mktemp -d)
-    trap "rm -rf $TEMP_DIR" EXIT
-
-    # Official xAI CLI installation
-    echo "Downloading Grok Build CLI installer..."
-    curl -fsSL https://x.ai/cli/install.sh -o "$TEMP_DIR/install.sh"
-    chmod +x "$TEMP_DIR/install.sh"
-    # Run the install script
-    bash "$TEMP_DIR/install.sh"
+    # Official installation via curl pipe
+    echo "Downloading and installing Grok Build CLI..."
+    curl -fsSL https://x.ai/cli/install.sh | bash
 
     # Verify installation
     if command -v grok >/dev/null 2>&1; then
