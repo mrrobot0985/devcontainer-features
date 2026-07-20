@@ -1,15 +1,8 @@
 {
   "id": "grok-build",
   "name": "Grok Build",
-  "version": "1.0.1",
-  "description": "Installs xAI Grok Build CLI and persists ~/.grok home directory across container rebuilds via bind mount",
-  "options": {
-    "version": {
-      "type": "string",
-      "default": "latest",
-      "description": "Grok Build version to install (latest, or specific version tag)"
-    }
-  },
+  "version": "1.0.0",
+  "description": "Installs xAI Grok Build CLI",
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils"
   ],

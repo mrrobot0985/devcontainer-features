@@ -135,6 +135,7 @@ jobs:
           - features: podman-checkpoint-helper
           - features: otel-collector-dev
           - features: bruno-api-testing
+          - features: grok-build
     steps:
       - uses: actions/checkout@v4
 
