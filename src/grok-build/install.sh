@@ -52,18 +52,12 @@ else
     TEMP_DIR=$(mktemp -d)
     trap "rm -rf $TEMP_DIR" EXIT
 
-    # Try the official xai-cli installation
-    if curl -fsSL https://xai.io/install -o "$TEMP_DIR/install.sh" 2>/dev/null; then
-        chmod +x "$TEMP_DIR/install.sh"
-        # Run the install script
-        bash "$TEMP_DIR/install.sh" 2>/dev/null || true
-    else
-        # Fallback: try npm install
-        if command -v npm >/dev/null 2>&1; then
-            echo "Trying npm install..."
-            npm install -g xai-cli 2>/dev/null || true
-        fi
-    fi
+    # Official xAI CLI installation
+    echo "Downloading Grok Build CLI installer..."
+    curl -fsSL https://x.ai/cli/install.sh -o "$TEMP_DIR/install.sh"
+    chmod +x "$TEMP_DIR/install.sh"
+    # Run the install script
+    bash "$TEMP_DIR/install.sh"
 
     # Verify installation
     if command -v grok >/dev/null 2>&1; then
