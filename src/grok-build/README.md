@@ -1,6 +1,6 @@
 # Grok Build
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.2-blue?style=flat-square)
 
 Installs xAI Grok Build CLI and persists `~/.grok` home directory across container rebuilds via bind mount.
 
