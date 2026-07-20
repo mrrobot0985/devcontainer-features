@@ -17,6 +17,11 @@ on:
     branches:
       - main
   pull_request:
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - '.github/workflows/test.yaml'
+      - 'scripts/**'
   workflow_dispatch:
 
 jobs:
