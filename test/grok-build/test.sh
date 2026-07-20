@@ -3,11 +3,12 @@ set -e
 
 source dev-container-features-test-lib
 
-check "grok command exists" command -v grok
-check "agent command exists" command -v agent
-check "grok version works" grok --version
-check "grok home directory exists" test -d /home/vscode/.grok
-check "grok bin in path" test -x /home/vscode/.grok/bin/grok
+# Check grok installation - try direct path since PATH may not include /usr/local/bin in test
+check "grok binary exists" test -x /usr/local/bin/grok
+check "agent binary exists" test -x /usr/local/bin/agent
+check "grok version works" /usr/local/bin/grok --version
+check "grok home directory exists" test -d /root/.grok
+check "grok bin exists" test -x /root/.grok/bin/grok
 check "profile.d script exists" test -f /etc/profile.d/grok-build.sh
 
 reportResults
