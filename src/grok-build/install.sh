@@ -3,68 +3,44 @@ set -e
 
 echo "Installing Grok Build CLI..."
 
+# Determine user home
+REMOTE_USER="${_REMOTE_USER:-vscode}"
+REMOTE_HOME=$(getent passwd "$REMOTE_USER" | cut -d: -f6 2>/dev/null || echo "/home/$REMOTE_USER")
+if [ "$REMOTE_USER" = "root" ]; then
+    REMOTE_HOME="/root"
+fi
+
+GROK_HOME="${REMOTE_HOME}/.grok"
+GROK_BIN="${GROK_HOME}/bin"
+
 # Check if already installed
-if command -v grok >/dev/null 2>&1; then
-    echo "Grok Build already installed: $(grok --version 2>/dev/null || echo 'version unknown')"
+if [ -x "${GROK_BIN}/grok" ]; then
+    echo "Grok Build already installed: $(${GROK_BIN}/grok --version 2>/dev/null || echo 'unknown')"
+elif command -v grok >/dev/null 2>&1; then
+    echo "Grok Build already installed: $(grok --version 2>/dev/null || echo 'unknown')"
     exit 0
 fi
 
-# Try curl first (official way)
-if command -v curl >/dev/null 2>&1; then
-    echo "Trying official installer..."
-    if curl -fsSL https://x.ai/cli/install.sh 2>/dev/null | bash; then
-        if command -v grok >/dev/null 2>&1; then
-            echo "Grok Build installed successfully: $(grok --version)"
-            exit 0
-        fi
-    fi
+# Install via official script
+curl -fsSL https://x.ai/cli/install.sh | bash
+
+# The install script puts grok in ~/.grok/bin
+# Add to PATH via profile.d for persistence
+if [ -d "$GROK_BIN" ]; then
+    echo "export PATH=\"\${PATH}:${GROK_BIN}\"" > /etc/profile.d/grok-build.sh
+    chmod +x /etc/profile.d/grok-build.sh
+    export PATH="${PATH}:${GROK_BIN}"
 fi
 
-# Fallback: download binary directly
-echo "Trying direct binary download..."
-
-# Determine architecture
-ARCH=$(uname -m)
-case "$ARCH" in
-    x86_64) ARCH_NAME="x86_64" ;;
-    aarch64|arm64) ARCH_NAME="aarch64" ;;
-    *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
-esac
-
-GROK_VERSION=$(curl -s https://api.github.com/repos/xai-org/grok/releases/latest | grep '"tag_name"' | sed 's/.*v\([0-9.]*\).*/\1/' || echo "0.2.106")
-TARBALL="grok-${GROK_VERSION}-linux-${ARCH_NAME}.tar.gz"
-
-TEMP_DIR=$(mktemp -d)
-cd "$TEMP_DIR"
-
-curl -LO "https://github.com/xai-org/grok/releases/download/v${GROK_VERSION}/${TARBALL}" || {
-    echo "Trying latest release..."
-    # Try the specific known version
-    curl -LO "https://github.com/xai-org/grok/releases/download/v0.2.106/grok-0.2.106-linux-${ARCH_NAME}.tar.gz"
-}
-
-tar -xzf "grok-${GROK_VERSION}-linux-${ARCH_NAME}.tar.gz" 2>/dev/null || \
-tar -xzf "grok-0.2.106-linux-${ARCH_NAME}.tar.gz" 2>/dev/null || {
-    echo "ERROR: Failed to download Grok"
-    cd /
-    rm -rf "$TEMP_DIR"
-    exit 1
-}
-
-# Install
-sudo install -o root -g root -m 755 grok*/grok /usr/local/bin/grok
-sudo install -o root -g root -m 755 grok*/agent /usr/local/bin/agent 2>/dev/null || true
-
-# Cleanup
-cd /
-rm -rf "$TEMP_DIR"
-
-# Verify
-if command -v grok >/dev/null 2>&1; then
+# Verify installation
+if [ -x "${GROK_BIN}/grok" ]; then
+    echo "Grok Build installed successfully: $(${GROK_BIN}/grok --version)"
+elif command -v grok >/dev/null 2>&1; then
     echo "Grok Build installed successfully: $(grok --version)"
 else
     echo "ERROR: Grok Build installation failed"
     exit 1
 fi
 
+echo ""
 echo "Run 'grok login' to authenticate."
