@@ -3,33 +3,44 @@ set -e
 
 echo "Installing Grok Build CLI..."
 
-# Determine user home
+# Determine user home - match what devcontainer will use
 REMOTE_USER="${_REMOTE_USER:-vscode}"
-REMOTE_HOME=$(getent passwd "$REMOTE_USER" | cut -d: -f6 2>/dev/null || echo "/home/$REMOTE_USER")
-if [ "$REMOTE_USER" = "root" ]; then
+if [ -n "${REMOTE_USER}" ] && [ "$REMOTE_USER" != "root" ]; then
+    REMOTE_HOME=$(getent passwd "$REMOTE_USER" | cut -d: -f6 2>/dev/null || echo "/home/$REMOTE_USER")
+else
     REMOTE_HOME="/root"
 fi
 
 GROK_HOME="${REMOTE_HOME}/.grok"
 GROK_BIN="${GROK_HOME}/bin"
 
-# Check if already installed
+# Check if already installed for this user
 if [ -x "${GROK_BIN}/grok" ]; then
     echo "Grok Build already installed: $(${GROK_BIN}/grok --version 2>/dev/null || echo 'unknown')"
-elif command -v grok >/dev/null 2>&1; then
-    echo "Grok Build already installed: $(grok --version 2>/dev/null || echo 'unknown')"
     exit 0
 fi
 
-# Install via official script
+# Install via official script (run as the target user)
+echo "Running x.ai installer..."
 curl -fsSL https://x.ai/cli/install.sh | bash
 
-# The install script puts grok in ~/.grok/bin
-# Add to PATH via profile.d for persistence
+# The installer installs to whoever ran it - fix ownership if different user
+if [ "$REMOTE_USER" != "root" ] && [ -d "$GROK_HOME" ]; then
+    echo "Fixing ownership for $REMOTE_USER..."
+    chown -R "$REMOTE_USER:$REMOTE_USER" "$GROK_HOME" 2>/dev/null || true
+fi
+
+# Ensure PATH includes grok - create profile.d script
 if [ -d "$GROK_BIN" ]; then
+    echo "Adding $GROK_BIN to PATH..."
     echo "export PATH=\"\${PATH}:${GROK_BIN}\"" > /etc/profile.d/grok-build.sh
     chmod +x /etc/profile.d/grok-build.sh
-    export PATH="${PATH}:${GROK_BIN}"
+
+    # Also add symlinks to /usr/local/bin for immediate access
+    if [ ! -f /usr/local/bin/grok ]; then
+        ln -sf "${GROK_BIN}/grok" /usr/local/bin/grok 2>/dev/null || true
+        ln -sf "${GROK_BIN}/agent" /usr/local/bin/agent 2>/dev/null || true
+    fi
 fi
 
 # Verify installation
